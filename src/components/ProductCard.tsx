@@ -12,7 +12,7 @@ export default function ProductCard({
     <div className="flex flex-col w-full rounded-lg shadow overflow-hidden">
       <div className="relative aspect-[2/3]">
         <Image
-          src="/images/product-1.png"
+          src="/images/coffee-1.avif"
           alt="Product"
           layout="fill"
           objectFit="cover"

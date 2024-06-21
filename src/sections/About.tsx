@@ -9,7 +9,7 @@ export default function About(props: AboutProps): ReactElement {
       <div className="container grid gap-7xl lg:grid-cols-about lg:items-center">
         <div className="relative aspect-square rounded-lg shadow">
           <Image
-            src="/images/cafe.png"
+            src="/images/coffee-shop-1.avif"
             alt="Cafe"
             objectFit="cover"
             layout="fill"
