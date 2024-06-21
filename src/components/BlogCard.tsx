@@ -9,7 +9,12 @@ export default function BlogCard({
   return (
     <li className="flex flex-col gap-3xl">
       <div className="relative aspect-video rounded-lg overflow-hidden shadow">
-        <Image src="/images/blog1.avif" alt="Blog" layout="fill" />
+        <Image
+          src="/images/blog1.avif"
+          alt="Blog"
+          objectFit="cover"
+          layout="fill"
+        />
       </div>
       <div>
         <h3>{title}</h3>
