@@ -3,10 +3,11 @@ import { About, Blog, Contact, Footer, Hero, Products } from "@/sections";
 
 export const metadata: Metadata = {
   title: "Home",
-  description: "This is the home page of coffee shop website",
+  description: "This is the home page of Java Cafe website",
 };
 
 export default function Home() {
+  
   return (
     <>
       <Hero />
