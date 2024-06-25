@@ -7,7 +7,7 @@ export default function BlogCard({
   description,
 }: Omit<Blog, "id">): ReactElement {
   return (
-    <li className="flex flex-col gap-3xl">
+    <div className="flex flex-col gap-4">
       <div className="relative aspect-video rounded-lg overflow-hidden shadow">
         <Image
           src="/images/blog1.avif"
@@ -20,6 +20,6 @@ export default function BlogCard({
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
-    </li>
+    </div>
   );
 }

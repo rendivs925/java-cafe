@@ -1,19 +1,15 @@
 "use client";
 
-import Button from "@/components/Button";
 import { type ReactElement } from "react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export interface HeroProps {}
 
 export default function Hero(props: HeroProps): ReactElement {
-  const handleClick = () => {
-    console.log("Hello world");
-  };
-
   return (
     <section>
-      <div className="container grid min-h-svh content-center lg:grid-cols-hero gap-xl lg:gap-7xl">
+      <div className="container grid min-h-svh content-center lg:grid-cols-hero gap-6 lg:gap-20">
         <div className="justify-self-center max-smallerMobileScreen:w-[250px] max-smallerMobileScreen:h-[250px] max-[380px]:w-[0] max-[380px]:h-[0] lg:justify-self-end lg:order-2 w-[320px] h-[320px] lg:w-[350px] lg:h-[350px] xl:h-[480px] xl:w-[480px] relative">
           <Image src="/images/coffee-hd.png" alt="Coffee" layout="fill" />
         </div>
@@ -26,7 +22,9 @@ export default function Hero(props: HeroProps): ReactElement {
             journey with the warmth, aroma, and taste that keep your dreams
             alive.
           </p>
-          <Button onClick={handleClick}>Order Now</Button>
+          <Button size="default" className="mt-12" variant="default">
+            Order Now
+          </Button>
         </div>
       </div>
     </section>

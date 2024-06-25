@@ -30,13 +30,14 @@ export default function ProductsList(props: ProductsListProps): ReactNode {
       }}
       navigation
     >
-      {products.map(({ title, description, id, price }) => {
+      {products.map(({ title, description, id, price, imgUrl }) => {
         return (
           <SwiperSlide key={id}>
             <ProductCard
               title={title}
               price={price}
               description={description}
+              imgUrl={imgUrl}
             />
           </SwiperSlide>
         );

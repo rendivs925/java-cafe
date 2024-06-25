@@ -2,7 +2,7 @@ import { Blog, Contact, NavbarLink, Product, WorkingHour } from "@/types";
 
 const navbarLinks: NavbarLink[] = [
   {
-    href: "#home",
+    href: "/",
     label: "Home",
   },
   {
@@ -30,6 +30,7 @@ const products: Product[] = [
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
     price: 23,
+    imgUrl: "/images/coffee1.avif",
   },
   {
     id: 2,
@@ -37,6 +38,7 @@ const products: Product[] = [
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
     price: 23,
+    imgUrl: "/images/coffee2.avif",
   },
   {
     id: 3,
@@ -44,20 +46,7 @@ const products: Product[] = [
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
     price: 23,
-  },
-  {
-    id: 4,
-    title: "Luwak Coffee",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
-    price: 23,
-  },
-  {
-    id: 5,
-    title: "Luwak Coffee",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
-    price: 23,
+    imgUrl: "/images/coffee3.avif",
   },
 ];
 

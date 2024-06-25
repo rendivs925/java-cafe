@@ -6,7 +6,7 @@ export interface AboutProps {}
 export default function About(props: AboutProps): ReactElement {
   return (
     <section>
-      <div className="container grid gap-7xl lg:grid-cols-about lg:items-center">
+      <div className="container grid gap-12 lg:grid-cols-about lg:items-center">
         <div className="relative aspect-square rounded-lg shadow">
           <Image
             src="/images/coffee-shop-1.avif"

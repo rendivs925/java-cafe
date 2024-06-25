@@ -18,10 +18,10 @@ export default function Contact(props: ContactProps): ReactElement {
           description="Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries"
         />
         <Map />
-        <div className="grid grid-cols-responsive gap-lg mt-3xl">
+        <div className="grid grid-cols-responsive gap-6 mt-12">
           <div>
-            <h2>Java Cafe</h2>
-            <h4 className="text-bodyBlur">
+            <h2 className="mb-6 p-0 leading-7">Java Cafe</h2>
+            <h4 className="text-muted-foreground mb-0 p-0">
               123 Coffee St. Brewtown, <br /> CA 12345
             </h4>
           </div>
@@ -32,10 +32,8 @@ export default function Contact(props: ContactProps): ReactElement {
               {workingHours.map(({ days, timesOpen }, index) => {
                 return (
                   <li key={index}>
-                    <p className="text-bodyBlur mb-2xs smaller-text font-bold">
-                      {days}
-                    </p>
-                    <h4>{timesOpen}</h4>
+                    <p className="text-muted-foreground sm-text mb-2">{days}</p>
+                    <p className="custom-p">{timesOpen}</p>
                   </li>
                 );
               })}
@@ -48,10 +46,10 @@ export default function Contact(props: ContactProps): ReactElement {
               {contactUs.map(({ title, value }, index) => {
                 return (
                   <li key={index} className="list-style">
-                    <p className="text-bodyBlur smaller-text mb-2xs font-bold">
+                    <p className="text-muted-foreground sm-text mb-2">
                       {title}
                     </p>
-                    <h4>{value}</h4>
+                    <p className="custom-p">{value}</p>
                   </li>
                 );
               })}
@@ -64,10 +62,10 @@ export default function Contact(props: ContactProps): ReactElement {
               {contactUs.map(({ title, value }, index) => {
                 return (
                   <li key={index} className="list-style">
-                    <p className="text-bodyBlur smaller-text mb-2xs font-bold">
+                    <p className="text-muted-foreground sm-text mb-2">
                       {title}
                     </p>
-                    <h4>{value}</h4>
+                    <p className="custom-p">{value}</p>
                   </li>
                 );
               })}

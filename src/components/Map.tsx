@@ -23,7 +23,7 @@ const Map: React.FC = () => {
       // Create a MapTiler Layer inside Leaflet
       new MaptilerLayer({
         // Get your free API key at https://cloud.maptiler.com
-        apiKey: "qoq8wEkPuvJygd6htGsl",
+        apiKey: process.env.MAPS_API_KEY,
       }).addTo(map.current);
     }
   }, [center, zoom]);

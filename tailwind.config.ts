@@ -1,87 +1,89 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
+const config = {
+  darkMode: ["class"],
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-
-    // Or if using `src` directory:
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
+  prefix: "",
   theme: {
     container: {
       center: true,
-      padding: {
-        DEFAULT: "2rem",
-        sm: "4rem",
-        lg: "5rem",
-        xl: "6rem",
-        "2xl": "7rem",
-      },
+      padding: "2rem",
       screens: {
-        xl: "1500px",
+        "2xl": "1400px",
       },
     },
     extend: {
       gridTemplateColumns: {
-        responsive: "repeat(auto-fit, minmax(235px, 1fr))",
+        responsive: "repeat(auto-fit, minmax(240px, 1fr))",
         about: "1fr 1.8fr",
         hero: "1fr auto",
       },
       screens: {
         smallerMobileScreen: "400px",
       },
-
       colors: {
-        primary: "#1C0A00",
-        secondary: "#361500",
-        accent: "#813e0a",
-        heading: "#F8FAFC",
-        body: "#bbbbbb",
-        bodyBlur: "rgba(255, 255, 255, .7)",
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
       },
-
-      fontSize: {
-        "2xs": "4px",
-        xs: "8px",
-        sm: "12px",
-        base: "16px",
-        md: "20px",
-        lg: "24px",
-        xl: "28px",
-        "2xl": "32px",
-        "3xl": "36px",
-        "4xl": "40px",
-        "5xl": "44px",
-        "6xl": "48px",
-        "7xl": "52px",
-        "8xl": "56px",
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
-      spacing: {
-        "2xs": "4px",
-        xs: "8px",
-        sm: "12px",
-        base: "16px",
-        md: "20px",
-        lg: "24px",
-        xl: "28px",
-        "2xl": "32px",
-        "3xl": "36px",
-        "4xl": "40px",
-        "5xl": "44px",
-        "6xl": "48px",
-        "7xl": "52px",
-        "8xl": "56px",
-        "9xl": "60px",
-        "10xl": "64px",
-        "11xl": "68px",
-        "12xl": "72px",
-        "13xl": "76px",
-        "14xl": "80px",
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  plugins: [],
-};
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;
+
 export default config;
+
