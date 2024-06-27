@@ -11,6 +11,15 @@ interface Product {
   imgUrl: string;
 }
 
+interface CartProduct {
+  id: number;
+  name: string;
+  stock: number;
+  price: number;
+  imageUrl: string;
+  category: string;
+}
+
 interface Blog {
   id: number;
   title: string;
@@ -27,4 +36,4 @@ interface Contact {
   value: string;
 }
 
-export type { Contact, WorkingHour, NavbarLink, Product, Blog };
+export type { CartProduct, Contact, WorkingHour, NavbarLink, Product, Blog };

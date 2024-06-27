@@ -22,6 +22,7 @@ const config = {
         responsive: "repeat(auto-fit, minmax(240px, 1fr))",
         about: "1fr 1.8fr",
         hero: "1fr auto",
+        cart: "1.8fr 1fr",
       },
       screens: {
         smallerMobileScreen: "400px",
@@ -86,4 +87,3 @@ const config = {
 } satisfies Config;
 
 export default config;
-

@@ -1,42 +1,39 @@
 "use client";
 
-import { type ReactElement } from "react";
+import { useCallback, type ReactElement } from "react";
 
-import { Navigation, A11y } from "swiper/modules";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-
-import "swiper/css";
-import "swiper/css/navigation";
 import { blogs } from "@/constanst";
 import BlogCard from "./BlogCard";
+import { Blog } from "@/types";
 export interface BlogsListProps {}
 
 export default function BlogsList(props: BlogsListProps): ReactElement {
+  const renderSlide = useCallback(
+    ({ title, description, id }: Blog) => (
+      <CarouselItem className="pl-12 md:basis-1/2 lg:basis-1/3" key={id}>
+        <BlogCard title={title} description={description} />
+      </CarouselItem>
+    ),
+    []
+  );
+
   return (
-    <Swiper
-      modules={[Navigation, A11y]}
-      spaceBetween={48}
-      breakpoints={{
-        640: {
-          slidesPerView: 1,
-        },
-        768: {
-          slidesPerView: 2,
-        },
-        1024: {
-          slidesPerView: 3,
-        },
-      }}
-      navigation
-    >
-      {blogs.map(({ title, description, id }) => {
-        return (
-          <SwiperSlide key={id}>
-            <BlogCard title={title} description={description} />
-          </SwiperSlide>
-        );
-      })}
-    </Swiper>
+    <Carousel>
+      <CarouselContent className="-ml-12">
+        {blogs.map(({ title, description, id }) => {
+          return renderSlide({ title, description, id });
+        })}
+      </CarouselContent>
+      <CarouselPrevious className="max-lg:hidden" />
+      <CarouselNext className="max-lg:hidden" />
+    </Carousel>
   );
 }

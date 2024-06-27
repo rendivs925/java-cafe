@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { type ReactElement } from "react";
-import { Button } from "@/components/ui/button";
+import { memo, type ReactElement } from "react";
+import { Button } from "./ui/button";
 import { Product } from "@/types";
 
-export default function ProductCard({
+function ProductCard({
   title,
   description,
   price,
@@ -27,3 +27,5 @@ export default function ProductCard({
     </div>
   );
 }
+
+export default memo(ProductCard);

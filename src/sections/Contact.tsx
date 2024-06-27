@@ -32,7 +32,9 @@ export default function Contact(props: ContactProps): ReactElement {
               {workingHours.map(({ days, timesOpen }, index) => {
                 return (
                   <li key={index}>
-                    <p className="text-muted-foreground sm-text mb-2">{days}</p>
+                    <p className="text-muted-foreground sm-text mb-2 mt-0">
+                      {days}
+                    </p>
                     <p className="custom-p">{timesOpen}</p>
                   </li>
                 );
@@ -46,7 +48,7 @@ export default function Contact(props: ContactProps): ReactElement {
               {contactUs.map(({ title, value }, index) => {
                 return (
                   <li key={index} className="list-style">
-                    <p className="text-muted-foreground sm-text mb-2">
+                    <p className="text-muted-foreground sm-text mb-2 mt-0">
                       {title}
                     </p>
                     <p className="custom-p">{value}</p>
@@ -62,7 +64,7 @@ export default function Contact(props: ContactProps): ReactElement {
               {contactUs.map(({ title, value }, index) => {
                 return (
                   <li key={index} className="list-style">
-                    <p className="text-muted-foreground sm-text mb-2">
+                    <p className="text-muted-foreground sm-text mb-2 mt-0">
                       {title}
                     </p>
                     <p className="custom-p">{value}</p>

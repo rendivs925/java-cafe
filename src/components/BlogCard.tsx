@@ -1,11 +1,8 @@
 import { Blog } from "@/types";
 import Image from "next/image";
-import { type ReactElement } from "react";
+import { memo, type ReactElement } from "react";
 
-export default function BlogCard({
-  title,
-  description,
-}: Omit<Blog, "id">): ReactElement {
+function BlogCard({ title, description }: Omit<Blog, "id">): ReactElement {
   return (
     <div className="flex flex-col gap-4">
       <div className="relative aspect-video rounded-lg overflow-hidden shadow">
@@ -23,3 +20,5 @@ export default function BlogCard({
     </div>
   );
 }
+
+export default memo(BlogCard);
