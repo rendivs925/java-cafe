@@ -14,7 +14,7 @@
     --card-foreground: 21 5% 90%;
     --popover: 21 50% 5%;
     --popover-foreground: 21 5% 90%;
-    --primary: 21 100% 5.5%;
+    --primary: 20 29% 18%;
     --primary-foreground: 0 0% 100%;
     --secondary: 21 30% 10%;
     --secondary-foreground: 0 0% 100%;
@@ -41,7 +41,7 @@
     --popover: 222.2 84%, 4.9%;
     --popover-foreground: 210 40%, 98%;
 
-    --primary: 210 40%, 98%;
+    --primary: 20, 29% 18%;
     --primary-foreground: 222.2 47.4%, 11.2%;
 
     --secondary: 217.2 32.6%, 17.5%;
@@ -86,7 +86,15 @@
   }
 
   a {
-    @apply font-medium text-foreground hover:text-accent transition text-lg;
+    @apply font-medium relative text-foreground transition text-lg;
+  }
+
+  a::after {
+    @apply absolute content-[''] h-[2px] w-0 left-0 -bottom-2 bg-foreground transition-all duration-300;
+  }
+
+  a:hover::after {
+    @apply w-full;
   }
 
   blockquote {
@@ -137,7 +145,7 @@
 
   .mapWrap {
     margin-inline: calc(-50svw - -50%);
-    @apply relative h-[300px] min-w-[100svw] lg:h-[450px] xl:h-[550px];
+    @apply relative h-[300px] min-w-[100svw] lg:h-[400px] xl:h-[500px];
   }
 
   .map {
@@ -166,8 +174,24 @@
     @apply h-16 lg:h-20;
   }
 
+  .glass {
+    @apply bg-background/20 backdrop-filter backdrop-blur-lg rounded-lg border border-white border-opacity-10 shadow-lg p-6;
+  }
+
   .pt-navbar {
     @apply pt-16 lg:pt-20;
+  }
+
+  .mt-navbar {
+    @apply mt-16 lg:mt-20;
+  }
+
+  .mb-navbar {
+    @apply mb-16 lg:mb-20;
+  }
+
+  .py-navbar {
+    @apply py-16 lg:py-20;
   }
 
   .py-navbar {

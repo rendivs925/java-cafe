@@ -2,23 +2,23 @@ import { Blog, Contact, NavbarLink, Product, WorkingHour } from "@/types";
 
 const navbarLinks: NavbarLink[] = [
   {
-    href: "/",
+    href: "/#hero",
     label: "Home",
   },
   {
-    href: "#about",
+    href: "/#about",
     label: "About",
   },
   {
-    href: "#products",
+    href: "/#products",
     label: "Products",
   },
   {
-    href: "#blog",
+    href: "/#blog",
     label: "Blog",
   },
   {
-    href: "#contact",
+    href: "/#contact",
     label: "Contact",
   },
 ];

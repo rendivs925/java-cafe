@@ -1,6 +1,12 @@
+import React from "react";
+
 interface NavbarLink {
   href: string;
   label: string;
+}
+
+interface AppContextType {
+  moveRoute: (route: string) => void;
 }
 
 interface Product {
@@ -36,4 +42,19 @@ interface Contact {
   value: string;
 }
 
-export type { CartProduct, Contact, WorkingHour, NavbarLink, Product, Blog };
+interface ShippingContextType {
+  activeStep: number;
+  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  incrementStep: () => void;
+}
+
+export type {
+  CartProduct,
+  ShippingContextType,
+  AppContextType,
+  Contact,
+  WorkingHour,
+  NavbarLink,
+  Product,
+  Blog,
+};

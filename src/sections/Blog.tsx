@@ -5,7 +5,7 @@ export interface BlogProps {}
 
 export default function Blog(props: BlogProps): ReactElement {
   return (
-    <section>
+    <section id="blog">
       <div className="container">
         <Title
           title="Our Blog Posts"

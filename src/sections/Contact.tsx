@@ -11,7 +11,7 @@ export interface ContactProps {}
 
 export default function Contact(props: ContactProps): ReactElement {
   return (
-    <section>
+    <section id="contact">
       <div className="container">
         <Title
           title="Our Locations"

@@ -1,21 +1,34 @@
+"use client";
+
 import { type ReactElement } from "react";
 import { Button } from "./ui/button";
+import { useAppContext } from "@/hooks";
+import { AppContextType } from "@/types";
+import Line from "./Line";
+import FormContainer from "./FormContainer"
 
 export interface OrderSummaryProps {}
 
 export default function OrderSummary(props: OrderSummaryProps): ReactElement {
+  const context: AppContextType | null = useAppContext();
+
   return (
-    <section className="bg-secondary rounded-lg p-8">
+    <FormContainer>
       <div>
         <h2>Order Summary</h2>
-        <div className="h-[1px] w-full bg-muted-foreground/30 mt-6"></div>
+        <Line className="mt-6" />
         <p className="text-foreground">Total item : 3</p>
         <p className="text-foreground">Sub harga : Rp 120.000</p>
-        <div className="h-[1px] w-full bg-muted-foreground/30 mt-6"></div>
-        <Button size="sm" className="mt-8" variant="default">
+        <Line className="mt-6"/>
+        <Button
+          size="sm"
+          className="mt-8"
+          variant="default"
+          onClick={() => context?.moveRoute("/shipping")}
+        >
           Checkout
         </Button>
       </div>
-    </section>
+    </FormContainer>
   );
 }

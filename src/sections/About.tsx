@@ -1,11 +1,11 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { type ReactElement } from "react";
 
 export interface AboutProps {}
 
 export default function About(props: AboutProps): ReactElement {
   return (
-    <section>
+    <section id="about">
       <div className="container grid gap-12 lg:grid-cols-about lg:items-center">
         <div className="relative aspect-square rounded-lg shadow">
           <Image

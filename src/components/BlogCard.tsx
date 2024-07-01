@@ -1,5 +1,5 @@
 import { Blog } from "@/types";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { memo, type ReactElement } from "react";
 
 function BlogCard({ title, description }: Omit<Blog, "id">): ReactElement {

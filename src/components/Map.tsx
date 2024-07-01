@@ -26,7 +26,6 @@ const Map: React.FC = () => {
         apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY,
       }).addTo(map.current);
     }
-    console.log(process.env.NEXT_PUBLIC_MAPS_API_KEY);
   }, [center, zoom]);
 
   return (

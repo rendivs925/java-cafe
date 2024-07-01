@@ -4,7 +4,7 @@ export interface ProductsProps {}
 
 export default function Products(props: ProductsProps): ReactElement {
   return (
-    <section>
+    <section id="products">
       <div className="container">
         <Title
           title="Our Products"

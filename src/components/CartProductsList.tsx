@@ -2,11 +2,13 @@ import { useMemo, type ReactElement } from "react";
 import CartProductCard from "./CartProductCard";
 import { CartProduct } from "@/types";
 
-export interface CartProductsListProps {}
+export interface CartProductsListProps {
+  className?: string | null;
+}
 
-export default function CartProductsList(
-  props: CartProductsListProps
-): ReactElement {
+export default function CartProductsList({
+  className = null,
+}: CartProductsListProps): ReactElement {
   const cartProductList: CartProduct[] = useMemo(
     () => [
       {
@@ -46,7 +48,7 @@ export default function CartProductsList(
   );
 
   return (
-    <ul className="flex flex-col gap-12">
+    <ul className={`flex flex-col gap-12 ${className}`}>
       {cartProductList.map(({ id, name, stock, price, imageUrl, category }) => (
         <CartProductCard
           key={id}

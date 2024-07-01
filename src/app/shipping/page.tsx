@@ -1,13 +1,10 @@
+"use client";
+
+import useShipping from "@/hooks/useShipping";
 import { type ReactElement } from "react";
 
-export interface pageProps {}
+export default function Shipping(): ReactElement {
+  const renderContent = useShipping();
 
-export default function page(props: pageProps): ReactElement {
-  return (
-    <section className="py-navbar">
-      <div>
-        <h1>Shipping</h1>
-      </div>
-    </section>
-  );
+  return <section>{renderContent()}</section>;
 }

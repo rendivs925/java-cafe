@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { memo, type ReactElement } from "react";
 import { Button } from "./ui/button";
 import { Product } from "@/types";
@@ -17,7 +17,7 @@ function ProductCard({
       <div className="bg-secondary px-6 py-6">
         <h3 className="mt-0">{title}</h3>
         <p>{description}</p>
-        <div className="flex mt-12 justify-between items-end">
+        <div className="flex mt-12 justify-between items-end overflow-hidden">
           <h3 className="price">${price}</h3>{" "}
           <Button variant="default" size="sm">
             Add To Cart

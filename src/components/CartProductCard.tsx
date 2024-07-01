@@ -1,6 +1,6 @@
 import { type ReactElement } from "react";
 import { CartProduct } from "@/types";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { Button } from "./ui/button";
 
 export default function CartProductCard({
@@ -16,7 +16,7 @@ export default function CartProductCard({
       </div>
       <div className="detail">
         <h4 className="title mb-0 font-medium">{name}</h4>
-        <p className="stock mt-0">Stok : {stock}</p>
+        <p className="stock mt-1">Stok : {stock}</p>
       </div>
       <h4 className="price font-medium mt-4">Rp {price}</h4>
       <div className="qty-btn flex text-muted-foreground items-center">
