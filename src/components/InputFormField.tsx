@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactElement } from "react";
+import { type ReactElement, memo } from "react";
 import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -14,7 +14,7 @@ interface InputFormFieldProps {
   errors: any;
 }
 
-export default function InputFormField({
+function InputFormField({
   control,
   name,
   id,
@@ -40,3 +40,5 @@ export default function InputFormField({
     />
   );
 }
+
+export default memo(InputFormField)

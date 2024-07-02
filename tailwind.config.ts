@@ -23,7 +23,8 @@ const config = {
         about: "1fr 1.8fr",
         hero: "1fr auto",
         cart: "1.8fr 1fr",
-        detail: "200px 1fr",
+        detail: "1fr 1.3fr",
+        "sm-detail": "200px 1fr"
       },
       screens: {
         smallerMobileScreen: "400px",

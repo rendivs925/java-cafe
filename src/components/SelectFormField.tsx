@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import {
   FormControl,
   FormItem,
@@ -59,4 +59,4 @@ const SelectFormField: React.FC<SelectFormFieldProps> = ({ control, name, label,
   );
 };
 
-export default SelectFormField;
+export default memo(SelectFormField);

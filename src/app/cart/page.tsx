@@ -1,5 +1,6 @@
-import { CartProductsList, OrderSummary } from "@/components";
 import { type ReactElement } from "react";
+import CartProductsList from "@/components/CartProductsList"
+import OrderSummary from "@/components/OrderSummary"
 
 export interface CartProps {}
 

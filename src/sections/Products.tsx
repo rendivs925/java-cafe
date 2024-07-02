@@ -1,8 +1,8 @@
-import { ProductsList, Title } from "@/components";
 import { type ReactElement } from "react";
-export interface ProductsProps {}
+import Title from "@/components/Title"
+import ProductsList from "@/components/ProductsList"
 
-export default function Products(props: ProductsProps): ReactElement {
+export default function Products(): ReactElement {
   return (
     <section id="products">
       <div className="container">

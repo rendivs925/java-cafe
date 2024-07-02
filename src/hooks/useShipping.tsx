@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import useShippingContext from "./useShippingContext";
-import { Konfirmasi, Pembayaran, Pengiriman } from "@/components";
+import Pengiriman from "@/components/Pengiriman";
+import Konfirmasi from "@/components/Konfirmasi";
+import Pembayaran from "@/components/Pembayaran";
 
 export default function useShipping() {
   const { activeStep, setActiveStep } = useShippingContext();

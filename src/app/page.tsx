@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { About, Blog, Contact, Footer, Hero, Products } from "@/sections";
+import Hero from "@/sections/Hero";
+import About from "@/sections/About";
+import Products from "@/sections/Products";
+import Blog from "@/sections/Blog";
+import Footer from "@/sections/Footer";
+import Contact from "@/sections/Contact";
 
 export const metadata: Metadata = {
   title: "Home",

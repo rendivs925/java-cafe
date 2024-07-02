@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useRef, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
@@ -8,7 +8,7 @@ import { MaptilerLayer } from "@maptiler/leaflet-maptilersdk";
 const Map: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<LeafletMap | null>(null);
-  const center: LatLngExpression = { lng: 13.338414, lat: 52.507932 };
+  const center: LatLngExpression = [52.507932, 13.338414];  // lat, lng order
   const [zoom] = useState<number>(12);
 
   useEffect(() => {
@@ -16,16 +16,24 @@ const Map: React.FC = () => {
 
     if (mapContainer.current) {
       map.current = new L.Map(mapContainer.current, {
-        center: L.latLng(center.lat, center.lng),
+        center: center,
         zoom: zoom,
       });
 
       // Create a MapTiler Layer inside Leaflet
       new MaptilerLayer({
-        // Get your free API key at https://cloud.maptiler.com
-        apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY,
+        apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY!,
       }).addTo(map.current);
     }
+
+    // Cleanup on unmount
+    return () => {
+      if (map.current) {
+        map.current.off();  // Remove all event listeners
+        map.current.remove();  // Remove the map instance
+        map.current = null;
+      }
+    };
   }, [center, zoom]);
 
   return (

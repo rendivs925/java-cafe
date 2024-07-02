@@ -1,7 +1,7 @@
 import { type ReactElement } from "react";
 import dynamic from "next/dynamic";
-import { Title } from "@/components";
 import { contactUs, workingHours } from "@/constanst";
+import Title from "@/components/Title"
 
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,

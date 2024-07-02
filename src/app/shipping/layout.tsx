@@ -1,5 +1,5 @@
-import { ProgressBar } from "@/components";
-import { ShippingProvider } from "@/providers";
+import ProgressBar from "@/components/ProgressBar";
+import ShippingProvider from "@/providers/ShippingProvider";
 import { ReactNode, ReactElement } from "react";
 
 export default function ShippingLayout({

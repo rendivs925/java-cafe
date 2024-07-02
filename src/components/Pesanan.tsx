@@ -25,7 +25,7 @@ function Pesanan() {
       <Line className="mb-6" />
       <div className="flex flex-col space-y-2">
         {orderDetails.map((detail, index) => (
-          <label key={index} className="grid grid-cols-detail">
+          <label key={index} className="grid grid-cols-detail sm:grid-cols-sm-detail">
             <span className="text-muted-foreground">{detail.label}</span>
             <p className="mt-0">
               :{" "}

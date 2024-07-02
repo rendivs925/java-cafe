@@ -1,5 +1,6 @@
-import { BlogsList, Title } from "@/components";
 import { type ReactElement } from "react";
+import Title from "@/components/Title"
+import BlogsList from "@/components/BlogsList"
 
 export interface BlogProps {}
 
