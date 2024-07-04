@@ -1,15 +1,15 @@
 "use client";
 
 import { AppContext } from "@/providers/AppProvider";
-import { AppContextType } from "@/types";
 import { useContextSelector } from "use-context-selector";
 
-export default function useAppContext(): AppContextType | null {
-  const context: AppContextType | null = useContextSelector(
+export default function useAppContext() {
+  const context = useContextSelector(
     AppContext,
-    (state) => state
+    (state) => state,
   );
 
-  if (context === null) return null;
-  return context;
+  if (context) {
+    return context;
+  }
 }

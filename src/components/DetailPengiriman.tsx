@@ -1,14 +1,12 @@
 import { type ReactElement } from "react";
 
-export interface DetailPengirimanProps {}
-
 const detailData = [
   { label: "Nama", value: "Rendi Virgantara Setiawan" },
   { label: "No Handphone", value: "08123456789" },
   { label: "Alamat", value: "Jl Raya Indonesia no 14" },
 ];
 
-export default function DetailPengiriman(props: DetailPengirimanProps): ReactElement {
+export default function DetailPengiriman(): ReactElement {
   return (
     <>
       <h2 className="mb-6">Detail Pengiriman</h2>

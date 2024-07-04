@@ -7,6 +7,7 @@ interface NavbarLink {
 
 interface AppContextType {
   moveRoute: (route: string) => void;
+  formatToRupiah: (value: number) => string;
 }
 
 interface Product {

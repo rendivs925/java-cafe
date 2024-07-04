@@ -2,16 +2,10 @@ import React from "react";
 import FormContainer from "./FormContainer";
 import { Button } from "./ui/button";
 import Line from "./Line";
-
-const formatToRupiah = (value: number) => {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 2,
-  }).format(value);
-};
+import useAppContext from "@/hooks/useAppContext";
 
 function Pesanan() {
+  const {formatToRupiah} = useAppContext();
   const orderDetails = [
     { label: "Total item", value: 4 },
     { label: "Ongkir", value: 30000 },

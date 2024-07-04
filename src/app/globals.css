@@ -175,7 +175,11 @@
   }
 
   .glass {
-    @apply bg-background/20 backdrop-filter backdrop-blur-lg rounded-lg border border-white border-opacity-10 shadow-lg p-6;
+    @apply bg-background/70 backdrop-filter backdrop-blur-lg border border-foreground border-opacity-10 shadow-lg p-6;
+  }
+
+  .sidebar-link-hover {
+    @apply bg-primary;
   }
 
   .pt-navbar {

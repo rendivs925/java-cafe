@@ -22,7 +22,7 @@ export default function Navbar(): ReactElement {
           })}
         </ul>
         <div className="flex gap-6 items-center">
-          <Link href="/cart" className="hover:after:w-0">
+          <Link href="/cart" prefetch={false} className="hover:after:w-0">
             <Image src="/images/cart.png" alt="Cart" width={28} height={28} />
           </Link>
           <div className="flex flex-col items-center justify-between h-6 w-9 lg:hidden">
