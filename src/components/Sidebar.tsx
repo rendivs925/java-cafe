@@ -20,8 +20,8 @@ const links = [
 
 const Sidebar = () => {
   return (
-    <aside className="h-screen py-12 bg-secondary w-[330px] text-white px-6 sticky top-0">
-      <h1 className="mb-12">Java Cafe</h1>
+    <aside className="h-screen py-12 bg-secondary w-[330px] text-white px-6 sticky min-h-svh top-0 bottom-0">
+      <h1 className="mb-12 justify-center flex gap-4">Cafe <span className="text-foreground"><PiCoffeeFill/></span></h1>
       <ul className="space-y-4">
         {links.map(({ href, label, isActive, icon }, index) => (
           <li key={index}>

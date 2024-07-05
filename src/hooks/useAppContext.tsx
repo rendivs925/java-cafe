@@ -9,7 +9,6 @@ export default function useAppContext() {
     (state) => state,
   );
 
-  if (context) {
-    return context;
-  }
+  if (!context) return null
+  return context;
 }

@@ -2,7 +2,6 @@
 
 import { type ReactElement } from "react";
 import { Button } from "./ui/button";
-import { AppContextType } from "@/types";
 import Line from "./Line";
 import FormContainer from "./FormContainer"
 import useAppContext from "@/hooks/useAppContext";
@@ -10,7 +9,7 @@ import useAppContext from "@/hooks/useAppContext";
 export interface OrderSummaryProps {}
 
 export default function OrderSummary(props: OrderSummaryProps): ReactElement {
-  const context: AppContextType | null = useAppContext();
+  const context = useAppContext();
 
   return (
     <FormContainer>

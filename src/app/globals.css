@@ -182,6 +182,32 @@
     @apply bg-primary;
   }
 
+  .dashboard-layout {
+    display: grid;
+    grid:
+      "dashboard-summary dashboard-summary" auto
+      "line-chart recent-orders" 1fr
+      / 1fr 600px;
+  }
+
+  .dashboard-summary {
+    grid-area: dashboard-summary;
+  }
+
+  .recent-orders {
+    grid-area: recent-orders;
+  }
+
+  .line-chart {
+    grid-area: line-chart;
+  }
+
+  .chart-canvas {
+    width: 100% !important; /* Ensures the canvas takes the full width of its container */
+    height: auto !important; /* Maintains the aspect ratio */
+    max-width: 100%; /* Ensures the canvas doesn't exceed the width of the container */
+  }
+
   .pt-navbar {
     @apply pt-16 lg:pt-20;
   }

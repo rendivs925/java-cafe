@@ -20,7 +20,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="scroll-smooth scroll-pt-32 overflow-x-hidden">
-      <body className={`${ inter.className } ${isDashboard && "flex"}`}>
+      <body className={`${ inter.className } ${isDashboard && "flex relative overflow-hidden max-h-svh"}`}>
           {!isDashboard ? <Navbar /> : <Sidebar/>}
         <AppProvider>{children}</AppProvider>
       </body>
