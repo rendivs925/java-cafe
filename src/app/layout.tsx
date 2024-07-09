@@ -2,10 +2,10 @@
 
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar"
-import AppProvider from "@/providers/AppProvider"
+import Navbar from "@/components/Navbar";
+import AppProvider from "@/providers/AppProvider";
 import { usePathname } from "next/navigation";
-import Sidebar from "@/components/Sidebar"
+import Sidebar from "@/components/Sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,12 +16,12 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
 
-  const isDashboard = pathname.startsWith('/dashboard');
+  const isDashboard = pathname.startsWith("/admin");
 
   return (
-    <html lang="en" className="scroll-smooth scroll-pt-32 overflow-x-hidden">
-      <body className={`${ inter.className } ${isDashboard && "flex relative overflow-hidden max-h-svh"}`}>
-          {!isDashboard ? <Navbar /> : <Sidebar/>}
+    <html lang="en" className="scroll-smooth scroll-pt-32">
+      <body className={`${inter.className} ${isDashboard && "flex max-h-svh"}`}>
+        {!isDashboard ? <Navbar /> : <Sidebar />}
         <AppProvider>{children}</AppProvider>
       </body>
     </html>

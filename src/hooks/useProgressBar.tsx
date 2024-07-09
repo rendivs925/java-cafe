@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactElement } from "react";
-import useShippingContext from "@/hooks/useShippingContext"
+import useShippingContext from "@/hooks/useShippingContext";
 
 interface StepProps {
   label: string;
@@ -13,7 +13,9 @@ export default function useProgressBar() {
   const Step = ({ label, isActive }: StepProps): ReactElement => (
     <h4
       className={`mb-0 py-2 px-5 sm:py-3 sm:px-6 md:py-4 md:px-7 sm-text rounded-lg font-medium transition ${
-        isActive ? "bg-primary" : "bg-primary/30"
+        isActive
+          ? "bg-primary text-primary-foreground"
+          : "bg-primary/30 text-foreground"
       }`}
     >
       {label}

@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Carousel,
   CarouselContent,
@@ -10,24 +8,21 @@ import {
 
 import ProductCard from "./ProductCard";
 import { products } from "@/constanst";
-import { ReactNode, useCallback } from "react";
+import { ReactNode } from "react";
 import { Product } from "@/types";
 
 export interface ProductsListProps {}
 
 export default function ProductsList(props: ProductsListProps): ReactNode {
-  const renderSlide = useCallback(
-    ({ title, id, description, price, imgUrl }: Product) => (
-      <CarouselItem className="pl-12 md:basis-1/2 lg:basis-1/3" key={id}>
-        <ProductCard
-          title={title}
-          price={price}
-          description={description}
-          imgUrl={imgUrl}
-        />
-      </CarouselItem>
-    ),
-    []
+  const renderSlide = ({ title, id, description, price, imgUrl }: Product) => (
+    <CarouselItem className="pl-12 md:basis-1/2 lg:basis-1/3" key={id}>
+      <ProductCard
+        title={title}
+        price={price}
+        description={description}
+        imgUrl={imgUrl}
+      />
+    </CarouselItem>
   );
 
   return (

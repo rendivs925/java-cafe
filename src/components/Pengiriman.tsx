@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormContainer from "./FormContainer";
 import InputFormField from "./InputFormField";
-import usePengiriman from "@/hooks/usePengiriman"
+import usePengiriman from "@/hooks/usePengiriman";
 
 export interface PengirimanProps {}
 
@@ -28,7 +28,7 @@ export default function Pengiriman(props: PengirimanProps): ReactElement {
   const { form, onSubmit } = usePengiriman();
 
   return (
-    <FormContainer className="max-w-[700px] mt-14 me-auto ms-auto bg-secondary">
+    <FormContainer className="max-w-[700px] mt-14 me-auto ms-auto bg-background">
       <h2 className="mb-6">Detail alamat pengiriman</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">

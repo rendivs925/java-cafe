@@ -23,7 +23,7 @@ export default function CartProductCard({
         <Button size="sm" className="p-5 h-0  rounded-none">
           -
         </Button>
-        <span className="bg-accent/20 h-5 p-5 font-medium flex items-center">
+        <span className="bg-background text-foreground/80 h-5 p-5 font-medium flex items-center">
           3
         </span>
         <Button size="sm" className="rounded-none p-5 h-0">

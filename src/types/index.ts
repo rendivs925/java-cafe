@@ -1,13 +1,31 @@
 import React from "react";
 
+interface formattedDataType {
+  month: string;
+  value: number;
+}
+
 interface NavbarLink {
   href: string;
   label: string;
 }
 
+interface TotalSalesData {
+  value: number;
+  date: Date;
+}
+
 interface AppContextType {
   moveRoute: (route: string) => void;
   formatToRupiah: (value: number) => string;
+  formatToIDR: (value: number) => string;
+  formatDate: (date: Date) => string;
+  getTotalSalesData: (
+    data: TotalSalesData[],
+    amount: number
+  ) => TotalSalesData[];
+  handleSelectChange: (value: string) => void;
+  totalDays: number;
 }
 
 interface Product {
@@ -58,4 +76,6 @@ export type {
   NavbarLink,
   Product,
   Blog,
+  TotalSalesData,
+  formattedDataType,
 };

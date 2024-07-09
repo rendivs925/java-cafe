@@ -1,6 +1,4 @@
-"use client";
-
-import { useCallback, type ReactElement } from "react";
+import { type ReactElement } from "react";
 
 import {
   Carousel,
@@ -16,13 +14,10 @@ import { Blog } from "@/types";
 export interface BlogsListProps {}
 
 export default function BlogsList(props: BlogsListProps): ReactElement {
-  const renderSlide = useCallback(
-    ({ title, description, id }: Blog) => (
-      <CarouselItem className="pl-12 md:basis-1/2 lg:basis-1/3" key={id}>
-        <BlogCard title={title} description={description} />
-      </CarouselItem>
-    ),
-    []
+  const renderSlide = ({ title, description, id }: Blog) => (
+    <CarouselItem className="pl-12 md:basis-1/2 lg:basis-1/3" key={id}>
+      <BlogCard title={title} description={description} />
+    </CarouselItem>
   );
 
   return (

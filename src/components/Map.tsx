@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useRef, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
@@ -8,7 +8,7 @@ import { MaptilerLayer } from "@maptiler/leaflet-maptilersdk";
 const Map: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<LeafletMap | null>(null);
-  const center: LatLngExpression = [52.507932, 13.338414];  // lat, lng order
+  const center: LatLngExpression = [52.507932, 13.338414]; // lat, lng order
   const [zoom] = useState<number>(12);
 
   useEffect(() => {
@@ -29,12 +29,12 @@ const Map: React.FC = () => {
     // Cleanup on unmount
     return () => {
       if (map.current) {
-        map.current.off();  // Remove all event listeners
-        map.current.remove();  // Remove the map instance
+        map.current.off(); // Remove all event listeners
+        map.current.remove(); // Remove the map instance
         map.current = null;
       }
     };
-  }, [center, zoom]);
+  }, []);
 
   return (
     <div className="mapWrap z-0">

@@ -7,7 +7,7 @@ interface FormContainerProps {
 
 const FormContainer = ({ children, className = "" }: FormContainerProps) => {
   return (
-    <section className={`bg-secondary p-8 rounded-lg ${className}`}>
+    <section className={`bg-background p-8 rounded-lg ${className}`}>
       {children}
     </section>
   );

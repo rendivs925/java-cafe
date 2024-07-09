@@ -14,7 +14,7 @@ function ProductCard({
       <div className="relative aspect-[2/3] rounded-lg overflow-hidden">
         <Image src={imgUrl} alt="Product" layout="fill" objectFit="cover" />
       </div>
-      <div className="bg-secondary px-6 py-6">
+      <div className="bg-background px-6 py-6">
         <h3 className="mt-0">{title}</h3>
         <p>{description}</p>
         <div className="flex mt-12 justify-between items-end overflow-hidden">

@@ -7,7 +7,7 @@ import Konfirmasi from "@/components/Konfirmasi";
 import Pembayaran from "@/components/Pembayaran";
 
 export default function useShipping() {
-  const { activeStep, setActiveStep } = useShippingContext();
+  const { activeStep } = useShippingContext();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {

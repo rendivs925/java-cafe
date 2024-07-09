@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+import React, { memo } from "react";
 import {
   FormControl,
   FormItem,
@@ -21,25 +21,27 @@ interface Option {
 }
 
 interface SelectFormFieldProps {
-  control: Control<any>; 
+  control: Control<any>;
   name: string;
   label: string;
   options: Option[];
 }
 
-const SelectFormField: React.FC<SelectFormFieldProps> = ({ control, name, label, options }) => {
+const SelectFormField: React.FC<SelectFormFieldProps> = ({
+  control,
+  name,
+  label,
+  options,
+}) => {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="bg-secondary w-full">
+        <FormItem className="bg-background w-full">
           <FormLabel>{label}</FormLabel>
-          <Select
-            onValueChange={field.onChange}
-            defaultValue={field.value}
-          >
-            <FormControl className="bg-secondary">
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl className="bg-background">
               <SelectTrigger>
                 <SelectValue placeholder={`Pilih ${label.toLowerCase()}`} />
               </SelectTrigger>
