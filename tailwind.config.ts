@@ -61,6 +61,8 @@ const config = {
         detail: "1fr 1.3fr",
         "sm-detail": "200px 1fr",
         totalSales: "1fr auto",
+        productSales: "auto 1fr",
+        productSalesDetail: "auto 1fr 2fr",
       },
       screens: {
         smallerMobileScreen: "400px",

@@ -24,12 +24,12 @@ export default function DashboardSummaryItemsList({
   const summaryData = [
     {
       label: "Total Sales",
-      value: formatToIDR(totalSales),
+      value: "IDR " + formatToIDR(totalSales),
       icon: <TbReportMoney fontSize="24" />,
     },
     {
       label: "Total Earnings",
-      value: formatToIDR(totalEarnings),
+      value: "IDR " + formatToIDR(totalEarnings),
       icon: <GrAnalytics fontSize="24" />,
     },
     {

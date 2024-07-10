@@ -1,7 +1,6 @@
 "use client";
 
 import useAppContext from "@/hooks/useAppContext";
-import SelectTotalSalesData from "./SelectTotalSalesData";
 
 import {
   Bar,

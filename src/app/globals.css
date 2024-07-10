@@ -186,7 +186,7 @@
     grid:
       "dashboard-summary dashboard-summary" auto
       "total-sales product-sales" 1fr
-      / 1.3fr 1fr;
+      / 1.5fr 1fr;
     overflow: visible;
   }
 

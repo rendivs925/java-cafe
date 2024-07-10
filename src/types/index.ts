@@ -20,10 +20,7 @@ interface AppContextType {
   formatToRupiah: (value: number) => string;
   formatToIDR: (value: number) => string;
   formatDate: (date: Date) => string;
-  getTotalSalesData: (
-    data: TotalSalesData[],
-    amount: number
-  ) => TotalSalesData[];
+  getTotalSalesData: (data: TotalSalesData[]) => formattedDataType[];
   handleSelectChange: (value: string) => void;
   totalDays: number;
 }
