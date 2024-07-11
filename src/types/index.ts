@@ -18,7 +18,7 @@ interface TotalSalesData {
 interface AppContextType {
   moveRoute: (route: string) => void;
   formatToRupiah: (value: number) => string;
-  formatToIDR: (value: number) => string;
+  formatNumber: (value: number) => string;
   formatDate: (date: Date) => string;
   getTotalSalesData: (data: TotalSalesData[]) => formattedDataType[];
   handleSelectChange: (value: string) => void;

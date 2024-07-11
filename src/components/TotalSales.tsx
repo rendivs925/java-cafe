@@ -87,7 +87,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function TotalSales() {
-  const { getTotalSalesData, formatToIDR } = useAppContext();
+  const { getTotalSalesData, formatNumber } = useAppContext();
 
   const filteredData = getTotalSalesData(chartData);
 
@@ -96,7 +96,7 @@ export default function TotalSales() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Card className="total-sales">
+    <Card>
       <CardHeader>
         <CardTitle className="mt-0">Sales This Year</CardTitle>
         <CardDescription>
@@ -114,14 +114,14 @@ export default function TotalSales() {
                 tickMargin={10}
                 axisLine={false}
               />
-              <YAxis tickFormatter={(tick) => formatToIDR(tick)} />
+              <YAxis tickFormatter={(tick) => formatNumber(tick)} />
 
               <ChartTooltip
                 cursor={false}
                 content={
                   <ChartTooltipContent
                     formatter={(tick) =>
-                      "Total sales : " + formatToIDR(Number(tick))
+                      "Total sales : " + formatNumber(Number(tick))
                     }
                     hideLabel
                   />

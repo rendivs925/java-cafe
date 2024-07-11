@@ -22,7 +22,7 @@ export default function AppProvider({
     router.push(route);
   };
 
-  const formatToIDR = (value: number) => {
+  const formatNumber = (value: number) => {
     if (value >= 1000000) {
       return (value / 1000000).toFixed(1) + "M";
     } else if (value >= 1000) {
@@ -88,7 +88,7 @@ export default function AppProvider({
   const contextValues: AppContextType = {
     moveRoute,
     formatToRupiah,
-    formatToIDR,
+    formatNumber,
     formatDate,
     getTotalSalesData,
     handleSelectChange,

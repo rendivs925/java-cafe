@@ -5,7 +5,7 @@ const DashboardSummary = () => {
   return (
     <DashboardSummaryItemsList
       totalEarnings={10000000}
-      totalOrders={200}
+      totalOrders={2000}
       totalSales={20000000}
       totalVisitors={30000}
     />

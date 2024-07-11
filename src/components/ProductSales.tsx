@@ -60,20 +60,20 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function ProductSales() {
-  const { formatToIDR } = useAppContext();
+  const { formatNumber } = useAppContext();
   const totalSales = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.totalSales, 0);
   }, []);
 
   return (
-    <Card className="overflow-visible bg-background flex flex-col product-sales">
+    <Card className="overflow-visible bg-background flex flex-col">
       <CardHeader className="items-start pb-0">
         <CardTitle className="mt-0">Product Sales</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1">
         <div className="grid grid-rows-productSales items-start h-full mt-6">
-          <ul className="w-full order-2 space-y-1 place-self-start">
+          <ul className="w-full order-2 space-y-1 place-self-start mt-2">
             {chartData.map((data) => (
               <li className="grid gap-4 grid-cols-productSalesDetail items-center">
                 <div
@@ -82,7 +82,7 @@ export default function ProductSales() {
                 ></div>
                 <CardDescription className="mt-0">{data.name}</CardDescription>
                 <CardDescription className="mt-0 font-medium text-muted-foreground">
-                  {formatToIDR(data.totalSales)}
+                  {formatNumber(data.totalSales)}
                 </CardDescription>
               </li>
             ))}
@@ -119,7 +119,7 @@ export default function ProductSales() {
                   content={
                     <ChartTooltipContent
                       formatter={(tick) =>
-                        "Total sales : " + formatToIDR(Number(tick))
+                        "Total sales : " + formatNumber(Number(tick))
                       }
                       hideLabel
                     />

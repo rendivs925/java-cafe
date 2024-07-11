@@ -63,6 +63,7 @@ const config = {
         totalSales: "1fr auto",
         productSales: "auto 1fr",
         productSalesDetail: "auto 1fr 2fr",
+        dashboardLayout: "1.5fr 1fr"
       },
       screens: {
         smallerMobileScreen: "400px",

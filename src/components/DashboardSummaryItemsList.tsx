@@ -1,7 +1,7 @@
 "use client";
 import { type ReactElement } from "react";
 import useAppContext from "@/hooks/useAppContext";
-import { GrAnalytics } from "react-icons/gr";
+import { GrFormView, GrAnalytics } from "react-icons/gr";
 import { IoCart } from "react-icons/io5";
 import { TbReportMoney } from "react-icons/tb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,34 +19,34 @@ export default function DashboardSummaryItemsList({
   totalOrders,
   totalVisitors,
 }: DashboardSummaryItemsListProps): ReactElement {
-  const { formatToIDR } = useAppContext();
+  const { formatNumber } = useAppContext();
 
   const summaryData = [
     {
       label: "Total Sales",
-      value: "IDR " + formatToIDR(totalSales),
+      value: "IDR " + formatNumber(totalSales),
       icon: <TbReportMoney fontSize="24" />,
     },
     {
       label: "Total Earnings",
-      value: "IDR " + formatToIDR(totalEarnings),
+      value: "IDR " + formatNumber(totalEarnings),
       icon: <GrAnalytics fontSize="24" />,
     },
     {
       label: "Total Orders",
-      value: totalOrders + " K",
+      value: formatNumber(totalOrders),
       icon: <IoCart fontSize="24" />,
     },
     {
       label: "Total Visitors",
-      value: totalVisitors + " K",
-      icon: <IoCart fontSize="24" />,
+      value: formatNumber(totalVisitors),
+      icon: <GrFormView fontSize="24" />,
     },
   ];
 
   return (
     <>
-      <ul className="dashboard-summary grid grid-cols-responsive gap-6">
+      <ul className="col-span-full grid grid-cols-responsive gap-6">
         {summaryData.map((item, index) => (
           <li key={index} className="text-left w-full bg-background rounded-lg">
             <Card>

@@ -181,15 +181,6 @@
     @apply bg-primary;
   }
 
-  .dashboard-layout {
-    display: grid;
-    grid:
-      "dashboard-summary dashboard-summary" auto
-      "total-sales product-sales" 1fr
-      / 1.5fr 1fr;
-    overflow: visible;
-  }
-
   .dashboard-summary {
     grid-area: dashboard-summary;
   }

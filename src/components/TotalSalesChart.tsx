@@ -77,7 +77,7 @@ const data = [
 const chartConfig = {} satisfies ChartConfig;
 
 export default function TotalSalesChart() {
-  const { getTotalSalesData, totalDays, formatToIDR, formatDate } =
+  const { getTotalSalesData, totalDays, formatNumber, formatDate } =
     useAppContext();
   const [filteredData, setFilteredData] = useState(data);
 
@@ -112,7 +112,7 @@ export default function TotalSalesChart() {
               }}
             >
               <CartesianGrid vertical={false} />
-              <YAxis tickFormatter={(tick) => formatToIDR(tick)} />
+              <YAxis tickFormatter={(tick) => formatNumber(tick)} />
 
               <XAxis
                 dataKey="date"
@@ -124,7 +124,7 @@ export default function TotalSalesChart() {
               <Tooltip
                 cursor={false}
                 contentStyle={{ backgroundColor: "hsl(var(--background))" }}
-                formatter={(value) => formatToIDR(value as number)}
+                formatter={(value) => formatNumber(value as number)}
               />
               <Line
                 dataKey="value"
