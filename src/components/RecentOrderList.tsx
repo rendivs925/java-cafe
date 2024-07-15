@@ -71,12 +71,12 @@ export default function RecentOrderList(
                 {order.title}
               </h5>
               <CardDescription className="my-0">
-                {getTimeOrderedString(order.timeOrdered)}
+                {`${getTimeOrderedString(order.timeOrdered)}`}
               </CardDescription>
             </div>
           </div>
           <p className="mt-0 text-foreground font-medium">
-            IDR {formatNumber(order.price)}
+            {"IDR " + formatNumber(order.price)}
           </p>
         </li>
       ))}

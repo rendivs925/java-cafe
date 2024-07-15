@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { Card } from "./ui/card";
 
 interface FormContainerProps {
   children: ReactNode;
@@ -7,9 +8,7 @@ interface FormContainerProps {
 
 const FormContainer = ({ children, className = "" }: FormContainerProps) => {
   return (
-    <section className={`bg-background p-8 rounded-lg ${className}`}>
-      {children}
-    </section>
+    <Card className={`bg-background rounded-lg ${className}`}>{children}</Card>
   );
 };
 

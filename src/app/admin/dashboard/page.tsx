@@ -4,14 +4,20 @@ import TotalSales from "@/components/TotalSales";
 import ProductSales from "@/components/ProductSales";
 import RecentOrders from "@/components/ProductDelivery";
 import StockReport from "@/components/StockReport";
+import DashboardContainer from "@/components/DashboardContainer";
+import DashboardHeader from "@/components/DashboardHeader";
+import DashboardTitle from "@/components/DashboardTitle";
+import DashboardContent from "@/components/DashboardContent";
+import SearchBar from "@/components/SearchBar";
 
 const page = () => {
   return (
-    <section className="w-full min-h-svh py-12 px-10 overflow-y-auto">
-      <div className="pt-[12px]">
-        <h2 className="mt-0 pb-0">Dashboard</h2>
-      </div>
-      <div className="w-full mt-12 overflow-visible grid grid-cols-dashboardLayout gap-6">
+    <DashboardContainer className="w-full min-h-svh py-12 px-10 overflow-y-auto">
+      <DashboardHeader className="flex justify-between">
+        <DashboardTitle>Dashboard</DashboardTitle>
+        <SearchBar />
+      </DashboardHeader>
+      <DashboardContent className="grid grid-cols-dashboardLayout gap-6">
         <DashboardSummary />
         <section className="flex flex-col gap-6">
           <TotalSales />
@@ -21,8 +27,8 @@ const page = () => {
           <ProductSales />
           <RecentOrders />
         </section>
-      </div>
-    </section>
+      </DashboardContent>
+    </DashboardContainer>
   );
 };
 

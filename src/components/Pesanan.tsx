@@ -5,7 +5,7 @@ import Line from "./Line";
 import useAppContext from "@/hooks/useAppContext";
 
 function Pesanan() {
-  const {formatToRupiah} = useAppContext();
+  const { formatToRupiah } = useAppContext();
   const orderDetails = [
     { label: "Total item", value: 4 },
     { label: "Ongkir", value: 30000 },
@@ -19,7 +19,10 @@ function Pesanan() {
       <Line className="mb-6" />
       <div className="flex flex-col space-y-2">
         {orderDetails.map((detail, index) => (
-          <label key={index} className="grid grid-cols-detail sm:grid-cols-sm-detail">
+          <label
+            key={index}
+            className="grid grid-cols-detail sm:grid-cols-sm-detail"
+          >
             <span className="text-muted-foreground">{detail.label}</span>
             <p className="mt-0">
               :{" "}

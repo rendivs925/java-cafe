@@ -1,5 +1,13 @@
 import React from "react";
 
+interface ChartData {
+  product: string;
+  name: string;
+  totalSales: number;
+  fill: string;
+  color: string;
+}
+
 interface formattedDataType {
   month: string;
   value: number;
@@ -75,4 +83,5 @@ export type {
   Blog,
   TotalSalesData,
   formattedDataType,
+  ChartData,
 };

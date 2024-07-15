@@ -9,7 +9,7 @@ export default function OrderSummaryButton(): ReactElement {
   return (
     <>
       <Button
-        size="sm"
+        size="default"
         className="mt-8"
         variant="default"
         onClick={() => moveRoute("/shipping")}

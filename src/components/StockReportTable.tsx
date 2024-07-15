@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Table,
   TableBody,
@@ -80,7 +80,8 @@ export default function StockReportTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Item</TableHead>
+          <TableHead>No</TableHead>
+          <TableHead>Item</TableHead>
           <TableHead>Product ID</TableHead>
           <TableHead>Date Added</TableHead>
           <TableHead>Price</TableHead>
@@ -89,9 +90,10 @@ export default function StockReportTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {products.map(({ item, dateAdded, price, productID, QTY }) => (
+        {products.map(({ item, dateAdded, price, productID, QTY }, index) => (
           <TableRow key={productID}>
-            <TableCell className="font-medium">{item}</TableCell>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell>{item}</TableCell>
             <TableCell>{productID}</TableCell>
             <TableCell>{formatDate(dateAdded)}</TableCell>
             <TableCell>{formatNumber(price)}</TableCell>

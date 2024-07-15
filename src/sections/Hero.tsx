@@ -27,7 +27,7 @@ export default function Hero(props: HeroProps): ReactElement {
             journey with the warmth, aroma, and taste that keep your dreams
             alive.
           </p>
-          <Button size="default" className="mt-12" variant="default">
+          <Button size="lg" className="mt-12" variant="default">
             Order Now
           </Button>
         </div>

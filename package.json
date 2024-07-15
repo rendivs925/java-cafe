@@ -11,6 +11,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
     "@maptiler/leaflet-maptilersdk": "^2.0.0",
+    "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
@@ -26,7 +27,7 @@
     "html": "^1.0.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.397.0",
-    "next": "14.2.4",
+    "next": "^14.2.5",
     "postcss": "^8.4.38",
     "prettier": "^3.3.2",
     "react": "^18.3.1",

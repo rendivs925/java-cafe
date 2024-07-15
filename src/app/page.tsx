@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Home",
   description: "This is the home page of Java Cafe website",
 };
- 
+
 export default function Home() {
   return (
     <>
