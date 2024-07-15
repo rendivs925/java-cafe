@@ -8,7 +8,9 @@ interface FormContainerProps {
 
 const FormContainer = ({ children, className = "" }: FormContainerProps) => {
   return (
-    <Card className={`bg-background rounded-lg ${className}`}>{children}</Card>
+    <Card className={`bg-background rounded-lg shadow ${className}`}>
+      {children}
+    </Card>
   );
 };
 

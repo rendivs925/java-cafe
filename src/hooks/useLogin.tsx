@@ -4,9 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 // Define the schema
 const formSchema = z.object({
-  username: z.string().min(5, {
-    message: "Username minimal 5 karakter.",
-  }),
   email: z.string().email({ message: "Format email tidak valid." }).min(5, {
     message: "Email minimal 5 karakter.",
   }),
@@ -15,11 +12,10 @@ const formSchema = z.object({
   }),
 });
 
-export default function useSignUp() {
+export default function useLogin() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
     },

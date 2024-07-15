@@ -1,7 +1,12 @@
 "use client";
 
 import { type ReactElement, memo } from "react";
-import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 
@@ -12,6 +17,7 @@ interface InputFormFieldProps {
   placeholder: string;
   label: string;
   errors: any;
+  type?: string;
 }
 
 function InputFormField({
@@ -21,6 +27,7 @@ function InputFormField({
   placeholder,
   label,
   errors,
+  type = "text",
 }: InputFormFieldProps): ReactElement {
   return (
     <FormField
@@ -28,17 +35,17 @@ function InputFormField({
       name={name}
       render={({ field }) => (
         <FormItem>
-            <Label htmlFor={id}>{label}</Label>
-            <FormControl>
-              <Input id={id} placeholder={placeholder} {...field} />
-            </FormControl>
-            <FormMessage className="empty:hidden mt-0">
-              {errors[name]?.message}
-            </FormMessage>
+          <Label htmlFor={id}>{label}</Label>
+          <FormControl>
+            <Input id={id} placeholder={placeholder} type={type} {...field} />
+          </FormControl>
+          <FormMessage className="empty:hidden mt-0">
+            {errors[name]?.message}
+          </FormMessage>
         </FormItem>
       )}
     />
   );
 }
 
-export default memo(InputFormField)
+export default memo(InputFormField);
