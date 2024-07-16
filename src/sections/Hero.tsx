@@ -16,6 +16,7 @@ export default function Hero(props: HeroProps): ReactElement {
             alt="Coffee"
             priority
             layout="fill"
+            loading="eager"
           />
         </div>
         <div className="lg:order-1 grid content-center justify-items-start">

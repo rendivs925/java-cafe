@@ -13,7 +13,13 @@ export default function CartProductCard({
   return (
     <Card className="cart-item bg-transparent shadow-none">
       <div className="image w-24 rounded-lg mb-4 overflow-hidden h-24 relative">
-        <Image src={imageUrl} alt={name} layout="fill" objectFit="cover" />
+        <Image
+          src={imageUrl}
+          loading="eager"
+          alt={name}
+          layout="fill"
+          objectFit="cover"
+        />
       </div>
       <div className="detail space-y-1.5">
         <CardTitle className="title">{name}</CardTitle>
