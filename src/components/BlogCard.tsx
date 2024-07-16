@@ -11,6 +11,7 @@ function BlogCard({ title, description }: Omit<Blog, "id">): ReactElement {
           src="/images/blog1.avif"
           alt="Blog"
           objectFit="cover"
+          loading="eager"
           layout="fill"
         />
       </CardHeader>

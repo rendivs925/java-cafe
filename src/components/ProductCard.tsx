@@ -13,7 +13,13 @@ function ProductCard({
   return (
     <Card className="flex flex-col w-full rounded-lg overflow-hidden shadow">
       <CardHeader className="relative aspect-[2/3] overflow-hidden">
-        <Image src={imgUrl} alt="Product" layout="fill" objectFit="cover" />
+        <Image
+          src={imgUrl}
+          loading="eager"
+          alt="Product"
+          layout="fill"
+          objectFit="cover"
+        />
       </CardHeader>
       <CardContent className="bg-background px-6 py-6">
         <CardTitle className="mt-0">{title}</CardTitle>
