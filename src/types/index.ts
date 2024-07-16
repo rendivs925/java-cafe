@@ -54,6 +54,7 @@ interface Blog {
   id: number;
   title: string;
   description: string;
+  imgUrl: string;
 }
 
 interface WorkingHour {

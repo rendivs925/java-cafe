@@ -56,24 +56,21 @@ const blogs: Blog[] = [
     title: "This is the title",
     description:
       "Lorem ipsum is placeholder text commonly used in the graphic, print....",
+    imgUrl: "/images/blog-image-1.jpg",
   },
   {
     id: 2,
     title: "This is the title",
     description:
       "Lorem ipsum is placeholder text commonly used in the graphic, print....",
+    imgUrl: "/images/blog-image-2.jpg",
   },
   {
     id: 3,
     title: "This is the title",
     description:
       "Lorem ipsum is placeholder text commonly used in the graphic, print....",
-  },
-  {
-    id: 4,
-    title: "This is the title",
-    description:
-      "Lorem ipsum is placeholder text commonly used in the graphic, print....",
+    imgUrl: "/images/blog-image-3.jpg",
   },
 ];
 

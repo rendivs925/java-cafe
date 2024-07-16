@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import useShippingContext from "./useShippingContext";
-import Pengiriman from "@/components/Pengiriman";
-import Konfirmasi from "@/components/Konfirmasi";
-import Pembayaran from "@/components/Pembayaran";
+import dynamic from "next/dynamic";
+
+const Pengiriman = dynamic(() => import("@/components/Pengiriman"));
+const Konfirmasi = dynamic(() => import("@/components/Konfirmasi"));
+const Pembayaran = dynamic(() => import("@/components/Pembayaran"));
 
 export default function useShipping() {
   const { activeStep } = useShippingContext();

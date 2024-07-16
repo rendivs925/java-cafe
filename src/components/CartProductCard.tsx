@@ -12,12 +12,13 @@ export default function CartProductCard({
 }: Omit<CartProduct, "id">): ReactElement {
   return (
     <Card className="cart-item bg-transparent shadow-none">
-      <div className="image w-24 rounded-lg mb-4 overflow-hidden h-24 relative">
+      <div className="image rounded-lg mb-4 overflow-hidden relative">
         <Image
           src={imageUrl}
+          width={96}
+          height={96}
           loading="eager"
           alt={name}
-          layout="fill"
           objectFit="cover"
         />
       </div>

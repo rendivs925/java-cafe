@@ -14,17 +14,17 @@ import { Blog } from "@/types";
 export interface BlogsListProps {}
 
 export default function BlogsList(props: BlogsListProps): ReactElement {
-  const renderSlide = ({ title, description, id }: Blog) => (
+  const renderSlide = ({ title, imgUrl, description, id }: Blog) => (
     <CarouselItem className="pl-12 md:basis-1/2 lg:basis-1/3" key={id}>
-      <BlogCard title={title} description={description} />
+      <BlogCard title={title} imgUrl={imgUrl} description={description} />
     </CarouselItem>
   );
 
   return (
     <Carousel>
       <CarouselContent className="-ml-12">
-        {blogs.map(({ title, description, id }) => {
-          return renderSlide({ title, description, id });
+        {blogs.map(({ title, description, id, imgUrl }) => {
+          return renderSlide({ title, description, id, imgUrl });
         })}
       </CarouselContent>
       <CarouselPrevious className="max-lg:hidden" />

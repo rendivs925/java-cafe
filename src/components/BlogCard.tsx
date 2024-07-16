@@ -3,12 +3,16 @@ import Image from "next/legacy/image";
 import { memo, type ReactElement } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
-function BlogCard({ title, description }: Omit<Blog, "id">): ReactElement {
+function BlogCard({
+  title,
+  description,
+  imgUrl,
+}: Omit<Blog, "id">): ReactElement {
   return (
     <Card className="bg-transparent space-y-6 shadow-none rounded-lg overflow-hidden">
       <CardHeader className="relative aspect-video">
         <Image
-          src="/images/blog1.avif"
+          src={imgUrl}
           alt="Blog"
           objectFit="cover"
           loading="eager"
