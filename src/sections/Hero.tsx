@@ -16,6 +16,7 @@ export default function Hero(props: HeroProps): ReactElement {
             alt="Coffee"
             priority
             layout="fill"
+            loading="eager"
             sizes="(max-width: 380px) 250px, (max-width: 640px) 320px, (max-width: 1024px) 350px, 480px"
           />
         </div>
