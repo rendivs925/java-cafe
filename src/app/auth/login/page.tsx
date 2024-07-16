@@ -1,6 +1,6 @@
 "use client";
 import { type ReactElement } from "react";
-import FormContainer from "@/components/FormContainer";
+import CardContainer from "@/components/CardContainer";
 import InputFormField from "@/components/InputFormField";
 import useLogin from "@/hooks/useLogin";
 import { Form } from "@/components/ui/form";
@@ -13,8 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-
-export interface pageProps {}
 
 const formFields = [
   {
@@ -32,11 +30,11 @@ const formFields = [
   },
 ];
 
-export default function page(props: pageProps): ReactElement {
+export default function page(): ReactElement {
   const { form, onSubmit } = useLogin();
 
   return (
-    <FormContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
+    <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Let's login to your account..</CardDescription>
@@ -70,6 +68,6 @@ export default function page(props: pageProps): ReactElement {
           </Link>
         </CardDescription>
       </CardFooter>
-    </FormContainer>
+    </CardContainer>
   );
 }

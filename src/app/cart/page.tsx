@@ -1,10 +1,8 @@
 import { type ReactElement } from "react";
-import CartProductsList from "@/components/CartProductsList"
-import OrderSummary from "@/components/OrderSummary"
+import CartProductsList from "@/components/CartProductsList";
+import OrderSummary from "@/components/OrderSummary";
 
-export interface CartProps {}
-
-export default function Cart(props: CartProps): ReactElement {
+export default function Cart(): ReactElement {
   return (
     <section className="py-navbar">
       <h1 className="container pt-navbar">Keranjang Anda</h1>

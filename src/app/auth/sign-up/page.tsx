@@ -1,6 +1,6 @@
 "use client";
 import { type ReactElement } from "react";
-import FormContainer from "@/components/FormContainer";
+import CardContainer from "@/components/CardContainer";
 import InputFormField from "@/components/InputFormField";
 import useSignUp from "@/hooks/useSignUp";
 import { Form } from "@/components/ui/form";
@@ -13,8 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-
-export interface SignUpProps {}
 
 const formFields = [
   {
@@ -38,11 +36,11 @@ const formFields = [
   },
 ];
 
-export default function SignUp(props: SignUpProps): ReactElement {
+export default function SignUp(): ReactElement {
   const { form, onSubmit } = useSignUp();
 
   return (
-    <FormContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
+    <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
       <CardHeader>
         <CardTitle>Sign Up</CardTitle>
         <CardDescription>Let's register your account..</CardDescription>
@@ -76,6 +74,6 @@ export default function SignUp(props: SignUpProps): ReactElement {
           </Link>
         </CardDescription>
       </CardFooter>
-    </FormContainer>
+    </CardContainer>
   );
 }

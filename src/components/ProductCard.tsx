@@ -1,5 +1,6 @@
 import Image from "next/legacy/image";
 import { memo, type ReactElement } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Product } from "@/types";
 
@@ -10,12 +11,12 @@ function ProductCard({
   imgUrl,
 }: Omit<Product, "id">): ReactElement {
   return (
-    <div className="flex flex-col w-full rounded-lg shadow">
-      <div className="relative aspect-[2/3] rounded-lg overflow-hidden">
+    <Card className="flex flex-col w-full rounded-lg overflow-hidden shadow">
+      <CardHeader className="relative aspect-[2/3] overflow-hidden">
         <Image src={imgUrl} alt="Product" layout="fill" objectFit="cover" />
-      </div>
-      <div className="bg-background px-6 py-6">
-        <h3 className="mt-0">{title}</h3>
+      </CardHeader>
+      <CardContent className="bg-background px-6 py-6">
+        <CardTitle className="mt-0">{title}</CardTitle>
         <p>{description}</p>
         <div className="flex mt-12 justify-between items-end overflow-hidden">
           <h3 className="price">${price}</h3>{" "}
@@ -23,8 +24,8 @@ function ProductCard({
             Add To Cart
           </Button>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 

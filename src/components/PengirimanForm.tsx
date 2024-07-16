@@ -1,8 +1,8 @@
 import React from "react";
 import { Form } from "@/components/ui/form";
 import SelectFormField from "./SelectFormField";
-import FormContainer from "./FormContainer"
-import useKonfirmasi from "@/hooks/useKonfirmasi"
+import CardContainer from "./CardContainer";
+import useKonfirmasi from "@/hooks/useKonfirmasi";
 
 function PengirimanForm() {
   const { form, onSubmit } = useKonfirmasi();
@@ -26,7 +26,7 @@ function PengirimanForm() {
   ];
 
   return (
-    <FormContainer>
+    <CardContainer>
       <h2 className="mb-6">Pengiriman</h2>
       <Form {...form}>
         <form
@@ -54,7 +54,7 @@ function PengirimanForm() {
           />
         </form>
       </Form>
-    </FormContainer>
+    </CardContainer>
   );
 }
 

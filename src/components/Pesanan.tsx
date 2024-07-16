@@ -1,5 +1,5 @@
 import React from "react";
-import FormContainer from "./FormContainer";
+import CardContainer from "./CardContainer";
 import { Button } from "./ui/button";
 import Line from "./Line";
 import useAppContext from "@/hooks/useAppContext";
@@ -14,7 +14,7 @@ function Pesanan() {
   ];
 
   return (
-    <FormContainer>
+    <CardContainer>
       <h2 className="mb-6">Pesanan</h2>
       <Line className="mb-6" />
       <div className="flex flex-col space-y-2">
@@ -37,7 +37,7 @@ function Pesanan() {
       <Button size="default" className="mt-8">
         Proses Pembayaran
       </Button>
-    </FormContainer>
+    </CardContainer>
   );
 }
 

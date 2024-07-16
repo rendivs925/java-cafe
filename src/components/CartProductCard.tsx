@@ -2,6 +2,7 @@ import { type ReactElement } from "react";
 import { CartProduct } from "@/types";
 import Image from "next/legacy/image";
 import { Button } from "./ui/button";
+import { Card, CardTitle } from "./ui/card";
 
 export default function CartProductCard({
   imageUrl,
@@ -10,13 +11,13 @@ export default function CartProductCard({
   price,
 }: Omit<CartProduct, "id">): ReactElement {
   return (
-    <li className="cart-item">
+    <Card className="cart-item bg-transparent shadow-none">
       <div className="image w-24 rounded-lg mb-4 overflow-hidden h-24 relative">
         <Image src={imageUrl} alt={name} layout="fill" objectFit="cover" />
       </div>
-      <div className="detail">
-        <h4 className="title mb-0 font-medium">{name}</h4>
-        <p className="stock mt-1">Stok : {stock}</p>
+      <div className="detail space-y-1.5">
+        <CardTitle className="title">{name}</CardTitle>
+        <p className="stock">Stok : {stock}</p>
       </div>
       <h4 className="price font-medium mt-4">Rp {price}</h4>
       <div className="qty-btn flex text-muted-foreground items-center">
@@ -31,6 +32,6 @@ export default function CartProductCard({
         </Button>
       </div>
       <div className="close-btn">x</div>
-    </li>
+    </Card>
   );
 }

@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
 import { Card } from "./ui/card";
 
-interface FormContainerProps {
+interface CardContainerProps {
   children: ReactNode;
   className?: string;
 }
 
-const FormContainer = ({ children, className = "" }: FormContainerProps) => {
+const CardContainer = ({ children, className = "" }: CardContainerProps) => {
   return (
     <Card className={`bg-background rounded-lg shadow ${className}`}>
       {children}
@@ -14,4 +14,4 @@ const FormContainer = ({ children, className = "" }: FormContainerProps) => {
   );
 };
 
-export default FormContainer;
+export default CardContainer;

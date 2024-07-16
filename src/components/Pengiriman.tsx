@@ -3,11 +3,10 @@
 import { type ReactElement } from "react";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import FormContainer from "./FormContainer";
+import CardContainer from "./CardContainer";
+import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import InputFormField from "./InputFormField";
 import usePengiriman from "@/hooks/usePengiriman";
-
-export interface PengirimanProps {}
 
 const formFields = [
   {
@@ -24,30 +23,34 @@ const formFields = [
   },
 ];
 
-export default function Pengiriman(props: PengirimanProps): ReactElement {
+export default function Pengiriman(): ReactElement {
   const { form, onSubmit } = usePengiriman();
 
   return (
-    <FormContainer className="max-w-[700px] mt-14 me-auto ms-auto bg-background">
-      <h2 className="mb-6">Detail alamat pengiriman</h2>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          {formFields.map((field) => (
-            <InputFormField
-              key={field.name}
-              control={form.control}
-              name={field.name}
-              id={field.id}
-              placeholder={field.placeholder}
-              label={field.label}
-              errors={form.formState.errors}
-            />
-          ))}
-          <Button type="submit" size="default">
-            Konfirmasi Pesanan
-          </Button>
-        </form>
-      </Form>
-    </FormContainer>
+    <CardContainer className="max-w-[700px] mt-14 me-auto ms-auto bg-background">
+      <CardHeader>
+        <CardTitle>Detail alamat pengiriman</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            {formFields.map((field) => (
+              <InputFormField
+                key={field.name}
+                control={form.control}
+                name={field.name}
+                id={field.id}
+                placeholder={field.placeholder}
+                label={field.label}
+                errors={form.formState.errors}
+              />
+            ))}
+            <Button type="submit" size="default">
+              Konfirmasi Pesanan
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </CardContainer>
   );
 }

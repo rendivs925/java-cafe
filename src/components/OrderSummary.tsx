@@ -1,21 +1,24 @@
 import { type ReactElement } from "react";
 import Line from "./Line";
-import FormContainer from "./FormContainer";
+import CardContainer from "./CardContainer";
 import OrderSummaryButton from "./OrderSummaryButton";
+import { CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 
-export interface OrderSummaryProps {}
-
-export default function OrderSummary(props: OrderSummaryProps): ReactElement {
+export default function OrderSummary(): ReactElement {
   return (
-    <FormContainer>
-      <div>
-        <h2>Order Summary</h2>
-        <Line className="mt-6" />
-        <p className="text-foreground">Total item : 3</p>
-        <p className="text-foreground">Sub harga : Rp 120.000</p>
-        <Line className="mt-6" />
+    <CardContainer className="px-6">
+      <CardHeader className="px-0">
+        <CardTitle>Order Summary</CardTitle>
+      </CardHeader>
+      <Line />
+      <CardContent className="pt-6 px-0">
+        <p className="text-foreground m-0">Total item : 3</p>
+        <p className="text-foreground m-0">Sub harga : Rp 120.000</p>
+      </CardContent>
+      <Line />
+      <CardFooter className="pt-6 px-0">
         <OrderSummaryButton />
-      </div>
-    </FormContainer>
+      </CardFooter>
+    </CardContainer>
   );
 }
