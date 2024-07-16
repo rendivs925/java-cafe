@@ -37,7 +37,9 @@ export default function SelectShowing(props: SelectShowingProps): ReactElement {
         </SelectTrigger>
         <SelectContent>
           {selectShowingItems.map(({ value }, index) => (
-            <SelectItem key={index} value={`${value}`}>{value}</SelectItem>
+            <SelectItem key={index} value={`${value}`}>
+              {value}
+            </SelectItem>
           ))}
         </SelectContent>
       </Select>
