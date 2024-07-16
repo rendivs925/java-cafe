@@ -13,9 +13,9 @@ export default function Konfirmasi(props: KonfirmasiProps): ReactElement {
       <DetailPengiriman />
       <BarangYangDibeli />
       <Line className="my-14" />
-      <div className="grid lg:grid-cols-2 gap-10">
-        <PengirimanForm/>
-        <Pesanan/>
+      <div className="grid items-start lg:grid-cols-2 gap-10">
+        <PengirimanForm />
+        <Pesanan />
       </div>
     </section>
   );

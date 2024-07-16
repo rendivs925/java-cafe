@@ -43,7 +43,7 @@ export default function SignUp(): ReactElement {
     <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
       <CardHeader>
         <CardTitle>Sign Up</CardTitle>
-        <CardDescription>Let's register your account..</CardDescription>
+        <CardDescription>Let&apos;s register your account..</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

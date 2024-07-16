@@ -2,6 +2,7 @@ import React from "react";
 import { Form } from "@/components/ui/form";
 import SelectFormField from "./SelectFormField";
 import CardContainer from "./CardContainer";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import useKonfirmasi from "@/hooks/useKonfirmasi";
 
 function PengirimanForm() {
@@ -27,33 +28,37 @@ function PengirimanForm() {
 
   return (
     <CardContainer>
-      <h2 className="mb-6">Pengiriman</h2>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-6"
-        >
-          <SelectFormField
-            control={form.control}
-            name="Provinsi"
-            label="Provinsi"
-            options={provinsiOptions}
-          />
-          <SelectFormField
-            control={form.control}
-            name="Kota"
-            label="Kota"
-            options={kotaOptions}
-          />
+      <CardHeader>
+        <CardTitle>Pengiriman</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-5"
+          >
+            <SelectFormField
+              control={form.control}
+              name="Provinsi"
+              label="Provinsi"
+              options={provinsiOptions}
+            />
+            <SelectFormField
+              control={form.control}
+              name="Kota"
+              label="Kota"
+              options={kotaOptions}
+            />
 
-          <SelectFormField
-            control={form.control}
-            name="Kurir"
-            label="Kurir"
-            options={kurirOptions}
-          />
-        </form>
-      </Form>
+            <SelectFormField
+              control={form.control}
+              name="Kurir"
+              label="Kurir"
+              options={kurirOptions}
+            />
+          </form>
+        </Form>
+      </CardContent>
     </CardContainer>
   );
 }

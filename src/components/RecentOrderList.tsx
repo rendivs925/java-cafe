@@ -2,6 +2,7 @@
 import { type ReactElement } from "react";
 import { CardDescription } from "./ui/card";
 import useAppContext from "@/hooks/useAppContext";
+import Image from "next/image";
 
 export interface RecentOrderListProps {}
 
@@ -65,7 +66,12 @@ export default function RecentOrderList(
       {recentOrdersData.map((order, index) => (
         <li key={index} className="flex justify-between items-center">
           <div className="flex gap-4 items-center">
-            <img src={order.imgUrl} alt={order.title} className="w-16 h-16" />
+            <Image
+              src={order.imgUrl}
+              alt={order.title}
+              width={64}
+              height={64}
+            />
             <div className="space-y-1 justify-self-start">
               <h5 className="my-0 py-0 text-lg font-medium text-foreground">
                 {order.title}

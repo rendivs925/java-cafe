@@ -22,6 +22,7 @@ export default function ShippingProvider({
   children,
 }: ShippingProviderProps): ReactElement {
   const [activeStep, setActiveStep] = useLocalStorage<number>("activeStep", 1);
+
   const incrementStep = () => {
     setActiveStep((prevStep) => {
       if (prevStep === 3) return 3;

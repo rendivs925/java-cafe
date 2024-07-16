@@ -30,14 +30,14 @@ const formFields = [
   },
 ];
 
-export default function page(): ReactElement {
+export default function Login(): ReactElement {
   const { form, onSubmit } = useLogin();
 
   return (
     <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
       <CardHeader>
         <CardTitle>Login</CardTitle>
-        <CardDescription>Let's login to your account..</CardDescription>
+        <CardDescription>Let&apos;s login to your account..</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -62,7 +62,7 @@ export default function page(): ReactElement {
       </CardContent>
       <CardFooter>
         <CardDescription className="mt-0">
-          Don't have an account ?{" "}
+          Don&apos;t have an account ?{" "}
           <Link href="/auth/sign-up" className="text-sm text-foreground/85">
             Sign Up
           </Link>

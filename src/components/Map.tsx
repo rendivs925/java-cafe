@@ -34,7 +34,7 @@ const Map: React.FC = () => {
         map.current = null;
       }
     };
-  }, []);
+  }, [center, zoom]);
 
   return (
     <div className="mapWrap z-0">
