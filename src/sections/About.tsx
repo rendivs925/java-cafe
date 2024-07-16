@@ -12,6 +12,7 @@ export default function About(props: AboutProps): ReactElement {
             src="/images/coffee-shop-1.avif"
             alt="Cafe"
             objectFit="cover"
+            loading="eager"
             layout="fill"
             className="rounded-lg"
           />
