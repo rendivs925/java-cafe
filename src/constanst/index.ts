@@ -30,7 +30,7 @@ const products: Product[] = [
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
     price: 23,
-    imgUrl: "/images/coffee1.avif",
+    imgUrl: "/images/product-1.jpg",
   },
   {
     id: 2,
@@ -38,7 +38,7 @@ const products: Product[] = [
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
     price: 23,
-    imgUrl: "/images/coffee2.avif",
+    imgUrl: "/images/product-2.jpg",
   },
   {
     id: 3,
@@ -46,7 +46,7 @@ const products: Product[] = [
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
     price: 23,
-    imgUrl: "/images/coffee3.avif",
+    imgUrl: "/images/product-3.jpg",
   },
 ];
 

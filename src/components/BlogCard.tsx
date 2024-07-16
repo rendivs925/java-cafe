@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 function BlogCard({ title, description }: Omit<Blog, "id">): ReactElement {
   return (
-    <Card className="bg-transparent space-y-6 rounded-lg overflow-hidden">
-      <CardHeader className="relative aspect-video shadow">
+    <Card className="bg-transparent space-y-6 shadow-none rounded-lg overflow-hidden">
+      <CardHeader className="relative aspect-video">
         <Image
           src="/images/blog1.avif"
           alt="Blog"
