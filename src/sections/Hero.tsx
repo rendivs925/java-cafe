@@ -12,7 +12,7 @@ export default function Hero(props: HeroProps): ReactElement {
       <div className="container grid min-h-svh content-center lg:grid-cols-hero gap-6 lg:gap-20">
         <div className="justify-self-center max-smallerMobileScreen:w-[250px] max-smallerMobileScreen:h-[250px] max-[380px]:w-[0] max-[380px]:h-[0] lg:justify-self-end lg:order-2 w-[320px] h-[320px] lg:w-[350px] lg:h-[350px] xl:h-[480px] xl:w-[480px] relative">
           <Image
-            src="/images/coffee-hd.png"
+            src="/images/optimized-coffee-hd.png"
             alt="Coffee"
             priority
             layout="fill"
