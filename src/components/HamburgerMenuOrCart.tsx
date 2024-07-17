@@ -11,7 +11,7 @@ export default function HamburgerMenuOrCart(
     <>
       <div className="flex gap-6 items-center">
         <Link href="/cart" className="hover:after:w-0">
-          <IoCart className="text-lg" />
+          <IoCart className="text-2xl" />
         </Link>
         <div className="flex flex-col items-center justify-between h-6 w-9 lg:hidden">
           <span className="h-[2.5px] w-full bg-foreground rounded-lg"></span>

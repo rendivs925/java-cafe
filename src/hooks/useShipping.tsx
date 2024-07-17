@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import useShippingContext from "./useShippingContext";
 import dynamic from "next/dynamic";
 
@@ -10,11 +9,6 @@ const Pembayaran = dynamic(() => import("@/components/Pembayaran"));
 
 export default function useShipping() {
   const { activeStep } = useShippingContext();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const renderStep = () => {
     if (activeStep === 1) return <Pengiriman />;
@@ -24,7 +18,9 @@ export default function useShipping() {
 
   const renderContent = () => {
     return (
-      <>{isClient ? <div className="container">{renderStep()}</div> : null}</>
+      <div className="container" suppressHydrationWarning>
+        {renderStep()}
+      </div>
     );
   };
 

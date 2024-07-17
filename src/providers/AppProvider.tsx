@@ -1,9 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ReactNode, ReactElement, useState } from "react";
+import { ReactNode, ReactElement } from "react";
 import { createContext } from "use-context-selector";
-import { AppContextType, formattedDataType, TotalSalesData } from "@/types";
+import {
+  AppContextType,
+  CartProduct,
+  formattedDataType,
+  TotalSalesData,
+} from "@/types";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 // Create the context with a default value
 export const AppContext = createContext<AppContextType | null>(null);
@@ -16,7 +22,10 @@ export default function AppProvider({
   children,
 }: AppProviderProps): ReactElement {
   const router = useRouter();
-  const [totalDays, setTotalDays] = useState(12);
+  const [cartProductList, setCartProductList] = useLocalStorage<CartProduct[]>(
+    "cartProductList",
+    []
+  );
 
   const moveRoute = (route: string) => {
     router.push(route);
@@ -43,11 +52,6 @@ export default function AppProvider({
     }).format(value);
   };
 
-  function getTotalAmountOfDays(amount: number) {
-    const today = new Date();
-    return new Date(today).setDate(today.getDate() - amount);
-  }
-
   const getTotalSalesData = (data: TotalSalesData[]) => {
     interface DataType {
       date: Date;
@@ -64,8 +68,6 @@ export default function AppProvider({
       return acc;
     }, []);
 
-    console.log(`Monthly data :`, monthlyData);
-
     // Convert the array to a more readable format and sort by month
     const formattedData: formattedDataType[] = monthlyData
       .filter((entry) => entry) // Remove any undefined months
@@ -80,19 +82,14 @@ export default function AppProvider({
     return formattedData;
   };
 
-  const handleSelectChange = (value: string) => {
-    console.log(value);
-    setTotalDays(parseInt(value));
-  };
-
   const contextValues: AppContextType = {
     moveRoute,
     formatToRupiah,
     formatNumber,
     formatDate,
     getTotalSalesData,
-    handleSelectChange,
-    totalDays,
+    cartProductList,
+    setCartProductList,
   };
 
   return (

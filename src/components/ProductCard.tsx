@@ -1,15 +1,28 @@
+"use client";
 import Image from "next/legacy/image";
 import { memo, type ReactElement } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Product } from "@/types";
+import useAppContext from "@/hooks/useAppContext";
 
 function ProductCard({
   title,
   description,
   price,
   imgUrl,
-}: Omit<Product, "id">): ReactElement {
+  id,
+  category,
+  stock,
+}: Product): ReactElement {
+  const { setCartProductList } = useAppContext();
+  const addProductToCart = () => {
+    setCartProductList((prev) => [
+      ...prev,
+      { id, title, category, imgUrl, price, stock },
+    ]);
+  };
+
   return (
     <Card className="flex flex-col w-full rounded-lg overflow-hidden shadow">
       <CardHeader className="relative aspect-[2/3] overflow-hidden">
@@ -26,7 +39,7 @@ function ProductCard({
         <p>{description}</p>
         <div className="flex mt-12 justify-between items-end overflow-hidden">
           <h3 className="price">${price}</h3>{" "}
-          <Button variant="default" size="sm">
+          <Button variant="default" size="sm" onClick={addProductToCart}>
             Add To Cart
           </Button>
         </div>

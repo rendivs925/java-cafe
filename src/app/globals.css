@@ -160,7 +160,7 @@
   }
 
   .custom-list li::before {
-    @apply content-["\2022"] absolute top-1/2 leading-[0] -translate-y-1/2 text-3xl -left-10 text-accent;
+    @apply content-["\2022"] absolute top-1/2 leading-[0] -translate-y-1/2 text-3xl -left-10 text-primary/75;
   }
 
   .custom-p {

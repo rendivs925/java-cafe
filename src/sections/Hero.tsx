@@ -3,10 +3,13 @@
 import { type ReactElement } from "react";
 import Image from "next/legacy/image";
 import { Button } from "@/components/ui/button";
+import useAppContext from "@/hooks/useAppContext";
 
 export interface HeroProps {}
 
 export default function Hero(props: HeroProps): ReactElement {
+  const { moveRoute } = useAppContext();
+
   return (
     <section id="hero">
       <div className="container grid min-h-svh content-center lg:grid-cols-hero gap-6 lg:gap-20">
@@ -29,8 +32,13 @@ export default function Hero(props: HeroProps): ReactElement {
             journey with the warmth, aroma, and taste that keep your dreams
             alive.
           </p>
-          <Button size="lg" className="mt-12" variant="default">
-            Order Now
+          <Button
+            size="lg"
+            onClick={() => moveRoute("/#about")}
+            className="mt-12"
+            variant="default"
+          >
+            Tell Me More
           </Button>
         </div>
       </div>

@@ -32,6 +32,7 @@ export default function TotalSalesChart() {
 
           <ChartTooltip
             cursor={false}
+            itemStyle={{ background: "red" }}
             content={
               <ChartTooltipContent
                 formatter={(tick) =>

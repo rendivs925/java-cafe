@@ -1,29 +1,29 @@
 import { type ReactElement } from "react";
-import { CartProduct } from "@/types";
+import { Product } from "@/types";
 import Image from "next/legacy/image";
 import { Button } from "./ui/button";
 import { Card, CardTitle } from "./ui/card";
 
 export default function CartProductCard({
-  imageUrl,
-  name,
+  imgUrl,
+  title,
   stock,
   price,
-}: Omit<CartProduct, "id">): ReactElement {
+}: Omit<Product, "id" | "description">): ReactElement {
   return (
     <Card className="cart-item bg-transparent shadow-none">
       <div className="image rounded-lg mb-4 overflow-hidden relative">
         <Image
-          src={imageUrl}
+          src={imgUrl}
           width={96}
           height={96}
           loading="eager"
-          alt={name}
+          alt={title}
           objectFit="cover"
         />
       </div>
       <div className="detail space-y-1.5">
-        <CardTitle className="title">{name}</CardTitle>
+        <CardTitle className="title">{title}</CardTitle>
         <p className="stock">Stok : {stock}</p>
       </div>
       <h4 className="price font-medium mt-4">Rp {price}</h4>

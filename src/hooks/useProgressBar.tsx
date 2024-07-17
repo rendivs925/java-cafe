@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import useShippingContext from "@/hooks/useShippingContext";
 
 interface StepProps {
@@ -8,7 +8,6 @@ interface StepProps {
 
 export default function useProgressBar() {
   const { activeStep } = useShippingContext();
-  const [isClient, setIsClient] = useState(false);
 
   const Step = ({ label, isActive }: StepProps): ReactElement => (
     <h4
@@ -23,30 +22,20 @@ export default function useProgressBar() {
   );
 
   const renderContent = () => (
-    <>
-      {isClient ? (
-        <div className="container flex flex-col">
-          <div className="flex mt-navbar gap-3 sm:gap-4 md:gap-5 place-self-center">
-            <Step
-              label="Pengiriman"
-              isActive={
-                activeStep === 1 || activeStep === 2 || activeStep === 3
-              }
-            />
-            <Step
-              label="Konfirmasi"
-              isActive={activeStep === 2 || activeStep === 3}
-            />
-            <Step label="Pembayaran" isActive={activeStep === 3} />
-          </div>
-        </div>
-      ) : null}
-    </>
+    <div className="container flex flex-col" suppressHydrationWarning>
+      <div className="flex mt-navbar gap-3 sm:gap-4 md:gap-5 place-self-center">
+        <Step
+          label="Pengiriman"
+          isActive={activeStep === 1 || activeStep === 2 || activeStep === 3}
+        />
+        <Step
+          label="Konfirmasi"
+          isActive={activeStep === 2 || activeStep === 3}
+        />
+        <Step label="Pembayaran" isActive={activeStep === 3} />
+      </div>
+    </div>
   );
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return renderContent;
 }

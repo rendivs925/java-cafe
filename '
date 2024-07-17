@@ -29,22 +29,19 @@ interface AppContextType {
   formatNumber: (value: number) => string;
   formatDate: (date: Date) => string;
   getTotalSalesData: (data: TotalSalesData[]) => formattedDataType[];
-  cartProductList: CartProduct[];
+  cartProductList: Product[];
   setCartProductList: (
-    value: CartProduct[] | ((val: CartProduct[]) => CartProduct[])
+    value: Product[] | ((val: Product[]) => Product[])
   ) => void;
 }
-
-type CartProduct = Omit<Product, "description">;
 
 interface Product {
   id: number;
   title: string;
   stock: number;
   price: number;
-  imgUrl: string;
+  imageUrl: string;
   category: string;
-  description: string;
 }
 
 interface Blog {
@@ -71,15 +68,15 @@ interface ShippingContextType {
 }
 
 export type {
-  Product,
+  CartProduct,
   ShippingContextType,
   AppContextType,
   Contact,
   WorkingHour,
   NavbarLink,
+  Product,
   Blog,
   TotalSalesData,
   formattedDataType,
   ChartData,
-  CartProduct,
 };
