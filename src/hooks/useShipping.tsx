@@ -17,11 +17,7 @@ export default function useShipping() {
   };
 
   const renderContent = () => {
-    return (
-      <div className="container" suppressHydrationWarning>
-        {renderStep()}
-      </div>
-    );
+    return <div className="container">{renderStep()}</div>;
   };
 
   return renderContent;

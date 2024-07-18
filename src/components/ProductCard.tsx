@@ -15,11 +15,21 @@ function ProductCard({
   category,
   stock,
 }: Product): ReactElement {
-  const { setCartProductList } = useAppContext();
+  const { setCartProductList, cartProductList, updateQuantity, formatNumber } =
+    useAppContext();
+
   const addProductToCart = () => {
+    const existingCartProductItem = cartProductList.find(
+      (item) => item.id === id
+    );
+
+    if (existingCartProductItem) {
+      return updateQuantity(existingCartProductItem.id, "increment");
+    }
+
     setCartProductList((prev) => [
       ...prev,
-      { id, title, category, imgUrl, price, stock },
+      { id, title, category, imgUrl, price, stock, qty: 1 },
     ]);
   };
 
@@ -38,7 +48,7 @@ function ProductCard({
         <CardTitle className="mt-0">{title}</CardTitle>
         <p>{description}</p>
         <div className="flex mt-12 justify-between items-end overflow-hidden">
-          <h3 className="price">${price}</h3>{" "}
+          <h3 className="price">IDR {formatNumber(price)}</h3>
           <Button variant="default" size="sm" onClick={addProductToCart}>
             Add To Cart
           </Button>

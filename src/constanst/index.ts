@@ -29,17 +29,17 @@ const products: Product[] = [
     title: "Luwak Coffee",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
-    price: 23,
+    price: 23000,
     imgUrl: "/images/product-1.jpg",
     category: "Coffee",
-    stock: 30,
+    stock: 5,
   },
   {
     id: 2,
     title: "Luwak Coffee",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
-    price: 23,
+    price: 23000,
     imgUrl: "/images/product-2.jpg",
     category: "Coffee",
     stock: 50,
@@ -49,7 +49,7 @@ const products: Product[] = [
     title: "Luwak Coffee",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
-    price: 23,
+    price: 23000,
     imgUrl: "/images/product-3.jpg",
     category: "Coffee",
     stock: 40,

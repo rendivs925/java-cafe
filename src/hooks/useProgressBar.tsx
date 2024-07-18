@@ -1,3 +1,4 @@
+"use client";
 import { type ReactElement } from "react";
 import useShippingContext from "@/hooks/useShippingContext";
 
@@ -13,8 +14,8 @@ export default function useProgressBar() {
     <h4
       className={`mb-0 py-2 px-5 sm:py-3 sm:px-6 md:py-4 md:px-7 sm-text rounded-lg font-medium transition ${
         isActive
-          ? "bg-primary text-primary-foreground"
-          : "bg-primary/30 text-foreground"
+          ? "bg-primary/85 text-primary-foreground"
+          : "bg-background text-foreground"
       }`}
     >
       {label}
@@ -22,7 +23,7 @@ export default function useProgressBar() {
   );
 
   const renderContent = () => (
-    <div className="container flex flex-col" suppressHydrationWarning>
+    <div className="container flex flex-col">
       <div className="flex mt-navbar gap-3 sm:gap-4 md:gap-5 place-self-center">
         <Step
           label="Pengiriman"

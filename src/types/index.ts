@@ -33,9 +33,14 @@ interface AppContextType {
   setCartProductList: (
     value: CartProduct[] | ((val: CartProduct[]) => CartProduct[])
   ) => void;
+  updateQuantity: (productId: number, operation: Operation) => void;
 }
 
-type CartProduct = Omit<Product, "description">;
+interface CartProduct extends Omit<Product, "description"> {
+  qty: number;
+}
+
+type Operation = "increment" | "decrement";
 
 interface Product {
   id: number;
@@ -82,4 +87,5 @@ export type {
   formattedDataType,
   ChartData,
   CartProduct,
+  Operation,
 };

@@ -7,6 +7,7 @@ import {
   AppContextType,
   CartProduct,
   formattedDataType,
+  Operation,
   TotalSalesData,
 } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -29,6 +30,21 @@ export default function AppProvider({
 
   const moveRoute = (route: string) => {
     router.push(route);
+  };
+
+  const updateQuantity = (productId: number, operation: Operation) => {
+    setCartProductList((prev) =>
+      prev.map((item) => {
+        if (item.id === productId) {
+          if (operation === "increment" && item.qty < item.stock) {
+            return { ...item, qty: item.qty + 1 };
+          } else if (operation === "decrement" && item.qty > 1) {
+            return { ...item, qty: item.qty - 1 };
+          }
+        }
+        return item;
+      })
+    );
   };
 
   const formatNumber = (value: number) => {
@@ -84,6 +100,7 @@ export default function AppProvider({
 
   const contextValues: AppContextType = {
     moveRoute,
+    updateQuantity,
     formatToRupiah,
     formatNumber,
     formatDate,
