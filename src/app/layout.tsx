@@ -21,10 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth scroll-pt-32">
       <body className={`${inter.className} ${isDashboard && "flex max-h-svh"}`}>
-        {!isDashboard ? <Navbar /> : <Sidebar />}
-        <div>
-          <AppProvider>{children}</AppProvider>
-        </div>
+        <AppProvider>
+          {!isDashboard ? <Navbar /> : <Sidebar />}
+          <div>{children}</div>
+        </AppProvider>
       </body>
     </html>
   );

@@ -4,18 +4,18 @@ import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
 
 export default function OrderSummaryButton(): ReactElement {
-  const { moveRoute } = useAppContext();
+  const { moveRoute, cartProductList } = useAppContext();
+  const isDisabled = cartProductList.length === 0;
 
   return (
-    <>
-      <Button
-        size="default"
-        // className="mt-8"
-        variant="default"
-        onClick={() => moveRoute("/shipping")}
-      >
-        Checkout
-      </Button>
-    </>
+    <Button
+      size="default"
+      variant="default"
+      onClick={() => moveRoute("/shipping")}
+      disabled={isDisabled}
+      className={`${isDisabled && "bg-gray-400 cursor-not-allowed"}`}
+    >
+      Checkout
+    </Button>
   );
 }

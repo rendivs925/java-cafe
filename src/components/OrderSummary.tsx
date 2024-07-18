@@ -2,7 +2,8 @@ import { type ReactElement } from "react";
 import Line from "./Line";
 import CardContainer from "./CardContainer";
 import OrderSummaryButton from "./OrderSummaryButton";
-import { CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { CardFooter, CardHeader, CardTitle } from "./ui/card";
+import OrderSummaryContent from "./OrderSummaryContent";
 
 export default function OrderSummary(): ReactElement {
   return (
@@ -11,10 +12,7 @@ export default function OrderSummary(): ReactElement {
         <CardTitle>Order Summary</CardTitle>
       </CardHeader>
       <Line />
-      <CardContent className="pt-6 px-0">
-        <p className="text-foreground m-0">Total item : 3</p>
-        <p className="text-foreground m-0">Sub harga : Rp 120.000</p>
-      </CardContent>
+      <OrderSummaryContent />
       <Line />
       <CardFooter className="pt-6 px-0">
         <OrderSummaryButton />
