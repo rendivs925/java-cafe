@@ -1,7 +1,7 @@
 import { type ReactElement } from "react";
 import NavbarHeading from "./NavbarHeading";
 import NavbarItemList from "./NavbarItemList";
-import HamburgerMenuOrCart from "./HamburgerMenuOrCart";
+import HamburgerMenuWithCartAndAuthButtons from "./HamburgerMenuWithCartAndAuthButtons";
 
 export default function Navbar(): ReactElement {
   return (
@@ -9,7 +9,7 @@ export default function Navbar(): ReactElement {
       <nav className="container flex items-center h-full justify-between">
         <NavbarHeading />
         <NavbarItemList />
-        <HamburgerMenuOrCart />
+        <HamburgerMenuWithCartAndAuthButtons />
       </nav>
     </header>
   );
