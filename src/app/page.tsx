@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "This is the home page of Java Cafe website",
 };
 
-console.log("Hi there from main branch!");
+console.log("Hi there from tes branch!");
 
 export default function Home() {
   return (
