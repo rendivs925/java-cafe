@@ -1,5 +1,7 @@
 import { Blog, Contact, NavbarLink, Product, WorkingHour } from "@/types";
 
+const COOKIE_NAME = "user-token";
+
 const navbarLinks: NavbarLink[] = [
   {
     href: "/#hero",
@@ -110,4 +112,4 @@ const contactUs: Contact[] = [
   },
 ];
 
-export { navbarLinks, workingHours, contactUs, products, blogs };
+export { navbarLinks, workingHours, COOKIE_NAME, contactUs, products, blogs };

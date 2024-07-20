@@ -3,6 +3,7 @@ import { type ReactElement } from "react";
 import { CardDescription } from "./ui/card";
 import useAppContext from "@/hooks/useAppContext";
 import Image from "next/image";
+import useClientComponent from "@/hooks/useClientComponent";
 
 export interface RecentOrderListProps {}
 
@@ -42,6 +43,7 @@ const recentOrdersData = [
 export default function RecentOrderList(
   props: RecentOrderListProps
 ): ReactElement {
+  const isClient = useClientComponent();
   const { formatNumber } = useAppContext();
   function getTimeOrderedString(date: Date): string {
     const now = new Date();
@@ -62,30 +64,34 @@ export default function RecentOrderList(
   }
 
   return (
-    <ul className="space-y-4">
-      {recentOrdersData.map((order, index) => (
-        <li key={index} className="flex justify-between items-center">
-          <div className="flex gap-4 items-center">
-            <Image
-              src={order.imgUrl}
-              alt={order.title}
-              width={64}
-              height={64}
-            />
-            <div className="space-y-1 justify-self-start">
-              <h5 className="my-0 py-0 text-lg font-medium text-foreground">
-                {order.title}
-              </h5>
-              <CardDescription className="my-0">
-                {`${getTimeOrderedString(order.timeOrdered)}`}
-              </CardDescription>
-            </div>
-          </div>
-          <p className="mt-0 text-foreground font-medium">
-            {"IDR " + formatNumber(order.price)}
-          </p>
-        </li>
-      ))}
-    </ul>
+    <>
+      {isClient && (
+        <ul className="space-y-4">
+          {recentOrdersData.map((order, index) => (
+            <li key={index} className="flex justify-between items-center">
+              <div className="flex gap-4 items-center">
+                <Image
+                  src={order.imgUrl}
+                  alt={order.title}
+                  width={64}
+                  height={64}
+                />
+                <div className="space-y-1 justify-self-start">
+                  <h5 className="my-0 py-0 text-lg font-medium text-foreground">
+                    {order.title}
+                  </h5>
+                  <CardDescription className="my-0">
+                    {`${getTimeOrderedString(order.timeOrdered)}`}
+                  </CardDescription>
+                </div>
+              </div>
+              <p className="mt-0 text-foreground font-medium">
+                {"IDR " + formatNumber(order.price)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 }

@@ -19,11 +19,15 @@
     "@types/leaflet": "^1.9.12",
     "@types/node": "^20.14.9",
     "@types/react-dom": "^18.3.0",
+    "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cookie": "^0.6.0",
     "embla-carousel-react": "^8.1.5",
+    "jose": "^5.6.3",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.397.0",
+    "nanoid": "^5.0.7",
     "next": "^14.2.5",
     "react": "^18.3.1",
     "react-dom": "^18",
@@ -36,6 +40,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/cookie": "^0.6.0",
     "@types/react": "^18",
     "eslint-config-next": "14.2.4",
     "tailwindcss": "^3.4.1",

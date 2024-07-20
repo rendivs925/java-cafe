@@ -19,13 +19,15 @@ export default function RootLayout({
   const isDashboard = pathname.startsWith("/admin");
 
   return (
-    <html lang="en" className="scroll-smooth scroll-pt-32">
-      <body className={`${inter.className} ${isDashboard && "flex max-h-svh"}`}>
-        <AppProvider>
+    <html lang="en" className="overflow-x-hidden scroll-smooth scroll-pt-32">
+      <AppProvider>
+        <body
+          className={`${inter.className} ${isDashboard && "flex max-h-svh"}`}
+        >
           {!isDashboard ? <Navbar /> : <Sidebar />}
-          <div>{children}</div>
-        </AppProvider>
-      </body>
+          <div className="w-full">{children}</div>
+        </body>
+      </AppProvider>
     </html>
   );
 }

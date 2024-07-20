@@ -10,7 +10,9 @@ export default function DashboardContainer({
   className = "",
 }: DashboardContainerProps): ReactElement {
   return (
-    <section className={ `w-full min-h-svh py-12 px-10 overflow-y-auto ${className}` }>
+    <section
+      className={`w-full max-h-svh py-12 px-10 overflow-y-auto ${className}`}
+    >
       {children}
     </section>
   );
