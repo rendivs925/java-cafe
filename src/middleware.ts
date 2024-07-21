@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAuth } from "./lib/auth";
+import { UserJwtPayload, verifyAuth } from "./lib/auth";
 import { COOKIE_NAME } from "./constanst";
-import { serialize } from "cookie";
 
 export default async function middleware(req: NextRequest) {
   const token = req.cookies.get(COOKIE_NAME)?.value;
@@ -18,35 +17,21 @@ export default async function middleware(req: NextRequest) {
 
   const { pathname, origin } = req.nextUrl;
 
-  if (pathname === "/auth/logout") {
-    const cookie = serialize(COOKIE_NAME, "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 0,
-      path: "/",
-    });
-
-    return NextResponse.redirect(new URL("/", origin), {
-      headers: {
-        "Set-Cookie": cookie,
-      },
-    });
+  if (!verifiedToken) {
+    // Allow unauthenticated access to /auth routes
+    if (pathname.startsWith("/auth")) return NextResponse.next(); // Allow the request to continue
   }
 
-  // Allow unauthenticated access to /auth routes if not verified
-  if (pathname.startsWith("/auth") && !verifiedToken) {
-    return NextResponse.next(); // Allow the request to continue
-  }
+  const userRole = (verifiedToken as UserJwtPayload)?.role || "user";
 
   // Redirect authenticated users from /auth to /
-  if (pathname.startsWith("/auth") && verifiedToken) {
+  if (pathname.startsWith("/auth"))
     return NextResponse.redirect(new URL("/", origin));
-  }
 
-  // Redirect unauthenticated users to /auth/login
-  if (!verifiedToken) {
-    return NextResponse.redirect(new URL("/auth/login", origin));
+  // Check for admin access
+  if (pathname.startsWith("/admin")) {
+    if (userRole !== "admin")
+      return NextResponse.redirect(new URL("/auth/login", origin));
   }
 
   return NextResponse.next(); // Allow the request to continue

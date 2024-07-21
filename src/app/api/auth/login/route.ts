@@ -8,12 +8,15 @@ import { baseUserSchema } from "@/schemas/UserSchema";
 import { z } from "zod";
 import User from "@/models/User";
 import bcrypt from "bcrypt";
+import { connectToDatabase } from "@/lib/dbConnect";
 
 const MAX_AGE = 60 * 60 * 24 * 30; // 30 days in seconds
 export async function POST(req: NextRequest) {
   try {
     // Parse and validate the input
     const { email, password } = baseUserSchema.parse(await req.json());
+
+    await connectToDatabase();
 
     const user = await User.findOne({ email });
 
@@ -28,7 +31,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const token = await new SignJWT({ role: user.role })
+    const token = await new SignJWT({
+      role: user.role,
+      email: user.email,
+      username: user.username,
+    })
       .setProtectedHeader({ alg: "HS256" })
       .setJti(nanoid())
       .setIssuedAt()

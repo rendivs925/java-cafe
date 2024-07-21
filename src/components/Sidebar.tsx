@@ -9,6 +9,7 @@ import { IoMdSettings } from "react-icons/io";
 import { BiSolidLogOut } from "react-icons/bi";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import useAppContext from "@/hooks/useAppContext";
 
 const links = [
   {
@@ -41,14 +42,11 @@ const links = [
     label: "Settings",
     icon: <IoMdSettings className="text-2xl" />,
   },
-  {
-    href: "/auth/logout",
-    label: "Logout",
-    icon: <BiSolidLogOut className="text-2xl" />,
-  },
 ];
 
 const Sidebar = () => {
+  const { handleLogout } = useAppContext();
+
   const pathname = usePathname();
   return (
     <aside className="h-screen py-12 bg-background w-full max-w-[300px] text-white px-6 sticky min-h-svh top-0 bottom-0">
@@ -60,7 +58,7 @@ const Sidebar = () => {
       </h1>
       <ul className="space-y-4">
         {links.map(({ href, label, icon }, index) => (
-          <li key={index} className="group">
+          <li key={index} className="group active:scale-95">
             <Link
               href={href}
               className={`flex hover:after:hidden items-center px-8 py-4 rounded-lg space-x-4 w-full transition-all duration-300 ${
@@ -74,6 +72,19 @@ const Sidebar = () => {
             </Link>
           </li>
         ))}
+        <li className="group active:scale-95">
+          <button
+            onClick={handleLogout}
+            className={` text-lg font-medium flex hover:after:hidden items-center px-8 py-4 rounded-lg space-x-4 w-full transition-all duration-300 ${
+              pathname === "/auth/logout"
+                ? "bg-primary text-primary-foreground"
+                : "bg-transparent text-muted-foreground hover:bg-primary/85 group-hover:text-primary-foreground/85"
+            }`}
+          >
+            <BiSolidLogOut className="text-2xl" />
+            <span>Logout</span>
+          </button>
+        </li>
       </ul>
     </aside>
   );

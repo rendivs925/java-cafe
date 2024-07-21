@@ -13,7 +13,7 @@ export default function OrderSummaryButton(): ReactElement {
       variant="default"
       onClick={() => moveRoute("/shipping")}
       disabled={isDisabled}
-      className={`${isDisabled && "bg-gray-400 cursor-not-allowed"}`}
+      className={`${isDisabled && "cursor-not-allowed"}`}
     >
       Checkout
     </Button>

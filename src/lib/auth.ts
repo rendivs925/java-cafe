@@ -1,11 +1,14 @@
-import { jwtVerify, SignJWT } from "jose";
+import { jwtVerify } from "jose";
 
-interface UserJwtPayload {
+export interface UserJwtPayload {
   jti: string;
   iat: number;
+  username: string;
+  email: string;
+  role: "admin" | "user";
 }
 
-export const getJwtSecretKey = () => {
+export const getJwtSecretKey = (): string => {
   const secret = process.env.JWT_SECRET;
 
   if (!secret || secret.length === 0) {
@@ -15,14 +18,14 @@ export const getJwtSecretKey = () => {
   return secret;
 };
 
-export async function verifyAuth(token: string) {
+export async function verifyAuth(token: string): Promise<UserJwtPayload> {
   try {
-    const verified = await jwtVerify(
+    const { payload } = await jwtVerify(
       token,
       new TextEncoder().encode(getJwtSecretKey())
     );
-    return verified.payload as UserJwtPayload;
+    return payload as unknown as UserJwtPayload;
   } catch (error) {
-    throw new Error("Your token has expired.");
+    throw new Error("Your token has expired or is invalid.");
   }
 }

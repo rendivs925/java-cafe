@@ -31,6 +31,7 @@ interface TotalSalesData {
 
 interface AppContextType {
   user: User;
+  handleLogout: () => Promise<void>;
   isAuthenticated: boolean;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
   setUser: (value: User | ((val: User) => User)) => void;

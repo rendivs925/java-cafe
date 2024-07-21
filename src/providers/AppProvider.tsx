@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ReactNode, ReactElement, useState, useEffect } from "react";
 import { createContext } from "use-context-selector";
 import {
@@ -12,6 +12,7 @@ import {
   User,
 } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import axios, { AxiosError } from "axios";
 
 // Create the context with a default value
 export const AppContext = createContext<AppContextType | null>(null);
@@ -24,7 +25,6 @@ export default function AppProvider({
   children,
 }: AppProviderProps): ReactElement {
   const router = useRouter();
-  const pathname = usePathname();
   const defaultUser: User = {
     username: "",
     email: "",
@@ -37,16 +37,24 @@ export default function AppProvider({
     []
   );
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const isLogout = pathname.startsWith("/auth/logout");
 
-  useEffect(() => {
-    setUser(defaultUser);
-  }, [isLogout]);
+  const handleLogout = async () => {
+    try {
+      const { data } = await axios.delete("/api/auth/logout");
+      setUser(defaultUser);
+      moveRoute("/");
+      console.log(data);
+    } catch (err) {
+      const error = err as AxiosError;
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     if (user.username === "" && user.email === "")
       return setIsAuthenticated(false);
-    return setIsAuthenticated(true);
+
+    setIsAuthenticated(true);
   }, [user.username, user.role, user.email]);
 
   const moveRoute = (route: string) => {
@@ -125,6 +133,7 @@ export default function AppProvider({
   const contextValues: AppContextType = {
     moveRoute,
     updateQuantity,
+    handleLogout,
     formatToRupiah,
     formatNumber,
     formatDate,

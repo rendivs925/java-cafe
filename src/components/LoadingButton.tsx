@@ -10,7 +10,12 @@ export default function LoadingButton({
   children,
 }: LoadingButtonProps): ReactElement {
   return (
-    <Button type="submit" size="default" className="w-full cursor-progress">
+    <Button
+      type="submit"
+      size="default"
+      disabled
+      className="w-full cursor-progress"
+    >
       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       {children}
     </Button>
