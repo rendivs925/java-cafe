@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import LoadingButton from "@/components/LoadingButton";
 
 const formFields = [
   {
@@ -32,7 +31,8 @@ const formFields = [
 ];
 
 export default function Login(): ReactElement {
-  const { form, onSubmit, isLoading } = useLogin();
+  const { form, onSubmit } = useLogin();
+  const isLoading = true;
 
   return (
     <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
@@ -55,13 +55,19 @@ export default function Login(): ReactElement {
                 type={field.type}
               />
             ))}
-            {isLoading ? (
-              <LoadingButton>Mengirim...</LoadingButton>
-            ) : (
-              <Button type="submit" size="default" className="w-full">
-                Login Now
-              </Button>
-            )}
+            <Button type="submit" size="default" className="w-full">
+              {isLoading ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 mr-3 ..."
+                    viewBox="0 0 24 24"
+                  ></svg>
+                  Processing...
+                </>
+              ) : (
+                <>Login Now</>
+              )}
+            </Button>
           </form>
         </Form>
       </CardContent>

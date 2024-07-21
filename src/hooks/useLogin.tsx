@@ -1,8 +1,11 @@
+"use client";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import useAppContext from "./useAppContext";
+import { User } from "@/types";
+import { useState } from "react";
 
 // Define the schema
 const formSchema = z.object({
@@ -15,7 +18,8 @@ const formSchema = z.object({
 });
 
 export default function useLogin() {
-  const { moveRoute } = useAppContext();
+  const { moveRoute, setUser } = useAppContext();
+  const [isLoading, setIsloading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,16 +35,25 @@ export default function useLogin() {
     };
 
     try {
+      setIsloading(true);
       const { data } = await axios.post("/api/auth/login", payload);
+      console.log("Data:", data);
+      const user: User = {
+        username: data.username,
+        email: data.email,
+        role: data.role,
+      };
 
-      alert(JSON.stringify(data));
-      moveRoute("/admin/dashboard");
+      setUser(user);
+      moveRoute("/");
     } catch (e) {
       const error = e as AxiosError;
 
-      alert(error.message);
+      console.log("Error:", error);
+    } finally {
+      setIsloading(false);
     }
   }
 
-  return { form, onSubmit, formSchema };
+  return { form, onSubmit, formSchema, isLoading };
 }

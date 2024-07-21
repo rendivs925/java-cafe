@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios, { AxiosError } from "axios";
+import useAppContext from "./useAppContext";
+import { useState } from "react";
 
 // Define the schema
 const formSchema = z.object({
@@ -16,6 +19,8 @@ const formSchema = z.object({
 });
 
 export default function useSignUp() {
+  const { moveRoute } = useAppContext();
+  const [isLoading, setIsloading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -25,9 +30,30 @@ export default function useSignUp() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit({
+    email,
+    username,
+    password,
+  }: z.infer<typeof formSchema>) {
+    const payload = {
+      username,
+      email,
+      password,
+    };
+
+    try {
+      setIsloading(true);
+      const { data } = await axios.post("/api/auth/sign-up", payload);
+      console.log("Data:", data);
+      moveRoute("/auth/login");
+    } catch (e) {
+      const error = e as AxiosError;
+
+      console.log("Error:", error);
+    } finally {
+      setIsloading(false);
+    }
   }
 
-  return { form, onSubmit, formSchema };
+  return { form, onSubmit, formSchema, isLoading };
 }

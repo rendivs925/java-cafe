@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import LoadingButton from "@/components/LoadingButton";
 
 const formFields = [
   {
@@ -37,7 +38,7 @@ const formFields = [
 ];
 
 export default function SignUp(): ReactElement {
-  const { form, onSubmit } = useSignUp();
+  const { form, onSubmit, isLoading } = useSignUp();
 
   return (
     <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
@@ -60,9 +61,13 @@ export default function SignUp(): ReactElement {
                 type={field.type}
               />
             ))}
-            <Button type="submit" size="default" className="w-full">
-              Sign Up Now
-            </Button>
+            {isLoading ? (
+              <LoadingButton>Mengirim...</LoadingButton>
+            ) : (
+              <Button type="submit" size="default" className="w-full">
+                Sign Up Now
+              </Button>
+            )}
           </form>
         </Form>
       </CardContent>

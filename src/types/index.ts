@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 interface ChartData {
   product: string;
@@ -6,6 +6,12 @@ interface ChartData {
   totalSales: number;
   fill: string;
   color: string;
+}
+
+interface User {
+  username: string;
+  email: string;
+  role: "admin" | "user";
 }
 
 interface formattedDataType {
@@ -24,6 +30,10 @@ interface TotalSalesData {
 }
 
 interface AppContextType {
+  user: User;
+  isAuthenticated: boolean;
+  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
+  setUser: (value: User | ((val: User) => User)) => void;
   moveRoute: (route: string) => void;
   formatToRupiah: (value: number) => string;
   formatNumber: (value: number) => string;
@@ -88,4 +98,5 @@ export type {
   ChartData,
   CartProduct,
   Operation,
+  User,
 };

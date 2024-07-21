@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ReactNode, ReactElement } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, ReactElement, useState, useEffect } from "react";
 import { createContext } from "use-context-selector";
 import {
   AppContextType,
@@ -9,6 +9,7 @@ import {
   formattedDataType,
   Operation,
   TotalSalesData,
+  User,
 } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
@@ -23,10 +24,30 @@ export default function AppProvider({
   children,
 }: AppProviderProps): ReactElement {
   const router = useRouter();
+  const pathname = usePathname();
+  const defaultUser: User = {
+    username: "",
+    email: "",
+    role: "user",
+  };
+
+  const [user, setUser] = useLocalStorage<User>("user", defaultUser);
   const [cartProductList, setCartProductList] = useLocalStorage<CartProduct[]>(
     "cartProductList",
     []
   );
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const isLogout = pathname.startsWith("/auth/logout");
+
+  useEffect(() => {
+    setUser(defaultUser);
+  }, [isLogout]);
+
+  useEffect(() => {
+    if (user.username === "" && user.email === "")
+      return setIsAuthenticated(false);
+    return setIsAuthenticated(true);
+  }, [user.username, user.role, user.email]);
 
   const moveRoute = (route: string) => {
     router.push(route);
@@ -110,6 +131,10 @@ export default function AppProvider({
     getTotalSalesData,
     cartProductList,
     setCartProductList,
+    user,
+    setUser,
+    isAuthenticated,
+    setIsAuthenticated,
   };
 
   return (
