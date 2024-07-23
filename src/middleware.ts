@@ -4,7 +4,6 @@ import { COOKIE_NAME } from "./constanst";
 
 export default async function middleware(req: NextRequest) {
   const token = req.cookies.get(COOKIE_NAME)?.value;
-  console.log("Token:", token);
 
   const verifiedToken =
     token &&
@@ -12,8 +11,6 @@ export default async function middleware(req: NextRequest) {
       console.log("Verification error:", err);
       return null; // Explicitly return null in case of error
     }));
-
-  console.log("Verified Token:", verifiedToken);
 
   const { pathname, origin } = req.nextUrl;
 

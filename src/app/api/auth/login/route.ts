@@ -20,10 +20,21 @@ export async function POST(req: NextRequest) {
 
     const user = await User.findOne({ email });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user) {
       return NextResponse.json(
         {
-          message: "Unauthorized",
+          message: "Akun tidak ditemukan.",
+        },
+        {
+          status: 401,
+        }
+      );
+    }
+
+    if (!(await bcrypt.compare(password, user.password))) {
+      return NextResponse.json(
+        {
+          message: "Password anda salah.",
         },
         {
           status: 401,

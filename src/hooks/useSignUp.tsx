@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import useAppContext from "./useAppContext";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 // Define the schema
 const formSchema = z.object({
@@ -20,6 +21,7 @@ const formSchema = z.object({
 
 export default function useSignUp() {
   const { moveRoute } = useAppContext();
+  const { toast } = useToast();
   const [isLoading, setIsloading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,8 +45,14 @@ export default function useSignUp() {
 
     try {
       setIsloading(true);
-      const { data } = await axios.post("/api/auth/sign-up", payload);
-      console.log("Data:", data);
+      await axios.post("/api/auth/sign-up", payload);
+
+      toast({
+        title: "Signed up successfully.",
+        description: "Time to login to your account..",
+        variant: "success",
+      });
+
       moveRoute("/auth/login");
     } catch (e) {
       const error = e as AxiosError;
