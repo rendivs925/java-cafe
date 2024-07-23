@@ -5,25 +5,40 @@ import { nanoid } from "nanoid";
 import { getJwtSecretKey } from "@/lib/auth";
 import { COOKIE_NAME } from "@/constanst";
 import { baseUserSchema } from "@/schemas/UserSchema";
-import { z } from "zod";
 import User from "@/models/User";
 import bcrypt from "bcrypt";
 import { connectToDatabase } from "@/lib/dbConnect";
 
 const MAX_AGE = 60 * 60 * 24 * 30; // 30 days in seconds
+
 export async function POST(req: NextRequest) {
   try {
-    // Parse and validate the input
-    const { email, password } = baseUserSchema.parse(await req.json());
+    const data = await req.json();
+
+    // Validate the input data with Zod schema
+    const parseResult = baseUserSchema.safeParse(data);
+    if (!parseResult.success) {
+      return NextResponse.json(
+        {
+          message: "Invalid input",
+          errors: parseResult.error.errors,
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const { email, password } = parseResult.data;
 
     await connectToDatabase();
 
     const user = await User.findOne({ email });
-
     if (!user) {
       return NextResponse.json(
         {
-          message: "Akun tidak ditemukan.",
+          message: "Akun tidak bisa ditemukan.",
+          path: "email",
         },
         {
           status: 401,
@@ -31,10 +46,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!(await bcrypt.compare(password, user.password))) {
+    // Validate password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
       return NextResponse.json(
         {
           message: "Password anda salah.",
+          path: "password",
         },
         {
           status: 401,
@@ -42,6 +60,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Create JWT token
     const token = await new SignJWT({
       role: user.role,
       email: user.email,
@@ -53,11 +72,12 @@ export async function POST(req: NextRequest) {
       .setExpirationTime(`${MAX_AGE}s`) // Set JWT expiration time to 30 days in seconds
       .sign(new TextEncoder().encode(getJwtSecretKey()));
 
+    // Set cookie
     const serialized = serialize(COOKIE_NAME, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: MAX_AGE, // Set cookie maxAge to 30 days in seconds
+      maxAge: MAX_AGE,
       path: "/",
     });
 
@@ -74,17 +94,8 @@ export async function POST(req: NextRequest) {
       }
     );
   } catch (err) {
-    if (err instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          message: "Invalid input",
-          errors: err.errors,
-        },
-        {
-          status: 400,
-        }
-      );
-    }
+    // Handle unexpected errors
+    console.error("Unexpected error:", err);
 
     return NextResponse.json(
       {

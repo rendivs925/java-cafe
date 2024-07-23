@@ -1,5 +1,5 @@
 "use client";
-import { ReactElement } from "react";
+import { ReactElement, ChangeEvent } from "react";
 import CardContainer from "@/components/CardContainer";
 import useLogin from "@/hooks/useLogin";
 import { Form } from "@/components/ui/form";
@@ -11,12 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ZodError } from "zod";
 import Link from "next/link";
 import LoadingButton from "@/components/LoadingButton";
 import InputFormField from "@/components/InputFormField";
-import loginAction from "@/actions/loginAction";
-import useAppContext from "@/hooks/useAppContext";
 
 interface FormField {
   name: string;
@@ -42,65 +39,8 @@ const formFields: FormField[] = [
   },
 ];
 
-interface LoginData {
-  email: string;
-  password: string;
-}
-
 export default function Login(): ReactElement {
-  const { form, baseUserSchema } = useLogin();
-  const { moveRoute } = useAppContext();
-
-  const handleSubmit = async (formData: FormData) => {
-    const loginData: LoginData = {
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    };
-
-    form.clearErrors();
-
-    try {
-      baseUserSchema.parse(loginData);
-
-      const data = await loginAction(formData);
-
-      if (data?.errors) {
-        const zodErrors = (data.errors as []).map(
-          (issue: { path: string[]; message: string }) => ({
-            path: issue.path,
-            message: issue.message,
-          })
-        );
-
-        form.setError("email", {
-          message:
-            zodErrors.find((err) => err.path[0] === "email")?.message || "",
-        });
-        form.setError("password", {
-          message:
-            zodErrors.find((err) => err.path[0] === "password")?.message || "",
-        });
-      } else {
-        moveRoute("/");
-      }
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const zodErrors = error.issues.map((issue) => ({
-          path: issue.path,
-          message: issue.message,
-        }));
-
-        form.setError("email", {
-          message:
-            zodErrors.find((err) => err.path[0] === "email")?.message || "",
-        });
-        form.setError("password", {
-          message:
-            zodErrors.find((err) => err.path[0] === "password")?.message || "",
-        });
-      }
-    }
-  };
+  const { form, onSubmit, isLoading } = useLogin();
 
   return (
     <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full shadow-lg rounded-lg">
@@ -112,7 +52,7 @@ export default function Login(): ReactElement {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form action={handleSubmit} className="space-y-5">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             {formFields.map((field) => (
               <InputFormField
                 key={field.name}
@@ -125,16 +65,13 @@ export default function Login(): ReactElement {
                 type={field.type}
               />
             ))}
-            {/* {isLoading ? ( */}
-            {/*   <LoadingButton>Mengirim...</LoadingButton> */}
-            {/* ) : ( */}
-            {/*   <Button type="submit" size="default" className="w-full"> */}
-            {/*     Login Now */}
-            {/*   </Button> */}
-            {/* )} */}
-            <Button type="submit" size="default" className="w-full">
-              Login Now
-            </Button>
+            {isLoading ? (
+              <LoadingButton>Mengirim...</LoadingButton>
+            ) : (
+              <Button type="submit" size="default" className="w-full">
+                Login Now
+              </Button>
+            )}
           </form>
         </Form>
       </CardContent>

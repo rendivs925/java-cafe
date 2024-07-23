@@ -29,8 +29,6 @@ function InputFormField({
   errors,
   type = "text",
 }: InputFormFieldProps): ReactElement {
-  console.log(errors);
-
   return (
     <FormField
       control={control}
