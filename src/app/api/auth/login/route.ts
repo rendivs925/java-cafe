@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
 
     // Validate the input data with Zod schema
     const parseResult = baseUserSchema.safeParse(data);
+
     if (!parseResult.success) {
       return NextResponse.json(
         {
@@ -33,7 +34,8 @@ export async function POST(req: NextRequest) {
 
     await connectToDatabase();
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).lean();
+
     if (!user) {
       return NextResponse.json(
         {

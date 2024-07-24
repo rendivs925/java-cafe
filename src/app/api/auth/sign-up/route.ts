@@ -5,29 +5,67 @@ import { signUpSchema } from "@/schemas/UserSchema";
 import User from "@/models/User";
 import { connectToDatabase } from "@/lib/dbConnect";
 
+async function checkForExistingUser(username: string, email: string) {
+  const existingUser = await User.findOne({
+    $or: [{ username }, { email }],
+  }).lean();
+  if (existingUser) {
+    const { path, message } =
+      existingUser.username === username
+        ? {
+            path: "username",
+            message: `Akun dengan username ${username} sudah ada di database.`,
+          }
+        : {
+            path: "email",
+            message: `Akun dengan email ${email} sudah ada di database.`,
+          };
+    return NextResponse.json({ path, message }, { status: 401 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     // Parse and validate the request body
-    const body = await req.json();
-    const validatedData = signUpSchema.parse(body);
+    const data = await req.json();
+    const parseResult = signUpSchema.safeParse(data);
 
-    // Connect to the database
+    if (!parseResult.success) {
+      return NextResponse.json(
+        {
+          message: "Invalid input",
+          errors: parseResult.error.errors,
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const { email, password, username } = parseResult.data;
+
     await connectToDatabase();
+
+    const existingUser = await checkForExistingUser(username, email);
+
+    if (existingUser) return existingUser;
+
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+    console.log(ADMIN_EMAIL);
+    console.log(ADMIN_PASSWORD);
 
     // Determine the role based on credentials
     const role =
-      validatedData.email === "rendi@gmail.com" &&
-      validatedData.password === "12345678"
-        ? "admin"
-        : "user";
+      email === ADMIN_EMAIL && password === ADMIN_PASSWORD ? "admin" : "user";
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(validatedData.password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user
     const newUser = new User({
-      username: validatedData.username,
-      email: validatedData.email,
+      username: username,
+      email: email,
       password: hashedPassword,
       role,
     });

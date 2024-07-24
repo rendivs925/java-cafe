@@ -5,26 +5,20 @@ import axios, { AxiosError } from "axios";
 import useAppContext from "./useAppContext";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { signUpSchema } from "@/schemas/UserSchema";
 
-// Define the schema
-const formSchema = z.object({
-  username: z.string().min(5, {
-    message: "Username minimal 5 karakter.",
-  }),
-  email: z.string().email({ message: "Format email tidak valid." }).min(5, {
-    message: "Email minimal 5 karakter.",
-  }),
-  password: z.string().min(8, {
-    message: "Password minimal 8 karakter.",
-  }),
-});
+// Type for the error response data
+interface ErrorResponse {
+  message?: string;
+  path?: string;
+}
 
 export default function useSignUp() {
   const { moveRoute } = useAppContext();
   const { toast } = useToast();
   const [isLoading, setIsloading] = useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -36,7 +30,7 @@ export default function useSignUp() {
     email,
     username,
     password,
-  }: z.infer<typeof formSchema>) {
+  }: z.infer<typeof signUpSchema>) {
     const payload = {
       username,
       email,
@@ -54,14 +48,31 @@ export default function useSignUp() {
       });
 
       moveRoute("/auth/login");
-    } catch (e) {
-      const error = e as AxiosError;
+    } catch (error) {
+      const axiosError = error as AxiosError;
 
-      console.log("Error:", error);
+      // Handle 401 (Unauthorized) errors specifically
+      if (axiosError.response?.status === 401) {
+        // Type assertion to ensure `axiosError.response.data` is of type `ErrorResponse`
+        const errorData = axiosError.response?.data as ErrorResponse;
+
+        // Default error message if not provided
+        const errorMessage = errorData.message || "Unauthorized";
+
+        // Use optional chaining to safely get the path
+        const path = errorData.path || ""; // Default to empty string if path is undefined
+
+        // Set form error if path is provided
+        if (path === "email" || path === "username" || path === "password") {
+          form.setError(path, {
+            message: errorMessage,
+          });
+        }
+      }
     } finally {
       setIsloading(false);
     }
   }
 
-  return { form, onSubmit, formSchema, isLoading };
+  return { form, onSubmit, signUpSchema, isLoading };
 }
