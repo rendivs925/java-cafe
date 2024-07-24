@@ -52,8 +52,6 @@ export async function POST(req: NextRequest) {
 
     const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
     const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-    console.log(ADMIN_EMAIL);
-    console.log(ADMIN_PASSWORD);
 
     // Determine the role based on credentials
     const role =
