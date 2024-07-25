@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import useAppContext from "./useAppContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { addProductSchema } from "@/schemas/AddProductSchema";
 
@@ -31,6 +31,8 @@ export default function useAddProduct() {
       productImage: undefined,
     },
   });
+
+  const formData = form.watch();
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -119,5 +121,6 @@ export default function useAddProduct() {
     onSubmit,
     isLoading,
     handleImageChange,
+    formData,
   };
 }

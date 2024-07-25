@@ -47,10 +47,8 @@ const SelectFormField: React.FC<SelectFormFieldProps> = ({
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {options.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
+              {options.map((option, index) => (
+                <SelectItem value={option.value}>{option.label}</SelectItem>
               ))}
             </SelectContent>
           </Select>

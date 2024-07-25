@@ -45,12 +45,14 @@ function InputFormField({
                 <>
                   {field.name === "description" ? (
                     <Textarea
+                      key={id}
                       placeholder="Tell us a little bit about yourself"
                       className="resize-none h-[200px]"
                       {...field}
                     />
                   ) : (
                     <Input
+                      key={id}
                       id={id}
                       placeholder={placeholder}
                       type={type}
@@ -60,6 +62,7 @@ function InputFormField({
                 </>
               ) : (
                 <Input
+                  key={id}
                   id={id}
                   placeholder={placeholder}
                   type={type}

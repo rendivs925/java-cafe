@@ -1,5 +1,5 @@
 "use client";
-import { type ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
 import { Button } from "./ui/button";
 import LoadingButton from "./LoadingButton";
 import InputFormField from "./InputFormField";
@@ -22,8 +22,14 @@ interface FormField {
 }
 
 export default function AddProductForm(): ReactElement {
-  const { form, handleImageChange, imageFile, imageSrc, isLoading, onSubmit } =
+  const { form, formData, handleImageChange, imageSrc, isLoading, onSubmit } =
     useAddProduct();
+  const { title, category, description, price, stock, productImage } = formData;
+
+  useEffect(() => {
+    console.log(title);
+  }, [title, category, description]);
+
   const formFields: FormField[] = [
     {
       name: "title",
@@ -79,21 +85,19 @@ export default function AddProductForm(): ReactElement {
         <CardContent className="pt-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-              {formFields.map((field) =>
+              {formFields.map((field, index) =>
                 field.name === "category" ? (
                   <SelectFormField
                     label={field.label}
                     name={field.name}
                     control={form.control}
                     options={field.options as Option[]}
-                    key={field.name}
                   />
                 ) : (
                   <InputFormField
-                    key={field.name}
                     control={form.control}
                     name={field.name}
-                    id={field.id}
+                    id={field.id + index}
                     placeholder={field.placeholder}
                     label={field.label}
                     errors={form.formState.errors}
@@ -125,7 +129,15 @@ export default function AddProductForm(): ReactElement {
           </Form>
         </CardContent>
       </CardContainer>
-      <ImagePreview imageSrc={imageSrc} />
+      <ImagePreview
+        imgUrl={imageSrc as string}
+        category={category}
+        description={description}
+        id={price}
+        price={price}
+        stock={stock}
+        title={title}
+      />
     </>
   );
 }

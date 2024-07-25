@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/legacy/image";
-import { memo, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import {
   Card,
   CardContent,
@@ -67,4 +67,4 @@ function ProductCard({
   );
 }
 
-export default memo(ProductCard);
+export default ProductCard;

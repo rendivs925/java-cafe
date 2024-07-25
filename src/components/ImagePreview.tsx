@@ -1,23 +1,28 @@
 import { type ReactElement } from "react";
 import ProductCard from "./ProductCard";
+import { Product } from "@/types";
 
 export default function ImagePreview({
-  imageSrc,
-}: {
-  imageSrc: string | ArrayBuffer | null;
-}): ReactElement {
+  title,
+  stock,
+  category,
+  id,
+  description,
+  price,
+  imgUrl,
+}: Product): ReactElement {
   return (
-    <>
-      <ProductCard
-        category="coffee"
-        description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere vero a est quisquam accusantium architecto iure, modi sit perferendis"
-        id={1000000}
-        imgUrl={(imageSrc as string) || "https://via.placeholder.com/400"}
-        price={20000}
-        stock={20}
-        title="Cappucino Coffee"
-        key="coffee"
-      />
-    </>
+    <ProductCard
+      category={category || "coffee"}
+      description={
+        description ||
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae"
+      }
+      id={id}
+      imgUrl={imgUrl || "https://via.placeholder.com/400"}
+      price={price || 0}
+      stock={stock}
+      title={title || "Product Title"}
+    />
   );
 }
