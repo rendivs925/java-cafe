@@ -6,15 +6,15 @@ import RecentOrders from "@/components/ProductDelivery";
 import StockReport from "@/components/StockReport";
 import DashboardContainer from "@/components/DashboardContainer";
 import DashboardHeader from "@/components/DashboardHeader";
-import DashboardTitle from "@/components/DashboardTitle";
 import DashboardContent from "@/components/DashboardContent";
 import SearchBar from "@/components/SearchBar";
+import DashboardGreater from "@/components/DashboardGreater";
 
 const page = () => {
   return (
     <DashboardContainer className="w-full min-h-svh py-12 px-10 overflow-y-auto">
       <DashboardHeader className="flex justify-between">
-        <DashboardTitle>Dashboard</DashboardTitle>
+        <DashboardGreater />
         <SearchBar />
       </DashboardHeader>
       <DashboardContent className="grid grid-cols-dashboardLayout gap-6">

@@ -18,6 +18,7 @@ interface InputFormFieldProps {
   label: string;
   errors: any;
   type?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function InputFormField({
@@ -28,22 +29,46 @@ function InputFormField({
   label,
   errors,
   type = "text",
+  onChange,
 }: InputFormFieldProps): ReactElement {
   return (
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
-        <FormItem>
-          <Label htmlFor={id}>{label}</Label>
-          <FormControl>
-            <Input id={id} placeholder={placeholder} type={type} {...field} />
-          </FormControl>
-          <FormMessage className="empty:hidden mt-0">
-            {errors[name]?.message}
-          </FormMessage>
-        </FormItem>
-      )}
+      render={({ field }) => {
+        return (
+          <FormItem>
+            <Label htmlFor={id}>{label}</Label>
+            <FormControl>
+              {!onChange ? (
+                <Input
+                  id={id}
+                  placeholder={placeholder}
+                  type={type}
+                  {...field}
+                />
+              ) : (
+                <Input
+                  id={id}
+                  placeholder={placeholder}
+                  type={type}
+                  accept="image/*"
+                  onChange={(e) => {
+                    onChange(e);
+                    field.onChange(e.target.files);
+                  }}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                  ref={field.ref}
+                />
+              )}
+            </FormControl>
+            <FormMessage className="empty:hidden mt-0">
+              {errors[name]?.message}
+            </FormMessage>
+          </FormItem>
+        );
+      }}
     />
   );
 }

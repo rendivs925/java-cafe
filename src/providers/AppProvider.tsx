@@ -82,10 +82,7 @@ export default function AppProvider({
     } else if (value >= 1000) {
       return (value / 1000).toFixed(0) + "K";
     }
-    return value.toLocaleString("id-ID", {
-      style: "currency",
-      currency: "IDR",
-    });
+    return value;
   };
 
   const formatDate = (date: Date) => {
