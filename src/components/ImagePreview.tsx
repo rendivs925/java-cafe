@@ -1,4 +1,5 @@
 import { type ReactElement } from "react";
+import ProductCard from "./ProductCard";
 
 export default function ImagePreview({
   imageSrc,
@@ -7,19 +8,16 @@ export default function ImagePreview({
 }): ReactElement {
   return (
     <>
-      {imageSrc && (
-        <div>
-          <h3>Image Preview:</h3>
-          <img
-            src={imageSrc as string}
-            alt="Image Preview"
-            style={{
-              maxWidth: "100%",
-              maxHeight: "1000px",
-            }}
-          />
-        </div>
-      )}
+      <ProductCard
+        category="coffee"
+        description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere vero a est quisquam accusantium architecto iure, modi sit perferendis"
+        id={1000000}
+        imgUrl={(imageSrc as string) || "https://via.placeholder.com/400"}
+        price={20000}
+        stock={20}
+        title="Cappucino Coffee"
+        key="coffee"
+      />
     </>
   );
 }

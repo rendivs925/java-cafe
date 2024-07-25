@@ -57,13 +57,14 @@ const config = {
         responsive: "repeat(auto-fit, minmax(240px, 1fr))",
         about: "1fr 1.8fr",
         hero: "1fr auto",
+        addNewProduct: "1fr 400px",
         cart: "1.8fr 1fr",
         detail: "1fr 1.3fr",
         "sm-detail": "200px 1fr",
         totalSales: "1fr auto",
         productSales: "auto 1fr",
         productSalesDetail: "auto 1fr 2fr",
-        dashboardLayout: "1.5fr 1fr"
+        dashboardLayout: "1.5fr 1fr",
       },
       screens: {
         smallerMobileScreen: "400px",

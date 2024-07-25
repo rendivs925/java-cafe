@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Control } from "react-hook-form"; // Adjust the import according to your form library
 
-interface Option {
+export interface Option {
   value: string;
   label: string;
 }

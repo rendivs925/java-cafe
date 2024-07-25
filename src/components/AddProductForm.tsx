@@ -8,6 +8,7 @@ import { Form } from "./ui/form";
 import CardContainer from "./CardContainer";
 import { CardContent } from "./ui/card";
 import ImagePreview from "./ImagePreview";
+import SelectFormField, { Option } from "./SelectFormField";
 
 interface FormField {
   name: string;
@@ -17,6 +18,7 @@ interface FormField {
   type?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value?: File | undefined;
+  options?: Option[];
 }
 
 export default function AddProductForm(): ReactElement {
@@ -41,13 +43,18 @@ export default function AddProductForm(): ReactElement {
       id: "description",
       placeholder: "Enter product description",
       label: "Description",
-      type: "text",
     },
     {
       name: "category",
       id: "category",
       placeholder: "Enter product category",
       label: "Category",
+      options: [
+        { value: "espresso", label: "Espresso" },
+        { value: "cappuccino", label: "Cappuccino" },
+        { value: "latte", label: "Latte" },
+        { value: "americano", label: "Americano" },
+      ],
     },
     {
       name: "stock",
@@ -72,26 +79,48 @@ export default function AddProductForm(): ReactElement {
         <CardContent className="pt-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-              {formFields.map((field) => (
-                <InputFormField
-                  key={field.name}
-                  control={form.control}
-                  name={field.name}
-                  id={field.id}
-                  placeholder={field.placeholder}
-                  label={field.label}
-                  errors={form.formState.errors}
-                  type={field.type}
-                  onChange={field.onChange}
-                />
-              ))}
-              {isLoading ? (
-                <LoadingButton>Mengirim...</LoadingButton>
-              ) : (
-                <Button type="submit" size="default" className="w-full">
-                  Login Now
-                </Button>
+              {formFields.map((field) =>
+                field.name === "category" ? (
+                  <SelectFormField
+                    label={field.label}
+                    name={field.name}
+                    control={form.control}
+                    options={field.options as Option[]}
+                    key={field.name}
+                  />
+                ) : (
+                  <InputFormField
+                    key={field.name}
+                    control={form.control}
+                    name={field.name}
+                    id={field.id}
+                    placeholder={field.placeholder}
+                    label={field.label}
+                    errors={form.formState.errors}
+                    type={field.type}
+                    onChange={field.onChange}
+                  />
+                )
               )}
+              <div className="flex gap-6">
+                {isLoading ? (
+                  <LoadingButton>Mengirim...</LoadingButton>
+                ) : (
+                  <>
+                    <Button
+                      type="submit"
+                      size="default"
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" size="default" className="w-full">
+                      Add Product
+                    </Button>
+                  </>
+                )}
+              </div>
             </form>
           </Form>
         </CardContent>

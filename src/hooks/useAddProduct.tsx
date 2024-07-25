@@ -6,7 +6,7 @@ import axios, { AxiosError } from "axios";
 import useAppContext from "./useAppContext";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { addProductSchema } from "@/schemas/UserSchema";
+import { addProductSchema } from "@/schemas/AddProductSchema";
 
 // Type for the error response data
 interface ErrorResponse {

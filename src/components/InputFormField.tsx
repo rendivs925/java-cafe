@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
+import { Textarea } from "./ui/textarea";
 
 interface InputFormFieldProps {
   control: any;
@@ -41,12 +42,22 @@ function InputFormField({
             <Label htmlFor={id}>{label}</Label>
             <FormControl>
               {!onChange ? (
-                <Input
-                  id={id}
-                  placeholder={placeholder}
-                  type={type}
-                  {...field}
-                />
+                <>
+                  {field.name === "description" ? (
+                    <Textarea
+                      placeholder="Tell us a little bit about yourself"
+                      className="resize-none h-[200px]"
+                      {...field}
+                    />
+                  ) : (
+                    <Input
+                      id={id}
+                      placeholder={placeholder}
+                      type={type}
+                      {...field}
+                    />
+                  )}
+                </>
               ) : (
                 <Input
                   id={id}
