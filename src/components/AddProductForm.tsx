@@ -85,7 +85,7 @@ export default function AddProductForm(): ReactElement {
               {formFields.map((field, index) =>
                 field.name === "category" ? (
                   <SelectFormField
-                    key={nanoid()}
+                    key={field.id + field.name}
                     label={field.label}
                     name={field.name}
                     control={form.control}
@@ -93,10 +93,10 @@ export default function AddProductForm(): ReactElement {
                   />
                 ) : (
                   <InputFormField
-                    key={nanoid()}
+                    key={field.id + field.name}
                     control={form.control}
                     name={field.name}
-                    id={field.id + index}
+                    id={field.id}
                     placeholder={field.placeholder}
                     label={field.label}
                     errors={form.formState.errors}

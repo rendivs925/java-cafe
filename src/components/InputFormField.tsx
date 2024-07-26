@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "./ui/textarea";
+import { nanoid } from "nanoid";
 
 interface InputFormFieldProps {
   control: any;
@@ -45,7 +46,7 @@ function InputFormField({
                 <>
                   {field.name === "description" ? (
                     <Textarea
-                      key={id}
+                      key={id + name}
                       id={id}
                       placeholder={placeholder}
                       className="resize-none h-[200px]"
@@ -53,7 +54,7 @@ function InputFormField({
                     />
                   ) : (
                     <Input
-                      key={id}
+                      key={id + name}
                       id={id}
                       placeholder={placeholder}
                       type={type}
@@ -63,14 +64,14 @@ function InputFormField({
                 </>
               ) : (
                 <Input
-                  key={id}
+                  key={id + name}
                   id={id}
                   placeholder={placeholder}
                   type={type}
                   accept="image/*"
-                  onChange={(e) => {
-                    onChange(e);
-                    field.onChange(e.target.files);
+                  onChange={(event) => {
+                    field.onChange(event.target.files);
+                    onChange(event);
                   }}
                   onBlur={field.onBlur}
                   name={field.name}

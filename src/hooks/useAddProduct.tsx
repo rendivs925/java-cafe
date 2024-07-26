@@ -40,7 +40,7 @@ export default function useAddProduct() {
   const formData = form.watch();
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
+    if (event?.target?.files && event.target.files[0]) {
       const file = event.target.files[0];
       setImageFile(file);
       const reader = new FileReader();
