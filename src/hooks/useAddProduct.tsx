@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import {
   addProductSchema,
+  AddProductType,
   newAddProductType,
 } from "@/schemas/AddProductSchema";
 import { getFile, uploadFile } from "@/lib/storage";
@@ -20,7 +21,7 @@ interface ErrorResponse {
 
 export default function useAddProduct() {
   // const { moveRoute } = useAppContext();
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const { toast } = useToast();
@@ -54,27 +55,42 @@ export default function useAddProduct() {
     const folder = "products/";
     const imagePath = await uploadFile(file, folder);
     const imageUrl = await getFile(imagePath);
+    console.log("Uploaded successfully");
+
     return imageUrl;
   };
 
-  async function onSubmit(formData: z.infer<typeof addProductSchema>) {
-    const imgUrl = await handleUpload(imageFile as File);
-
-    const { productImage, ...payload } = formData;
-
-    (payload as newAddProductType).imgUrl = imgUrl;
-
-    form.clearErrors();
+  async function onSubmit(formData: AddProductType) {
+    setIsLoading(true);
 
     try {
-      setIsloading(true);
-      const { data } = await axios.post("/api/auth/login", payload);
+      // Check if product already exists
+      const checkResponse = await axios.post("/api/products/check-product", {
+        title: formData.title, // Assuming 'title' is the unique identifier
+      });
 
-      const productToAdd: z.infer<typeof addProductSchema> = {
-        ...data,
-      };
+      console.log(checkResponse.data);
 
-      toast({ description: "Product added successfully.", variant: "success" });
+      if (checkResponse.data.exists) {
+        toast({
+          description: "Product already exists",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      const imgUrl = await handleUpload(imageFile as File);
+
+      const { productImage, ...payload } = formData;
+
+      (payload as newAddProductType).imgUrl = imgUrl;
+
+      form.clearErrors();
+
+      const { data } = await axios.post("/api/products/add-product", payload);
+
+      toast({ description: data.message, variant: "success" });
     } catch (error) {
       const axiosError = error as AxiosError;
 
@@ -118,7 +134,7 @@ export default function useAddProduct() {
         });
       }
     } finally {
-      setIsloading(false);
+      setIsLoading(false);
     }
   }
 

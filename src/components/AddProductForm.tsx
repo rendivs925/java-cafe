@@ -9,6 +9,7 @@ import CardContainer from "./CardContainer";
 import { CardContent } from "./ui/card";
 import ImagePreview from "./ImagePreview";
 import SelectFormField, { Option } from "./SelectFormField";
+import { nanoid } from "nanoid";
 
 interface FormField {
   name: string;
@@ -84,7 +85,7 @@ export default function AddProductForm(): ReactElement {
               {formFields.map((field, index) =>
                 field.name === "category" ? (
                   <SelectFormField
-                    key={field.id}
+                    key={nanoid()}
                     label={field.label}
                     name={field.name}
                     control={form.control}
@@ -92,6 +93,7 @@ export default function AddProductForm(): ReactElement {
                   />
                 ) : (
                   <InputFormField
+                    key={nanoid()}
                     control={form.control}
                     name={field.name}
                     id={field.id + index}
@@ -105,7 +107,17 @@ export default function AddProductForm(): ReactElement {
               )}
               <div className="flex gap-6">
                 {isLoading ? (
-                  <LoadingButton>Mengirim...</LoadingButton>
+                  <>
+                    <Button
+                      type="submit"
+                      size="default"
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Cancel
+                    </Button>
+                    <LoadingButton>Menambahkan...</LoadingButton>
+                  </>
                 ) : (
                   <>
                     <Button
@@ -128,6 +140,7 @@ export default function AddProductForm(): ReactElement {
       </CardContainer>
       <ImagePreview
         imgUrl={imageSrc as string}
+        key={title}
         category={category}
         description={description}
         id={price}

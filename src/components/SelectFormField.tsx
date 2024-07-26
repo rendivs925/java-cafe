@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Control } from "react-hook-form"; // Adjust the import according to your form library
+import { nanoid } from "nanoid";
 
 export interface Option {
   value: string;
@@ -47,8 +48,8 @@ const SelectFormField: React.FC<SelectFormFieldProps> = ({
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {options.map((option, index) => (
-                <SelectItem id={option.value + index} value={option.value}>
+              {options.map((option) => (
+                <SelectItem key={nanoid()} id={nanoid()} value={option.value}>
                   {option.label}
                 </SelectItem>
               ))}
