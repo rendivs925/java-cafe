@@ -42,5 +42,12 @@ export const addProductSchema = z.object({
     ),
 });
 
+export const newAddProductSchema = addProductSchema
+  .omit({ productImage: true })
+  .extend({
+    imgUrl: z.string().min(5, "newField must be at least 5 characters long"),
+  });
+
 // Define TypeScript type based on the add product schema
 export type AddProductType = z.infer<typeof addProductSchema>;
+export type newAddProductType = z.infer<typeof newAddProductSchema>;

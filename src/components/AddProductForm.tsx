@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import { Button } from "./ui/button";
 import LoadingButton from "./LoadingButton";
 import InputFormField from "./InputFormField";
@@ -24,11 +24,7 @@ interface FormField {
 export default function AddProductForm(): ReactElement {
   const { form, formData, handleImageChange, imageSrc, isLoading, onSubmit } =
     useAddProduct();
-  const { title, category, description, price, stock, productImage } = formData;
-
-  useEffect(() => {
-    console.log(imageSrc);
-  }, [imageSrc]);
+  const { title, category, description, price, stock } = formData;
 
   const formFields: FormField[] = [
     {
@@ -88,6 +84,7 @@ export default function AddProductForm(): ReactElement {
               {formFields.map((field, index) =>
                 field.name === "category" ? (
                   <SelectFormField
+                    key={field.id}
                     label={field.label}
                     name={field.name}
                     control={form.control}

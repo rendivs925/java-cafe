@@ -43,10 +43,8 @@ export default function AppProvider({
       const { data } = await axios.delete("/api/auth/logout");
       setUser(defaultUser);
       moveRoute("/");
-      console.log(data);
     } catch (err) {
       const error = err as AxiosError;
-      console.error(error);
     }
   };
 
