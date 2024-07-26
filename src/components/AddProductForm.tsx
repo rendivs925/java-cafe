@@ -27,8 +27,8 @@ export default function AddProductForm(): ReactElement {
   const { title, category, description, price, stock, productImage } = formData;
 
   useEffect(() => {
-    console.log(title);
-  }, [title, category, description]);
+    console.log(imageSrc);
+  }, [imageSrc]);
 
   const formFields: FormField[] = [
     {

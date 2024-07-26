@@ -7,6 +7,8 @@ import useAppContext from "./useAppContext";
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { addProductSchema } from "@/schemas/AddProductSchema";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../lib/firebase";
 
 // Type for the error response data
 interface ErrorResponse {
@@ -15,10 +17,12 @@ interface ErrorResponse {
 }
 
 export default function useAddProduct() {
-  const { moveRoute } = useAppContext();
+  // const { moveRoute } = useAppContext();
   const [isLoading, setIsloading] = useState(false);
-  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
+  const [progresspercent, setProgresspercent] = useState(0);
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
@@ -38,21 +42,49 @@ export default function useAddProduct() {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       setImageFile(file);
-
       const reader = new FileReader();
       reader.onload = () => {
-        console.log(reader.result);
-
         setImageSrc(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const uploadFile = async (file: File) => {
+    if (!file) return;
+
+    const storageRef = ref(storage, `files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    return uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error);
+      },
+      async () => {
+        return await getDownloadURL(uploadTask.snapshot.ref).then(
+          (downloadURL) => {
+            return downloadURL as string;
+          }
+        );
+      }
+    );
+  };
+
   async function onSubmit(formData: z.infer<typeof addProductSchema>) {
     const payload = {
       ...formData,
     };
+
+    const url = await uploadFile(imageFile as File);
+
+    console.log(url);
 
     form.clearErrors();
 
@@ -115,9 +147,7 @@ export default function useAddProduct() {
   return {
     form,
     setImageSrc,
-    setImageFile,
     imageSrc,
-    imageFile,
     onSubmit,
     isLoading,
     handleImageChange,

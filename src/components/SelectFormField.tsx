@@ -48,7 +48,9 @@ const SelectFormField: React.FC<SelectFormFieldProps> = ({
             </FormControl>
             <SelectContent>
               {options.map((option, index) => (
-                <SelectItem value={option.value}>{option.label}</SelectItem>
+                <SelectItem id={option.value + index} value={option.value}>
+                  {option.label}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>

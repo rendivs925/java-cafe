@@ -13,14 +13,14 @@ export default function Hero(props: HeroProps): ReactElement {
   return (
     <section id="hero">
       <div className="container grid min-h-svh content-center lg:grid-cols-hero gap-6 lg:gap-20">
-        <div className="justify-self-center max-smallerMobileScreen:w-[250px] max-smallerMobileScreen:h-[250px] max-[380px]:w-[0] max-[380px]:h-[0] lg:justify-self-end lg:order-2 w-[320px] h-[320px] lg:w-[350px] lg:h-[350px] xl:h-[480px] xl:w-[480px] relative">
+        <div className="justify-self-center max-smallerMobileScreen:w-[250px] max-smallerMobileScreen:h-[250px] max-[380px]:w-[0] max-[380px]:h-[0] lg:justify-self-end lg:order-2 w-[320px] h-[320px] lg:w-[350px] lg:h-[350px] xl:h-[550px] xl:w-[550px] relative">
           <Image
             src="/images/optimized-coffee-hd.png"
             alt="Coffee"
             priority
             layout="fill"
             loading="eager"
-            sizes="(max-width: 380px) 250px, (max-width: 640px) 320px, (max-width: 1024px) 350px, 480px"
+            sizes="(max-width: 380px) 250px, (max-width: 640px) 320px, (max-width: 1024px) 350px, 550px"
           />
         </div>
         <div className="lg:order-1 grid content-center justify-items-start">

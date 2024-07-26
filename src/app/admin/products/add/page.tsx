@@ -8,10 +8,10 @@ import { type ReactElement } from "react";
 export default function AddProduct(): ReactElement {
   return (
     <DashboardContainer>
-      <DashboardHeader className="mx-auto px-[150px]">
+      <DashboardHeader className="container">
         <DashboardTitle>Add New Product</DashboardTitle>
       </DashboardHeader>
-      <DashboardContent className="mx-auto px-[150px] grid items-start grid-cols-addNewProduct gap-6">
+      <DashboardContent className="container grid items-start grid-cols-addNewProduct gap-6">
         <AddProductForm />
       </DashboardContent>
     </DashboardContainer>

@@ -46,7 +46,8 @@ function InputFormField({
                   {field.name === "description" ? (
                     <Textarea
                       key={id}
-                      placeholder="Tell us a little bit about yourself"
+                      id={id}
+                      placeholder={placeholder}
                       className="resize-none h-[200px]"
                       {...field}
                     />
