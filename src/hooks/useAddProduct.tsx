@@ -3,8 +3,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import useAppContext from "./useAppContext";
-import { useState, useEffect } from "react";
+// import useAppContext from "./useAppContext";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import {
   addProductSchema,

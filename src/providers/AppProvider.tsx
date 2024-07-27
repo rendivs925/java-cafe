@@ -40,7 +40,7 @@ export default function AppProvider({
 
   const handleLogout = async () => {
     try {
-      const { data } = await axios.delete("/api/auth/logout");
+      await axios.delete("/api/auth/logout");
       setUser(defaultUser);
       moveRoute("/");
     } catch (err) {
@@ -80,7 +80,7 @@ export default function AppProvider({
     } else if (value >= 1000) {
       return (value / 1000).toFixed(0) + "K";
     }
-    return value;
+    return String(value);
   };
 
   const formatDate = (date: Date) => {

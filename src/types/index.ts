@@ -54,7 +54,7 @@ interface CartProduct extends Omit<Product, "description"> {
 type Operation = "increment" | "decrement";
 
 interface Product {
-  id: string;
+  id: string | number;
   title: string;
   stock: number;
   price: number;

@@ -9,7 +9,6 @@ import CardContainer from "./CardContainer";
 import { CardContent } from "./ui/card";
 import ImagePreview from "./ImagePreview";
 import SelectFormField, { Option } from "./SelectFormField";
-import { nanoid } from "nanoid";
 
 interface FormField {
   name: string;
@@ -82,7 +81,7 @@ export default function AddProductForm(): ReactElement {
         <CardContent className="pt-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-              {formFields.map((field, index) =>
+              {formFields.map((field) =>
                 field.name === "category" ? (
                   <SelectFormField
                     key={field.id + field.name}
@@ -143,7 +142,7 @@ export default function AddProductForm(): ReactElement {
         key={title}
         category={category}
         description={description}
-        id={price}
+        id={title}
         price={price}
         stock={stock}
         title={title}

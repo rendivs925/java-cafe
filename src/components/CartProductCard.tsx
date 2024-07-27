@@ -10,14 +10,14 @@ export default function CartProductCard({
   title,
   stock,
   price,
-  category,
+  // category,
   id,
   qty,
 }: CartProduct): ReactElement {
   const { formatNumber, updateQuantity, setCartProductList } = useAppContext();
 
   const incrementQuantity = () => {
-    updateQuantity(id, "increment");
+    updateQuantity(id as number, "increment");
   };
 
   const deleteProductFromCart = () => {
@@ -25,7 +25,7 @@ export default function CartProductCard({
   };
 
   const decrementQuantity = () => {
-    updateQuantity(id, "decrement");
+    updateQuantity(id as number, "decrement");
   };
 
   return (

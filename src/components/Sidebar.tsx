@@ -62,7 +62,7 @@ const Sidebar = () => {
             <Link
               href={href}
               className={`flex hover:after:hidden items-center px-8 py-4 rounded-lg space-x-4 w-full transition-all duration-300 ${
-                pathname.includes(href)
+                pathname?.includes(href)
                   ? "bg-primary text-primary-foreground"
                   : "bg-transparent text-muted-foreground hover:bg-primary/85 group-hover:text-primary-foreground/85"
               }`}
@@ -76,7 +76,7 @@ const Sidebar = () => {
           <button
             onClick={handleLogout}
             className={` text-lg font-medium flex hover:after:hidden items-center px-8 py-4 rounded-lg space-x-4 w-full transition-all duration-300 ${
-              pathname.includes("/auth/logout")
+              pathname?.includes("/auth/logout")
                 ? "bg-primary text-primary-foreground"
                 : "bg-transparent text-muted-foreground hover:bg-primary/85 group-hover:text-primary-foreground/85"
             }`}

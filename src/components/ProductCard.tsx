@@ -30,7 +30,7 @@ function ProductCard({
     );
 
     if (existingCartProductItem) {
-      return updateQuantity(existingCartProductItem.id, "increment");
+      return updateQuantity(existingCartProductItem.id as number, "increment");
     }
 
     setCartProductList((prev) => [

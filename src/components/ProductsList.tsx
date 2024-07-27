@@ -1,4 +1,4 @@
-// Import necessary libraries and components
+// components/ProductsList.tsx
 "use client";
 import {
   Carousel,
@@ -7,46 +7,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
 import ProductCard from "./ProductCard";
-import { ReactNode, useEffect, useState } from "react";
-import axios from "axios";
 import { newAddProductType } from "@/schemas/AddProductSchema";
 
 // Define the product type, extending newAddProductType with an ID
-export type ProductType = newAddProductType & { _id: string };
+export type ProductType = newAddProductType & { _id: string | number };
 
-// Define props for ProductsList (empty in this case)
-export interface ProductsListProps {}
+// Define props for ProductsList, now including products
+export interface ProductsListProps {
+  products: ProductType[];
+}
 
 // Define the ProductsList component
-export default function ProductsList(props: ProductsListProps): ReactNode {
-  // State for products, loading, and error
-  const [products, setProducts] = useState<ProductType[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Fetch products on component mount
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(`/api/products`);
-        console.log(response.data);
-        setProducts(response.data.products);
-      } catch (err: any) {
-        if (err.response && err.response.data && err.response.data.message) {
-          setError(err.response.data.message);
-        } else {
-          setError(err.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
+const ProductsList: React.FC<ProductsListProps> = ({ products }) => {
   // Render individual slides
   const renderSlide = (product: ProductType) => (
     <CarouselItem className="pl-12 md:basis-1/2 lg:basis-1/3" key={product._id}>
@@ -57,7 +30,7 @@ export default function ProductsList(props: ProductsListProps): ReactNode {
         stock={product.stock}
         description={product.description}
         imgUrl={product.imgUrl}
-        id={product._id}
+        id={product._id.toString() as string}
       />
     </CarouselItem>
   );
@@ -72,4 +45,6 @@ export default function ProductsList(props: ProductsListProps): ReactNode {
       <CarouselNext className="max-lg:hidden" />
     </Carousel>
   );
-}
+};
+
+export default ProductsList;

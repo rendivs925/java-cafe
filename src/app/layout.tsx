@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
 
-  const isDashboard = pathname.startsWith("/admin");
+  const isDashboard = pathname?.startsWith("/admin");
 
   return (
     <html lang="en" className="overflow-x-hidden scroll-smooth scroll-pt-32">
