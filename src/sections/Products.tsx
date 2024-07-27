@@ -1,10 +1,10 @@
-"use server";
 import Title from "@/components/Title";
 import ProductsList, { ProductType } from "@/components/ProductsList";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Product from "@/models/Product";
 
 async function getProducts() {
+  "use server";
   try {
     await connectToDatabase();
 

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-// import useAppContext from "./useAppContext";
+import useAppContext from "./useAppContext";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -12,6 +12,7 @@ import {
   newAddProductType,
 } from "@/schemas/AddProductSchema";
 import { getFile, uploadFile } from "@/lib/storage";
+import { useRouter } from "next/navigation";
 
 // Type for the error response data
 interface ErrorResponse {
@@ -20,24 +21,32 @@ interface ErrorResponse {
 }
 
 export default function useAddProduct() {
-  // const { moveRoute } = useAppContext();
+  const { moveRoute } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
+  const router = useRouter();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      price: 0,
-      category: "",
+      title: "Your product title",
+      description:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis",
+      price: 1000,
+      category: "espresso",
       stock: 0,
       productImage: undefined,
     },
   });
 
   const formData = form.watch();
+
+  const handleCancel = () => {
+    form.reset();
+    setImageSrc("https://via.placeholder.com/400");
+    router.back();
+  };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event?.target?.files && event.target.files[0]) {
@@ -55,7 +64,6 @@ export default function useAddProduct() {
     const folder = "products/";
     const imagePath = await uploadFile(file, folder);
     const imageUrl = await getFile(imagePath);
-    console.log("Uploaded successfully");
 
     return imageUrl;
   };
@@ -69,8 +77,6 @@ export default function useAddProduct() {
         title: formData.title, // Assuming 'title' is the unique identifier
       });
 
-      console.log(checkResponse.data);
-
       if (checkResponse.data.exists) {
         toast({
           description: "Product already exists",
@@ -80,6 +86,11 @@ export default function useAddProduct() {
         return;
       }
 
+      toast({ description: "Product added successfully.", variant: "success" });
+      setIsLoading(false);
+
+      form.reset();
+
       const imgUrl = await handleUpload(imageFile as File);
 
       const { productImage, ...payload } = formData;
@@ -88,19 +99,16 @@ export default function useAddProduct() {
 
       form.clearErrors();
 
-      const { data } = await axios.post("/api/products/add-product", payload);
-
-      toast({ description: data.message, variant: "success" });
+      await axios.post("/api/products/add-product", payload);
     } catch (error) {
       const axiosError = error as AxiosError;
 
-      // Handle 401 (Unauthorized) errors specifically
-      if (axiosError.response?.status === 401) {
+      if (axiosError.response?.status === 400) {
         // Type assertion to ensure `axiosError.response.data` is of type `ErrorResponse`
         const errorData = axiosError.response?.data as ErrorResponse;
 
         // Default error message if not provided
-        const errorMessage = errorData.message || "Unauthorized";
+        const errorMessage = errorData.message;
 
         // Use optional chaining to safely get the path
         const path = errorData.path || ""; // Default to empty string if path is undefined
@@ -133,6 +141,8 @@ export default function useAddProduct() {
           }
         });
       }
+
+      toast({ description: "Something went wrong.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -146,5 +156,6 @@ export default function useAddProduct() {
     isLoading,
     handleImageChange,
     formData,
+    handleCancel,
   };
 }

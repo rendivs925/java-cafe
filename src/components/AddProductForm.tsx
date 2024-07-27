@@ -1,5 +1,5 @@
 "use client";
-import { type ReactElement } from "react";
+import { MutableRefObject, type ReactElement } from "react";
 import { Button } from "./ui/button";
 import LoadingButton from "./LoadingButton";
 import InputFormField from "./InputFormField";
@@ -22,8 +22,15 @@ interface FormField {
 }
 
 export default function AddProductForm(): ReactElement {
-  const { form, formData, handleImageChange, imageSrc, isLoading, onSubmit } =
-    useAddProduct();
+  const {
+    form,
+    handleCancel,
+    formData,
+    handleImageChange,
+    imageSrc,
+    isLoading,
+    onSubmit,
+  } = useAddProduct();
   const { title, category, description, price, stock } = formData;
 
   const formFields: FormField[] = [
@@ -108,10 +115,11 @@ export default function AddProductForm(): ReactElement {
                 {isLoading ? (
                   <>
                     <Button
-                      type="submit"
+                      type="button"
                       size="default"
                       variant="outline"
                       className="w-full"
+                      onClick={handleCancel}
                     >
                       Cancel
                     </Button>
@@ -120,10 +128,11 @@ export default function AddProductForm(): ReactElement {
                 ) : (
                   <>
                     <Button
-                      type="submit"
+                      type="button"
                       size="default"
                       variant="outline"
                       className="w-full"
+                      onClick={handleCancel}
                     >
                       Cancel
                     </Button>

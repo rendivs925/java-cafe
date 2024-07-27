@@ -10,7 +10,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "./ui/textarea";
-import { nanoid } from "nanoid";
 
 interface InputFormFieldProps {
   control: any;
@@ -51,6 +50,7 @@ function InputFormField({
                       placeholder={placeholder}
                       className="resize-none h-[200px]"
                       {...field}
+                      maxLength={95}
                     />
                   ) : (
                     <Input

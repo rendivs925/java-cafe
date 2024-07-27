@@ -13,16 +13,16 @@ export default function ImagePreview({
 }: Product): ReactElement {
   return (
     <ProductCard
-      category={category || "coffee"}
+      category={category || "espresso"}
       description={
         description ||
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae"
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis"
       }
-      id={id}
+      id={id || "id"}
       imgUrl={imgUrl || "https://via.placeholder.com/400"}
-      price={price || 0}
-      stock={stock}
-      title={title || "Product Title"}
+      price={price || 1000}
+      stock={stock || 0}
+      title={title || "Your product title"}
     />
   );
 }
