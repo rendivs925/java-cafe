@@ -2,15 +2,27 @@ import { ProductType } from "@/components/ProductsList";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Product from "@/models/Product";
 
-export async function getProductsAction() {
-  "use server";
+export async function getProductsAction(page: number, limit: number) {
   try {
     await connectToDatabase();
 
-    const products: ProductType[] = await Product.find({}).lean();
+    const skip = (page - 1) * limit;
 
-    return products;
+    const products: ProductType[] = await Product.find({})
+      .skip(skip)
+      .limit(limit)
+      .lean();
+    const totalProductsLength: number = await Product.find({}).countDocuments();
+
+    return {
+      products,
+      totalProductsLength,
+    };
   } catch (error) {
-    return [];
+    console.error(error);
+    return {
+      products: [],
+      totalProductsLength: 0,
+    };
   }
 }

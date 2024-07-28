@@ -7,7 +7,11 @@ import ProductsTable from "@/components/ProductsTable";
 import SelectShowing from "@/components/SelectShowing";
 import AddProductButton from "@/components/AddProductButton";
 
-export default function Products(): ReactElement {
+export default function Products({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}): ReactElement {
   return (
     <DashboardContainer>
       <DashboardHeader className="flex justify-between">
@@ -18,7 +22,7 @@ export default function Products(): ReactElement {
         </div>
       </DashboardHeader>
       <DashboardContent className="bg-background p-6 rounded-lg">
-        <ProductsTable />
+        <ProductsTable searchParams={searchParams} />
       </DashboardContent>
     </DashboardContainer>
   );

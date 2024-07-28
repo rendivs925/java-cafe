@@ -1,4 +1,5 @@
-import { type ReactElement } from "react";
+"use client";
+import { useEffect, useState, type ReactElement } from "react";
 import {
   Select,
   SelectContent,
@@ -6,34 +7,57 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-export interface SelectShowingProps {}
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const selectShowingItems = [
   {
-    value: 10,
+    value: 1,
   },
   {
-    value: 20,
+    value: 2,
   },
   {
-    value: 30,
+    value: 3,
   },
   {
-    value: 40,
+    value: 4,
   },
   {
-    value: 50,
+    value: 5,
   },
 ];
 
-export default function SelectShowing(props: SelectShowingProps): ReactElement {
+export default function SelectShowing(): ReactElement {
+  const [totalItemsPerPage, setTotalItemsPerPage] = useLocalStorage(
+    "totalItemsPerPage",
+    "1"
+  );
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handleSelectOnchange = (value: string) => {
+    setTotalItemsPerPage(value);
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", "1");
+    params.set("per_page", totalItemsPerPage);
+
+    router.push(`${pathname}?${params.toString()}`);
+  }, [totalItemsPerPage]);
+
   return (
     <div className="flex gap-6 items-center">
       <p className="mt-0">Showing</p>
-      <Select>
+      <Select
+        defaultValue={totalItemsPerPage}
+        onValueChange={handleSelectOnchange}
+      >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="10" />
+          <SelectValue placeholder="1" />
         </SelectTrigger>
         <SelectContent>
           {selectShowingItems.map(({ value }, index) => (

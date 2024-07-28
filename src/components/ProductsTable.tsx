@@ -15,8 +15,35 @@ import TableCellFormattedDate from "./TableCellFormattedDate";
 import TableCellFormattedNumber from "./TableCellFormattedNumber";
 import PaginationControls from "./PaginationControls";
 
-export default async function ProductsTable() {
-  const products = await getProductsAction();
+export default async function ProductsTable({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const page = searchParams["page"] ?? "1";
+  const per_page = searchParams["per_page"] ?? "1";
+  const { products, totalProductsLength } = await getProductsAction(
+    Number(page),
+    Number(per_page)
+  );
+
+  console.log("   ");
+  console.log("   ");
+  console.log(
+    "====================================================================================================================================="
+  );
+  console.log("   ");
+  console.log("Products:", products);
+  console.log("   ");
+  console.log(
+    "====================================================================================================================================="
+  );
+  console.log("   ");
+  console.log("   ");
+
+  // mocked, skipped and limited in the real app
+  const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
+  const totalPages = Math.ceil(totalProductsLength / Number(per_page));
 
   const getStockStatus = (stock: number): string => {
     if (stock === 0) return "Out of Stock";
@@ -92,12 +119,17 @@ export default async function ProductsTable() {
         <TableRow>
           <TableCell
             className="bg-background text-muted-foreground pb-0"
-            colSpan={4}
+            colSpan={5}
           >
-            Total Items : {products.length}
+            Total Items : {totalProductsLength}
           </TableCell>
-          <TableCell className="bg-background pb-0" colSpan={4}>
-            <PaginationControls />
+          <TableCell className="bg-background pb-0" colSpan={5}>
+            <PaginationControls
+              hasNextPage={Number(page) < totalPages}
+              hasPrevPage={start > 0}
+              totalItems={totalProductsLength}
+              totalProductsLength={totalProductsLength}
+            />
           </TableCell>
         </TableRow>
       </TableBody>
