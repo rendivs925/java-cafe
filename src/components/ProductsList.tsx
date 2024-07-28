@@ -11,7 +11,11 @@ import ProductCard from "./ProductCard";
 import { newAddProductType } from "@/schemas/AddProductSchema";
 
 // Define the product type, extending newAddProductType with an ID
-export type ProductType = newAddProductType & { _id: string | number };
+export type ProductType = newAddProductType & {
+  _id: string | number;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 // Define props for ProductsList, now including products
 export interface ProductsListProps {

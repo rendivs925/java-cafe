@@ -1,24 +1,9 @@
 import Title from "@/components/Title";
-import ProductsList, { ProductType } from "@/components/ProductsList";
-import { connectToDatabase } from "@/lib/dbConnect";
-import Product from "@/models/Product";
-
-async function getProducts() {
-  "use server";
-  try {
-    await connectToDatabase();
-
-    const products: ProductType[] = await Product.find({}).lean();
-    console.log(products);
-
-    return products;
-  } catch (error) {
-    return [];
-  }
-}
+import ProductsList from "@/components/ProductsList";
+import { getProductsAction } from "@/actions/getProductsAction";
 
 export default async function Products() {
-  const products = await getProducts();
+  const products = await getProductsAction();
 
   return (
     <section id="products">

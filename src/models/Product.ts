@@ -11,14 +11,17 @@ interface IProduct extends Document {
 }
 
 // Create the Mongoose schema
-const ProductSchema: Schema = new Schema({
-  category: { type: String, required: true },
-  description: { type: String, required: true },
-  imgUrl: { type: String, required: true },
-  price: { type: Number, required: true },
-  stock: { type: Number, required: true },
-  title: { type: String, required: true, unique: true },
-});
+const ProductSchema: Schema = new Schema(
+  {
+    category: { type: String, required: true },
+    description: { type: String, required: true },
+    imgUrl: { type: String, required: true },
+    price: { type: Number, required: true },
+    stock: { type: Number, required: true },
+    title: { type: String, required: true, unique: true },
+  },
+  { timestamps: true }
+);
 
 // Create and export the Mongoose model
 const Product: Model<IProduct> =

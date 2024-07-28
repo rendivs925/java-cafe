@@ -7,17 +7,20 @@ interface IUser extends Document {
   role: "admin" | "user";
 }
 
-const UserSchema: Schema<IUser> = new Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  role: {
-    type: String,
-    required: true,
-    enum: ["admin", "user"],
-    default: "user",
+const UserSchema: Schema<IUser> = new Schema(
+  {
+    username: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    role: {
+      type: String,
+      required: true,
+      enum: ["admin", "user"],
+      default: "user",
+    },
+    password: { type: String, required: true },
   },
-  password: { type: String, required: true },
-});
+  { timestamps: true }
+);
 
 const User: Model<IUser> =
   mongoose.models.User || mongoose.model<IUser>("User", UserSchema);

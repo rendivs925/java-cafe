@@ -90,6 +90,7 @@ export default function useAddProduct() {
       setIsLoading(false);
 
       form.reset();
+      setImageSrc("https://via.placeholder.com/400");
 
       const imgUrl = await handleUpload(imageFile as File);
 
