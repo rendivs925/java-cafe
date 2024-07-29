@@ -1,5 +1,10 @@
 import { storage } from "./firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import { nanoid } from "nanoid";
 
 export const uploadFile = async (file: File, folder: string) => {
@@ -16,6 +21,29 @@ export const uploadFile = async (file: File, folder: string) => {
     throw error;
   }
 };
+
+export async function deleteFile(filePath: string) {
+  try {
+    // Create a reference to the file to delete
+    const fileRef = ref(storage, filePath);
+
+    // Delete the file
+    await deleteObject(fileRef);
+
+    console.log("File deleted successfully.");
+
+    return {
+      status: "success",
+      message: "File deleted successfully.",
+    };
+  } catch (error) {
+    console.error("Error deleting file:", error);
+    return {
+      status: "error",
+      message: "Failed to delete file.",
+    };
+  }
+}
 
 export const getFile = async (path: string) => {
   try {

@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/table";
 import { Button } from "./ui/button";
 import Image from "next/image";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
 import { getProductsAction } from "@/actions/getProductsAction";
 import TableCellFormattedDate from "./TableCellFormattedDate";
 import TableCellFormattedNumber from "./TableCellFormattedNumber";
 import PaginationControls from "./PaginationControls";
+import DeleteProductButton from "./DeleteProductButton";
 
 export default async function ProductsTable({
   searchParams,
@@ -26,20 +26,6 @@ export default async function ProductsTable({
     Number(page),
     Number(per_page)
   );
-
-  console.log("   ");
-  console.log("   ");
-  console.log(
-    "====================================================================================================================================="
-  );
-  console.log("   ");
-  console.log("Products:", products);
-  console.log("   ");
-  console.log(
-    "====================================================================================================================================="
-  );
-  console.log("   ");
-  console.log("   ");
 
   // mocked, skipped and limited in the real app
   const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
@@ -106,12 +92,13 @@ export default async function ProductsTable({
               </TableCell>
               <TableCell>{stock}</TableCell>
               <TableCell className="space-x-4 text-right">
-                <Button size="icon" className="bg-transparent">
+                <Button size="sm" variant="ghost" className="bg-transparent">
                   <MdOutlineEdit className="text-foreground text-lg" />
                 </Button>
-                <Button size="icon" className="bg-transparent">
-                  <RiDeleteBin6Line className="text-destructive text-lg" />
-                </Button>
+                <DeleteProductButton
+                  filePath={imgUrl}
+                  productId={_id.toString()}
+                />
               </TableCell>
             </TableRow>
           )

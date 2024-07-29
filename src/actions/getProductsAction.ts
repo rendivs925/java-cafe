@@ -15,12 +15,15 @@ export async function getProductsAction(page: number, limit: number) {
     const totalProductsLength: number = await Product.find({}).countDocuments();
 
     return {
+      status: "success",
+      message: "Products fetched successfully.",
       products,
       totalProductsLength,
     };
   } catch (error) {
-    console.error(error);
     return {
+      status: "error",
+      message: "Error fetching products.",
       products: [],
       totalProductsLength: 0,
     };

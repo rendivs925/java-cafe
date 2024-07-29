@@ -45,7 +45,7 @@ export default function useAddProduct() {
   const handleCancel = () => {
     form.reset();
     setImageSrc("https://via.placeholder.com/400");
-    router.back();
+    moveRoute("/admin/products");
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
