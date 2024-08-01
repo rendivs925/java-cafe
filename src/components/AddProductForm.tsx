@@ -9,6 +9,7 @@ import CardContainer from "./CardContainer";
 import { CardContent } from "./ui/card";
 import ImagePreview from "./ImagePreview";
 import SelectFormField, { Option } from "./SelectFormField";
+import { addProductAction } from "@/actions/addProductAction";
 
 interface FormField {
   name: string;
@@ -29,9 +30,10 @@ export default function AddProductForm(): ReactElement {
     handleImageChange,
     imageSrc,
     isLoading,
+    imageFile,
     onSubmit,
   } = useAddProduct();
-  const { title, category, description, price, stock } = formData;
+  const { title, category, description, price, stock, productImage } = formData;
 
   const formFields: FormField[] = [
     {
@@ -87,7 +89,20 @@ export default function AddProductForm(): ReactElement {
       <CardContainer>
         <CardContent className="pt-6">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <form
+              action={async () => {
+                const formData = new FormData();
+                formData.append("title", title);
+                formData.append("price", String(price) as string);
+                formData.append("description", description);
+                formData.append("category", category);
+                formData.append("stock", String(stock) as string);
+                formData.append("productImage", imageFile as File);
+
+                await addProductAction(formData);
+              }}
+              className="space-y-5"
+            >
               {formFields.map((field) =>
                 field.name === "category" ? (
                   <SelectFormField

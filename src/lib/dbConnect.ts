@@ -1,10 +1,10 @@
 import mongoose, { ConnectOptions } from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
+const DB_URL = process.env.DB_URL as string;
 
-if (!MONGODB_URI) {
+if (DB_URL === "" || DB_URL === null || DB_URL === undefined) {
   throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env.local"
+    "Please define the DB_URL environment variable inside .env.local"
   );
 }
 
@@ -20,7 +20,7 @@ export async function connectToDatabase() {
       // You can include other supported options here
     };
 
-    const client = await mongoose.connect(MONGODB_URI, options);
+    const client = await mongoose.connect(DB_URL, options);
     cachedClient = client;
     console.log("Connected to MongoDB");
     return client;

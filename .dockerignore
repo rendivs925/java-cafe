@@ -1,0 +1,10 @@
+.git
+.vscode
+.*ignore
+docker-compose*.yml
+Dockerfile*
+**/*_test.go
+.next
+Makefile
+*.md
+node_modules

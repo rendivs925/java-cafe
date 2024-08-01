@@ -7,6 +7,9 @@ import ProductsTable from "@/components/ProductsTable";
 import SelectShowing from "@/components/SelectShowing";
 import AddProductButton from "@/components/AddProductButton";
 
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 export default function Products({
   searchParams,
 }: {

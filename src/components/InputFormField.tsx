@@ -70,7 +70,10 @@ function InputFormField({
                   type={type}
                   accept="image/*"
                   onChange={(event) => {
-                    field.onChange(event.target.files);
+                    field.onChange(
+                      event?.target?.files && event.target.files[0]
+                    );
+
                     onChange(event);
                   }}
                   onBlur={field.onBlur}

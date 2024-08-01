@@ -38,26 +38,34 @@ const SelectFormField: React.FC<SelectFormFieldProps> = ({
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
-        <FormItem className="bg-background w-full">
-          <FormLabel>{label}</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
-            <FormControl className="bg-background">
-              <SelectTrigger>
-                <SelectValue placeholder={`Pilih ${label.toLowerCase()}`} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {options.map((option) => (
-                <SelectItem key={nanoid()} id={nanoid()} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <FormMessage />
-        </FormItem>
-      )}
+      render={({ field }) => {
+        return (
+          <FormItem className="bg-background w-full">
+            <FormLabel>{label}</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl className="bg-background">
+                <SelectTrigger>
+                  <SelectValue placeholder={`Pilih ${label.toLowerCase()}`} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {options.map((option) => {
+                  return (
+                    <SelectItem
+                      key={option.label}
+                      id={option.label}
+                      value={option.value}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 };

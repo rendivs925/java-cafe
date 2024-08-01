@@ -41,7 +41,7 @@ function ProductCard({
 
   return (
     <Card className="flex flex-col w-full rounded-lg overflow-hidden shadow">
-      <CardHeader className="relative aspect-square overflow-hidden">
+      <CardHeader className="relative aspect-[2/3] overflow-hidden">
         <Image
           src={imgUrl}
           loading="eager"

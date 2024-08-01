@@ -14,10 +14,17 @@ export async function getProductsAction(page: number, limit: number) {
       .lean();
     const totalProductsLength: number = await Product.find({}).countDocuments();
 
+    const formattedProducts = products.map((product) => {
+      return {
+        ...product,
+        _id: product._id.toString(),
+      };
+    });
+
     return {
       status: "success",
       message: "Products fetched successfully.",
-      products,
+      products: formattedProducts,
       totalProductsLength,
     };
   } catch (error) {
