@@ -12,7 +12,6 @@ import {
   newAddProductType,
 } from "@/schemas/AddProductSchema";
 import { getFile, uploadFile } from "@/lib/storage";
-import { useRouter } from "next/navigation";
 
 // Type for the error response data
 interface ErrorResponse {
@@ -25,7 +24,6 @@ export default function useAddProduct() {
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
-  const router = useRouter();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),

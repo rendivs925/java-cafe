@@ -25,63 +25,6 @@ const navbarLinks: NavbarLink[] = [
   },
 ];
 
-const products: Product[] = [
-  {
-    id: 1,
-    title: "Luwak Coffee",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
-    price: 23000,
-    imgUrl: "/images/product-1.jpg",
-    category: "Coffee",
-    stock: 5,
-  },
-  {
-    id: 2,
-    title: "Luwak Coffee",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
-    price: 23000,
-    imgUrl: "/images/product-2.jpg",
-    category: "Coffee",
-    stock: 50,
-  },
-  {
-    id: 3,
-    title: "Luwak Coffee",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis repudiandae,",
-    price: 23000,
-    imgUrl: "/images/product-3.jpg",
-    category: "Coffee",
-    stock: 40,
-  },
-];
-
-const blogs: Blog[] = [
-  {
-    id: 1,
-    title: "This is the title",
-    description:
-      "Lorem ipsum is placeholder text commonly used in the graphic, print....",
-    imgUrl: "/images/blog-image-1.jpg",
-  },
-  {
-    id: 2,
-    title: "This is the title",
-    description:
-      "Lorem ipsum is placeholder text commonly used in the graphic, print....",
-    imgUrl: "/images/blog-image-2.jpg",
-  },
-  {
-    id: 3,
-    title: "This is the title",
-    description:
-      "Lorem ipsum is placeholder text commonly used in the graphic, print....",
-    imgUrl: "/images/blog-image-3.jpg",
-  },
-];
-
 const workingHours: WorkingHour[] = [
   {
     days: "Sunday - Thursday",
@@ -112,4 +55,4 @@ const contactUs: Contact[] = [
   },
 ];
 
-export { navbarLinks, workingHours, COOKIE_NAME, contactUs, products, blogs };
+export { navbarLinks, workingHours, COOKIE_NAME, contactUs };

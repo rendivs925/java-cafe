@@ -31,9 +31,8 @@ export default function AddProductForm(): ReactElement {
     imageSrc,
     isLoading,
     imageFile,
-    onSubmit,
   } = useAddProduct();
-  const { title, category, description, price, stock, productImage } = formData;
+  const { title, category, description, price, stock } = formData;
 
   const formFields: FormField[] = [
     {
