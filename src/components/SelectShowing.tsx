@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, type ReactElement } from "react";
+import { Suspense, useEffect, type ReactElement } from "react";
 import {
   Select,
   SelectContent,
@@ -50,23 +50,25 @@ export default function SelectShowing(): ReactElement {
   }, [totalItemsPerPage]);
 
   return (
-    <div className="flex gap-6 items-center">
-      <p className="mt-0">Showing</p>
-      <Select
-        defaultValue={totalItemsPerPage}
-        onValueChange={handleSelectOnchange}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="1" />
-        </SelectTrigger>
-        <SelectContent>
-          {selectShowingItems.map(({ value }, index) => (
-            <SelectItem key={index} value={`${value}`}>
-              {value}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+    <Suspense>
+      <div className="flex gap-6 items-center">
+        <p className="mt-0">Showing</p>
+        <Select
+          defaultValue={totalItemsPerPage}
+          onValueChange={handleSelectOnchange}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="1" />
+          </SelectTrigger>
+          <SelectContent>
+            {selectShowingItems.map(({ value }, index) => (
+              <SelectItem key={index} value={`${value}`}>
+                {value}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </Suspense>
   );
 }

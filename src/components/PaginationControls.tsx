@@ -1,5 +1,5 @@
 "use client";
-import { type ReactElement } from "react";
+import { Suspense, type ReactElement } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -29,34 +29,36 @@ export default function PaginationControls({
   const per_page = searchParams.get("per_page") ?? "1";
 
   return (
-    <Pagination className="justify-end mx-0 overflow-hidden w-full">
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            onClick={() => {
-              hasPrevPage &&
-                moveRoute(
-                  `${pathname}?page=${Number(page) - 1}&per_page=${per_page}`
-                );
-            }}
-            className="hover:bg-transparent cursor-pointer"
-          />
-        </PaginationItem>
-        <PaginationItem>
-          {page} / {Math.ceil(totalItemsLength / Number(per_page))}
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext
-            className="hover:bg-transparent cursor-pointer"
-            onClick={() => {
-              hasNextPage &&
-                moveRoute(
-                  `${pathname}?page=${Number(page) + 1}&per_page=${per_page}`
-                );
-            }}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+    <Suspense>
+      <Pagination className="justify-end mx-0 overflow-hidden w-full">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => {
+                hasPrevPage &&
+                  moveRoute(
+                    `${pathname}?page=${Number(page) - 1}&per_page=${per_page}`
+                  );
+              }}
+              className="hover:bg-transparent cursor-pointer"
+            />
+          </PaginationItem>
+          <PaginationItem>
+            {page} / {Math.ceil(totalItemsLength / Number(per_page))}
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              className="hover:bg-transparent cursor-pointer"
+              onClick={() => {
+                hasNextPage &&
+                  moveRoute(
+                    `${pathname}?page=${Number(page) + 1}&per_page=${per_page}`
+                  );
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </Suspense>
   );
 }

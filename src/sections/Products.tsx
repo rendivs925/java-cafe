@@ -13,7 +13,7 @@ export default async function Products() {
           description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
                        dolor sit amet consectetur adipisicing elit. Corporis"
         />
-        <ProductsList products={products.products} />
+        <ProductsList products={products.items} />
       </div>
     </section>
   );

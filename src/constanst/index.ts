@@ -1,4 +1,4 @@
-import { Blog, Contact, NavbarLink, Product, WorkingHour } from "@/types";
+import { Blog, Contact, NavbarLink, WorkingHour } from "@/types";
 
 const COOKIE_NAME = "user-token";
 
@@ -22,6 +22,30 @@ const navbarLinks: NavbarLink[] = [
   {
     href: "/#contact",
     label: "Contact",
+  },
+];
+
+const blogs: Blog[] = [
+  {
+    id: 1,
+    title: "This is the title",
+    description:
+      "Lorem ipsum is placeholder text commonly used in the graphic, print....",
+    imgUrl: "/images/blog-image-1.jpg",
+  },
+  {
+    id: 2,
+    title: "This is the title",
+    description:
+      "Lorem ipsum is placeholder text commonly used in the graphic, print....",
+    imgUrl: "/images/blog-image-2.jpg",
+  },
+  {
+    id: 3,
+    title: "This is the title",
+    description:
+      "Lorem ipsum is placeholder text commonly used in the graphic, print....",
+    imgUrl: "/images/blog-image-3.jpg",
   },
 ];
 
@@ -55,4 +79,4 @@ const contactUs: Contact[] = [
   },
 ];
 
-export { navbarLinks, workingHours, COOKIE_NAME, contactUs };
+export { navbarLinks, workingHours, COOKIE_NAME, contactUs, blogs };
