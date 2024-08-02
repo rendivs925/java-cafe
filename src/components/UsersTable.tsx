@@ -1,0 +1,80 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "./ui/button";
+import { MdOutlineEdit } from "react-icons/md";
+import TableCellFormattedDate from "./TableCellFormattedDate";
+import PaginationControls from "./PaginationControls";
+import { getUsersAction } from "@/actions/getUsersAction";
+import DeleteUserButton from "./DeleteUserButton";
+
+export default async function UsersTable({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const page = searchParams["page"] ?? "1";
+  const per_page = searchParams["per_page"] ?? "1";
+  const { items, totalItemsLength } = await getUsersAction(
+    Number(page),
+    Number(per_page)
+  );
+
+  // mocked, skipped and limited in the real app
+  const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
+  const totalPages = Math.ceil(totalItemsLength / Number(per_page));
+
+  return (
+    <Table className="overflow-y-hidden">
+      <TableHeader>
+        <TableRow>
+          <TableHead>No</TableHead>
+          <TableHead>Username</TableHead>
+          <TableHead>User ID</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>Role</TableHead>
+          <TableHead>Date Added</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {items?.map(({ _id, role, email, username, createdAt }, index) => (
+          <TableRow key={_id.toString()}>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell>{username}</TableCell>
+            <TableCell>{_id.toString()}</TableCell>
+            <TableCell>{email}</TableCell>
+            <TableCell>{role}</TableCell>
+            <TableCellFormattedDate createdAt={createdAt} />
+            <TableCell className="text-right">
+              <Button size="sm" variant="ghost" className="bg-transparent">
+                <MdOutlineEdit className="text-foreground text-lg" />
+              </Button>
+              <DeleteUserButton filePath="" itemId={_id.toString()} />
+            </TableCell>
+          </TableRow>
+        ))}
+        <TableRow>
+          <TableCell
+            className="bg-background text-muted-foreground pb-0"
+            colSpan={5}
+          >
+            Total Items : {totalItemsLength}
+          </TableCell>
+          <TableCell className="bg-background pb-0" colSpan={5}>
+            <PaginationControls
+              hasNextPage={Number(page) < totalPages}
+              hasPrevPage={start > 0}
+              totalItemsLength={totalItemsLength}
+            />
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  );
+}

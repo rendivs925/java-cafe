@@ -12,7 +12,7 @@ export async function getProductsAction(page: number, limit: number) {
       .skip(skip)
       .limit(limit)
       .lean();
-    const totalProductsLength: number = await Product.find({}).countDocuments();
+    const totalItemsLength: number = await Product.find({}).countDocuments();
 
     const formattedProducts = products.map((product) => {
       return {
@@ -24,15 +24,15 @@ export async function getProductsAction(page: number, limit: number) {
     return {
       status: "success",
       message: "Products fetched successfully.",
-      products: formattedProducts,
-      totalProductsLength,
+      items: formattedProducts,
+      totalItemsLength,
     };
   } catch (error) {
     return {
       status: "error",
       message: "Error fetching products.",
-      products: [],
-      totalProductsLength: 0,
+      items: [],
+      totalItemsLength: 0,
     };
   }
 }

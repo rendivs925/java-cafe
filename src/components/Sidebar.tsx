@@ -7,6 +7,7 @@ import { TbReportMoney } from "react-icons/tb";
 import { GrAnalytics } from "react-icons/gr";
 import { IoMdSettings } from "react-icons/io";
 import { BiSolidLogOut } from "react-icons/bi";
+import { FaRegUser } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import useAppContext from "@/hooks/useAppContext";
@@ -36,6 +37,11 @@ const links = [
     href: "/admin/reports",
     label: "Reports",
     icon: <GrAnalytics className="text-2xl" />,
+  },
+  {
+    href: "/admin/users",
+    label: "Users",
+    icon: <FaRegUser className="text-2xl" />,
   },
   {
     href: "/admin/settings",

@@ -22,14 +22,14 @@ export default async function ProductsTable({
 }) {
   const page = searchParams["page"] ?? "1";
   const per_page = searchParams["per_page"] ?? "1";
-  const { products, totalProductsLength } = await getProductsAction(
+  const { items, totalItemsLength } = await getProductsAction(
     Number(page),
     Number(per_page)
   );
 
   // mocked, skipped and limited in the real app
   const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
-  const totalPages = Math.ceil(totalProductsLength / Number(per_page));
+  const totalPages = Math.ceil(totalItemsLength / Number(per_page));
 
   const getStockStatus = (stock: number): string => {
     if (stock === 0) return "Out of Stock";
@@ -53,7 +53,7 @@ export default async function ProductsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {products?.map(
+        {items?.map(
           (
             {
               title,
@@ -91,7 +91,7 @@ export default async function ProductsTable({
                 {getStockStatus(stock)}
               </TableCell>
               <TableCell>{stock}</TableCell>
-              <TableCell className="space-x-4 text-right">
+              <TableCell className="text-right">
                 <Button size="sm" variant="ghost" className="bg-transparent">
                   <MdOutlineEdit className="text-foreground text-lg" />
                 </Button>
@@ -108,14 +108,13 @@ export default async function ProductsTable({
             className="bg-background text-muted-foreground pb-0"
             colSpan={5}
           >
-            Total Items : {totalProductsLength}
+            Total Items : {totalItemsLength}
           </TableCell>
           <TableCell className="bg-background pb-0" colSpan={5}>
             <PaginationControls
               hasNextPage={Number(page) < totalPages}
               hasPrevPage={start > 0}
-              totalItems={totalProductsLength}
-              totalProductsLength={totalProductsLength}
+              totalItemsLength={totalItemsLength}
             />
           </TableCell>
         </TableRow>

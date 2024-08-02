@@ -13,6 +13,7 @@ import {
 } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import axios, { AxiosError } from "axios";
+import { toast } from "@/components/ui/use-toast";
 
 // Create the context with a default value
 export const AppContext = createContext<AppContextType | null>(null);
@@ -45,6 +46,7 @@ export default function AppProvider({
       moveRoute("/");
     } catch (err) {
       const error = err as AxiosError;
+      toast({ description: error.message, variant: "destructive" });
     }
   };
 

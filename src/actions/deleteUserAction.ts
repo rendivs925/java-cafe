@@ -2,32 +2,32 @@
 
 import { connectToDatabase } from "@/lib/dbConnect";
 import { deleteFile } from "@/lib/storage";
-import Product from "@/models/Product";
+import User from "@/models/User";
 import { revalidatePath } from "next/cache";
 
-export async function deleteProductAction(
+export async function deleteUserAction(
   itemId: number | string,
   filePath: string
 ) {
   try {
     await connectToDatabase();
-    const response = await Product.deleteOne({
+    const response = await User.deleteOne({
       _id: itemId,
     });
 
     if (response.deletedCount === 0)
       return {
-        message: "Product not found.",
+        message: "User not found.",
         status: "error",
       };
 
-    revalidatePath("/admin/products");
+    revalidatePath("/admin/users");
 
     await deleteFile(filePath);
 
     return {
       status: "success",
-      message: "Product deleted successfully.",
+      message: "User deleted successfully.",
     };
   } catch (error) {
     return { status: "error", message: "Internal server error." };

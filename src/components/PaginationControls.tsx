@@ -1,32 +1,29 @@
 "use client";
-import { useState, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useAppContext from "@/hooks/useAppContext";
 
 export interface PaginationControlsProps {
   hasNextPage: boolean;
   hasPrevPage: boolean;
-  totalItems: number;
-  totalProductsLength: number;
+  totalItemsLength: number;
 }
 
 export default function PaginationControls({
   hasNextPage,
   hasPrevPage,
-  totalItems,
-  totalProductsLength,
+  totalItemsLength,
 }: PaginationControlsProps): ReactElement {
   const { moveRoute } = useAppContext();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const page = searchParams.get("page") ?? "1";
   const per_page = searchParams.get("per_page") ?? "1";
@@ -39,16 +36,14 @@ export default function PaginationControls({
             onClick={() => {
               hasPrevPage &&
                 moveRoute(
-                  `/admin/products/?page=${
-                    Number(page) - 1
-                  }&per_page=${per_page}`
+                  `${pathname}?page=${Number(page) - 1}&per_page=${per_page}`
                 );
             }}
             className="hover:bg-transparent cursor-pointer"
           />
         </PaginationItem>
         <PaginationItem>
-          {page} / {Math.ceil(totalProductsLength / Number(per_page))}
+          {page} / {Math.ceil(totalItemsLength / Number(per_page))}
         </PaginationItem>
         <PaginationItem>
           <PaginationNext
@@ -56,9 +51,7 @@ export default function PaginationControls({
             onClick={() => {
               hasNextPage &&
                 moveRoute(
-                  `/admin/products/?page=${
-                    Number(page) + 1
-                  }&per_page=${per_page}`
+                  `${pathname}?page=${Number(page) + 1}&per_page=${per_page}`
                 );
             }}
           />

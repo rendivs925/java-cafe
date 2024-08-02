@@ -7,7 +7,7 @@ const DashboardGreater = () => {
 
   const userNickname = user.username.split(" ")[0];
 
-  return <DashboardTitle>Welcome {userNickname} !!</DashboardTitle>;
+  return <DashboardTitle>{`Welcome ${userNickname} !!`}</DashboardTitle>;
 };
 
 export default DashboardGreater;
