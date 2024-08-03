@@ -43,6 +43,7 @@ export default function useLogin() {
         username: data.username,
         email: data.email,
         role: data.role,
+        imgUrl: data.imgUrl,
       };
 
       toast({ description: "Logged in successfully.", variant: "success" });

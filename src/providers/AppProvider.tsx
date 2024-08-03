@@ -12,7 +12,7 @@ import {
   User,
 } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { logoutAction } from "@/actions/logoutAction";
 
