@@ -25,6 +25,7 @@ interface FormField {
 export default function AddProductForm(): ReactElement {
   const {
     form,
+    setIsLoading,
     handleCancel,
     formData,
     handleImageChange,
@@ -90,15 +91,23 @@ export default function AddProductForm(): ReactElement {
           <Form {...form}>
             <form
               action={async () => {
-                const formData = new FormData();
-                formData.append("title", title);
-                formData.append("price", String(price) as string);
-                formData.append("description", description);
-                formData.append("category", category);
-                formData.append("stock", String(stock) as string);
-                formData.append("productImage", imageFile as File);
+                try {
+                  setIsLoading(true);
+                  const formData = new FormData();
+                  formData.append("title", title);
+                  formData.append("price", String(price) as string);
+                  formData.append("description", description);
+                  formData.append("category", category);
+                  formData.append("stock", String(stock) as string);
+                  formData.append("productImage", imageFile as File);
 
-                await addProductAction(formData);
+                  const response = await addProductAction(formData);
+
+                  console.log(response.message);
+                } catch (error) {
+                } finally {
+                  setIsLoading(false);
+                }
               }}
               className="space-y-5"
             >

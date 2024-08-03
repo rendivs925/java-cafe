@@ -1,11 +1,9 @@
 "use server";
-import { ProductType } from "@/components/ProductsList";
 import { connectToDatabase } from "@/lib/dbConnect";
 import { getFile, uploadFile } from "@/lib/storage";
 import Product from "@/models/Product";
 import {
   AddProductType,
-  newAddProductSchema,
   addProductSchema,
   newAddProductType,
 } from "@/schemas/AddProductSchema";
@@ -21,8 +19,6 @@ const handleUpload = async (file: File) => {
 
 export async function addProductAction(formData: FormData) {
   try {
-    console.log("Masukkkk");
-
     await connectToDatabase();
 
     const data: AddProductType = {
@@ -34,12 +30,9 @@ export async function addProductAction(formData: FormData) {
       productImage: formData.get("productImage") as string,
     };
 
-    console.log("Product:", data);
     // Validate the data against the schema
     const parseResult = addProductSchema.safeParse(data);
     if (!parseResult.success) {
-      console.log("Errors:", parseResult.error.errors);
-
       return {
         status: "error",
         message: parseResult.error.errors.map((err) => err.message).join(", "),
@@ -59,15 +52,13 @@ export async function addProductAction(formData: FormData) {
     await newProduct.save();
 
     revalidatePath("/admin/products/add");
-
-    console.log("Product added successfully.");
+    revalidatePath("/admin/products");
 
     return {
       status: "success",
       message: "Product added successfully.",
     };
   } catch (error) {
-    console.error("Error adding product:", error);
     return {
       status: "error",
       message:

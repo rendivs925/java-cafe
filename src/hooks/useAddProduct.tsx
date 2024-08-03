@@ -153,6 +153,7 @@ export default function useAddProduct() {
     imageSrc,
     imageFile,
     onSubmit,
+    setIsLoading,
     isLoading,
     handleImageChange,
     formData,

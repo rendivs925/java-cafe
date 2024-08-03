@@ -7,9 +7,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "./ui/textarea";
+import { TbPhotoCirclePlus } from "react-icons/tb";
 
 interface InputFormFieldProps {
   control: any;
@@ -20,6 +22,7 @@ interface InputFormFieldProps {
   errors: any;
   type?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  imageSrc?: string;
 }
 
 function InputFormField({
@@ -31,15 +34,35 @@ function InputFormField({
   errors,
   type = "text",
   onChange,
+  imageSrc,
 }: InputFormFieldProps): ReactElement {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => {
+        const isProfileImage = field.name === "profileImage";
+
         return (
           <FormItem>
-            <Label htmlFor={id}>{label}</Label>
+            {!isProfileImage ? (
+              <Label htmlFor={id}>{label}</Label>
+            ) : (
+              <Label
+                htmlFor={id}
+                className="flex cursor-pointer items-center justify-center mx-auto size-44 shadow rounded-full bg-secondary"
+              >
+                {!imageSrc ? (
+                  <TbPhotoCirclePlus className="size-full p-6 text-secondary-foreground" />
+                ) : (
+                  <>
+                    <Avatar className="size-full">
+                      <AvatarImage src={imageSrc} />
+                    </Avatar>
+                  </>
+                )}
+              </Label>
+            )}
             <FormControl>
               {!onChange ? (
                 <>
@@ -68,6 +91,7 @@ function InputFormField({
                   id={id}
                   placeholder={placeholder}
                   type={type}
+                  className={isProfileImage ? "opacity-0 size-0 absolute" : ""}
                   accept="image/*"
                   onChange={(event) => {
                     field.onChange(

@@ -1,12 +1,5 @@
+import { ACCEPTED_IMAGE_MIME_TYPES, MAX_FILE_SIZE } from "@/constanst";
 import { z } from "zod";
-
-const MAX_FILE_SIZE = 1024 * 1024 * 5;
-const ACCEPTED_IMAGE_MIME_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
 
 // Add product schema for coffee shop owner
 export const addProductSchema = z.object({
@@ -45,7 +38,10 @@ export const addProductSchema = z.object({
 export const newAddProductSchema = addProductSchema
   .omit({ productImage: true })
   .extend({
-    imgUrl: z.string().min(5, "newField must be at least 5 characters long"),
+    imgUrl: z
+      .string()
+      .url()
+      .min(5, "newField must be at least 5 characters long"),
   });
 
 // Define TypeScript type based on the add product schema

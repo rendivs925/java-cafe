@@ -5,6 +5,7 @@ interface IUser extends Document {
   email: string;
   password: string;
   role: "admin" | "user";
+  imgUrl?: string;
 }
 
 const UserSchema: Schema<IUser> = new Schema(
@@ -18,6 +19,7 @@ const UserSchema: Schema<IUser> = new Schema(
       default: "user",
     },
     password: { type: String, required: true },
+    imgUrl: { type: String },
   },
   { timestamps: true }
 );

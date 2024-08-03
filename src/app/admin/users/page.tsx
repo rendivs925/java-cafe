@@ -14,7 +14,6 @@ export default function Users({
 }): ReactElement {
   return (
     <Suspense>
-      {" "}
       <DashboardContainer>
         <DashboardHeader className="flex justify-between">
           <DashboardTitle>Users</DashboardTitle>

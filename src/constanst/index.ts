@@ -2,6 +2,14 @@ import { Blog, Contact, NavbarLink, WorkingHour } from "@/types";
 
 const COOKIE_NAME = "user-token";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 5;
+const ACCEPTED_IMAGE_MIME_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
 const navbarLinks: NavbarLink[] = [
   {
     href: "/#hero",
@@ -79,4 +87,12 @@ const contactUs: Contact[] = [
   },
 ];
 
-export { navbarLinks, workingHours, COOKIE_NAME, contactUs, blogs };
+export {
+  navbarLinks,
+  MAX_FILE_SIZE,
+  ACCEPTED_IMAGE_MIME_TYPES,
+  workingHours,
+  COOKIE_NAME,
+  contactUs,
+  blogs,
+};

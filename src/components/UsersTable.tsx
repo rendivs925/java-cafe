@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Image from "next/image";
 import { Button } from "./ui/button";
 import { MdOutlineEdit } from "react-icons/md";
 import TableCellFormattedDate from "./TableCellFormattedDate";
@@ -43,22 +44,34 @@ export default async function UsersTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {items?.map(({ _id, role, email, username, createdAt }, index) => (
-          <TableRow key={_id.toString()}>
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>{username}</TableCell>
-            <TableCell>{_id.toString()}</TableCell>
-            <TableCell>{email}</TableCell>
-            <TableCell>{role}</TableCell>
-            <TableCellFormattedDate createdAt={createdAt} />
-            <TableCell className="text-right">
-              <Button size="sm" variant="ghost" className="bg-transparent">
-                <MdOutlineEdit className="text-foreground text-lg" />
-              </Button>
-              <DeleteUserButton filePath="" itemId={_id.toString()} />
-            </TableCell>
-          </TableRow>
-        ))}
+        {items?.map(
+          ({ _id, imgUrl, role, email, username, createdAt }, index) => (
+            <TableRow key={_id.toString()}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell className="flex items-center gap-4">
+                <Image
+                  src={imgUrl}
+                  width={40}
+                  height={40}
+                  alt={username}
+                  objectFit="cover"
+                  className="aspect-square"
+                />
+                {username}
+              </TableCell>
+              <TableCell>{_id.toString()}</TableCell>
+              <TableCell>{email}</TableCell>
+              <TableCell>{role}</TableCell>
+              <TableCellFormattedDate createdAt={createdAt} />
+              <TableCell className="text-right">
+                <Button size="sm" variant="ghost" className="bg-transparent">
+                  <MdOutlineEdit className="text-foreground text-lg" />
+                </Button>
+                <DeleteUserButton filePath="" itemId={_id.toString()} />
+              </TableCell>
+            </TableRow>
+          )
+        )}
         <TableRow>
           <TableCell
             className="bg-background text-muted-foreground pb-0"

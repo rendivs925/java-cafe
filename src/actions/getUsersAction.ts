@@ -7,6 +7,7 @@ export interface IUser extends Omit<SignUpType, "password"> {
   createdAt: Date;
   updatedAt: Date;
   role: string;
+  imgUrl: string;
 }
 
 export async function getUsersAction(page: number, limit: number) {
