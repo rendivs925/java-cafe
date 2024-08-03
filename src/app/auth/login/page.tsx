@@ -14,6 +14,10 @@ import {
 import Link from "next/link";
 import LoadingButton from "@/components/LoadingButton";
 import InputFormField from "@/components/InputFormField";
+import { loginAction } from "@/actions/loginAction";
+import { toast } from "@/components/ui/use-toast";
+import useAppContext from "@/hooks/useAppContext";
+import { User } from "@/types";
 
 interface FormField {
   name: string;
@@ -40,7 +44,10 @@ const formFields: FormField[] = [
 ];
 
 export default function Login(): ReactElement {
-  const { form, onSubmit, isLoading } = useLogin();
+  const { form, onSubmit, isLoading, formData } = useLogin();
+  const { setUser } = useAppContext();
+
+  const { email, password } = formData;
 
   return (
     <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full shadow-lg rounded-lg">
@@ -52,7 +59,31 @@ export default function Login(): ReactElement {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form
+            action={async () => {
+              try {
+                const formData = new FormData();
+                formData.append("email", email);
+                formData.append("password", password);
+
+                const response = await loginAction(formData);
+
+                console.log(response.message);
+                if (response.status === "success") {
+                  console.log(response.user);
+                  toast({
+                    description: "Logged in successfully.",
+                    variant: "success",
+                  });
+
+                  setUser(response.user as User);
+                }
+              } catch (error) {
+              } finally {
+              }
+            }}
+            className="space-y-5"
+          >
             {formFields.map((field) => (
               <InputFormField
                 key={field.name}

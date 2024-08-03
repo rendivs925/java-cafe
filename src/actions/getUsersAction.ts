@@ -1,12 +1,11 @@
 import { connectToDatabase } from "@/lib/dbConnect";
 import User from "@/models/User";
-import { SignUpType } from "@/schemas/UserSchema";
+import { AddUserType } from "@/schemas/AddUserSchema";
 
-export interface IUser extends Omit<SignUpType, "password"> {
+export interface IUser extends Omit<AddUserType, "password"> {
   _id: string | number;
   createdAt: Date;
   updatedAt: Date;
-  role: string;
   imgUrl: string;
 }
 

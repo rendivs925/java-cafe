@@ -6,7 +6,6 @@ import axios, { AxiosError } from "axios";
 import useAppContext from "./useAppContext";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { signUpSchema } from "@/schemas/UserSchema";
 import { addUserSchema } from "@/schemas/AddUserSchema";
 import { getFile, uploadFile } from "@/lib/storage";
 
@@ -65,7 +64,7 @@ export default function useSignUp() {
     email,
     username,
     password,
-  }: z.infer<typeof signUpSchema>) {
+  }: z.infer<typeof addUserSchema>) {
     const payload = {
       username,
       email,

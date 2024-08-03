@@ -27,6 +27,8 @@ export default function useLogin() {
     },
   });
 
+  const formData = form.watch();
+
   async function onSubmit({ email, password }: z.infer<typeof baseUserSchema>) {
     const payload = {
       email,
@@ -73,5 +75,5 @@ export default function useLogin() {
     }
   }
 
-  return { form, onSubmit, baseUserSchema, isLoading };
+  return { form, onSubmit, formData, baseUserSchema, isLoading };
 }

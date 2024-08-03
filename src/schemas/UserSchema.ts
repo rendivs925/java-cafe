@@ -12,16 +12,5 @@ export const baseUserSchema = z.object({
     .max(30, "Password cannot exceed 30 characters"),
 });
 
-// Sign-up schema extending the base schema
-export const signUpSchema = baseUserSchema.extend({
-  username: z
-    .string()
-    .min(1, "Username is required")
-    .max(30, "Username cannot exceed 30 characters"),
-});
-
-// Define TypeScript type based on the sign-up schema
-export type SignUpType = z.infer<typeof signUpSchema>;
-
 // Define TypeScript type based on the base schema
 export type BaseUserType = z.infer<typeof baseUserSchema>;

@@ -1,4 +1,5 @@
 "use server";
+import bcrypt from "bcrypt";
 import { connectToDatabase } from "@/lib/dbConnect";
 import { getFile, uploadFile } from "@/lib/storage";
 import User from "@/models/User";
@@ -16,6 +17,25 @@ const handleUpload = async (file: File) => {
 
   return imageUrl;
 };
+
+async function checkForExistingUser(username: string, email: string) {
+  const existingUser = await User.findOne({
+    $or: [{ username }, { email }],
+  }).lean();
+  if (existingUser) {
+    const { path, message } =
+      existingUser.username === username
+        ? {
+            path: "username",
+            message: `Akun dengan username ${username} sudah ada di database.`,
+          }
+        : {
+            path: "email",
+            message: `Akun dengan email ${email} sudah ada di database.`,
+          };
+    return { path, message, status: "error" };
+  }
+}
 
 export async function addUserAction(formData: FormData) {
   try {
@@ -46,10 +66,36 @@ export async function addUserAction(formData: FormData) {
 
     (payload as NewAddUserType).imgUrl = imgUrl;
 
-    // Add the product to the database
-    const newUser = new User(payload);
-    await newUser.save();
+    const existingUser = await checkForExistingUser(
+      payload.username,
+      payload.email
+    );
 
+    if (existingUser) return existingUser;
+
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+    // Determine the role based on credentials
+    const role =
+      payload.email === ADMIN_EMAIL && payload.password === ADMIN_PASSWORD
+        ? "admin"
+        : "user";
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(payload.password, 10);
+
+    // Create a new user
+    const newUser = new User({
+      username: payload.username,
+      email: payload.email,
+      password: hashedPassword,
+      role,
+      imgUrl,
+    });
+
+    // Save the user to the database
+    await newUser.save();
     revalidatePath("/admin/users/add");
     revalidatePath("/admin/users");
 

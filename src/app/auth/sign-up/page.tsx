@@ -14,31 +14,50 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import LoadingButton from "@/components/LoadingButton";
-
-const formFields = [
-  {
-    name: "username",
-    id: "username",
-    placeholder: "Rendi Virgantara Setiawan",
-    label: "Username",
-  },
-  {
-    name: "email",
-    id: "email",
-    placeholder: "example@gmail.com",
-    label: "Email",
-  },
-  {
-    name: "password",
-    id: "password",
-    placeholder: "Masukkan password anda",
-    label: "Password",
-    type: "password",
-  },
-];
+import { addUserAction } from "@/actions/addUserAction";
 
 export default function SignUp(): ReactElement {
-  const { form, onSubmit, isLoading } = useSignUp();
+  const {
+    form,
+    formData,
+    handleImageChange,
+    setIsLoading,
+    onSubmit,
+    isLoading,
+    imageFile,
+    imageSrc,
+  } = useSignUp();
+  const { email, password, username, profileImage, role } = formData;
+
+  const formFields = [
+    {
+      name: "profileImage",
+      id: "productImage",
+      placeholder: "Enter profile image",
+      label: "Profile image",
+      type: "file",
+      onChange: handleImageChange,
+    },
+    {
+      name: "username",
+      id: "username",
+      placeholder: "Rendi Virgantara Setiawan",
+      label: "Username",
+    },
+    {
+      name: "email",
+      id: "email",
+      placeholder: "example@gmail.com",
+      label: "Email",
+    },
+    {
+      name: "password",
+      id: "password",
+      placeholder: "Masukkan password anda",
+      label: "Password",
+      type: "password",
+    },
+  ];
 
   return (
     <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
@@ -48,7 +67,27 @@ export default function SignUp(): ReactElement {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form
+            action={async () => {
+              try {
+                setIsLoading(true);
+                const formData = new FormData();
+                formData.append("profileImage", imageFile as File);
+                formData.append("username", username);
+                formData.append("email", email);
+                formData.append("role", role);
+                formData.append("password", password);
+
+                const response = await addUserAction(formData);
+
+                console.log(response.message);
+              } catch (error) {
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            className="space-y-5"
+          >
             {formFields.map((field) => (
               <InputFormField
                 key={field.name}
@@ -59,6 +98,8 @@ export default function SignUp(): ReactElement {
                 label={field.label}
                 errors={form.formState.errors}
                 type={field.type}
+                onChange={field.onChange}
+                imageSrc={imageSrc as string}
               />
             ))}
             {isLoading ? (

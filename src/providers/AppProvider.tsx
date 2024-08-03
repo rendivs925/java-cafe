@@ -14,6 +14,7 @@ import {
 import useLocalStorage from "@/hooks/useLocalStorage";
 import axios, { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
+import { logoutAction } from "@/actions/logoutAction";
 
 // Create the context with a default value
 export const AppContext = createContext<AppContextType | null>(null);
@@ -30,6 +31,7 @@ export default function AppProvider({
     username: "",
     email: "",
     role: "user",
+    imgUrl: "",
   };
 
   const [user, setUser] = useLocalStorage<User>("user", defaultUser);
@@ -41,7 +43,7 @@ export default function AppProvider({
 
   const handleLogout = async () => {
     try {
-      await axios.delete("/api/auth/logout");
+      await logoutAction();
       setUser(defaultUser);
       moveRoute("/");
     } catch (err) {

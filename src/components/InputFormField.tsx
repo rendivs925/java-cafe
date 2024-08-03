@@ -7,7 +7,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "./ui/textarea";
@@ -50,7 +50,7 @@ function InputFormField({
             ) : (
               <Label
                 htmlFor={id}
-                className="flex cursor-pointer items-center justify-center mx-auto size-44 shadow rounded-full bg-secondary"
+                className="flex cursor-pointer items-center justify-center mx-auto size-36 shadow rounded-full bg-secondary"
               >
                 {!imageSrc ? (
                   <TbPhotoCirclePlus className="size-full p-6 text-secondary-foreground" />

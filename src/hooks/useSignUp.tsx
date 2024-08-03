@@ -5,7 +5,7 @@ import axios, { AxiosError } from "axios";
 import useAppContext from "./useAppContext";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { signUpSchema } from "@/schemas/UserSchema";
+import { addUserSchema } from "@/schemas/AddUserSchema";
 
 // Type for the error response data
 interface ErrorResponse {
@@ -16,21 +16,39 @@ interface ErrorResponse {
 export default function useSignUp() {
   const { moveRoute } = useAppContext();
   const { toast } = useToast();
-  const [isLoading, setIsloading] = useState(false);
-  const form = useForm<z.infer<typeof signUpSchema>>({
-    resolver: zodResolver(signUpSchema),
+  const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
+  const form = useForm<z.infer<typeof addUserSchema>>({
+    resolver: zodResolver(addUserSchema),
     defaultValues: {
       username: "",
       email: "",
       password: "",
+      role: "user",
+      profileImage: undefined,
     },
   });
+
+  const formData = form.watch();
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   async function onSubmit({
     email,
     username,
     password,
-  }: z.infer<typeof signUpSchema>) {
+  }: z.infer<typeof addUserSchema>) {
     const payload = {
       username,
       email,
@@ -38,7 +56,7 @@ export default function useSignUp() {
     };
 
     try {
-      setIsloading(true);
+      setIsLoading(true);
       await axios.post("/api/auth/sign-up", payload);
 
       toast({
@@ -70,9 +88,19 @@ export default function useSignUp() {
         }
       }
     } finally {
-      setIsloading(false);
+      setIsLoading(false);
     }
   }
 
-  return { form, onSubmit, signUpSchema, isLoading };
+  return {
+    form,
+    onSubmit,
+    addUserSchema,
+    formData,
+    imageFile,
+    imageSrc,
+    isLoading,
+    setIsLoading,
+    handleImageChange,
+  };
 }

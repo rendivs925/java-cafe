@@ -1,9 +1,13 @@
 import { z } from "zod";
-import { signUpSchema } from "./UserSchema";
+import { baseUserSchema } from "./UserSchema";
 import { ACCEPTED_IMAGE_MIME_TYPES, MAX_FILE_SIZE } from "@/constanst";
 
 // Sign-up schema extending the base schema
-export const addUserSchema = signUpSchema.extend({
+export const addUserSchema = baseUserSchema.extend({
+  username: z
+    .string()
+    .min(1, "Username is required")
+    .max(30, "Username cannot exceed 30 characters"),
   profileImage: z
     .any()
     .refine((files) => {
@@ -16,7 +20,7 @@ export const addUserSchema = signUpSchema.extend({
   role: z.enum(["user", "admin"]), // Adding role field
 });
 
-export const newAddProductSchema = addUserSchema
+export const newAddUserSchema = addUserSchema
   .omit({ profileImage: true })
   .extend({
     imgUrl: z
@@ -26,4 +30,4 @@ export const newAddProductSchema = addUserSchema
   });
 
 export type AddUserType = z.infer<typeof addUserSchema>;
-export type NewAddUserType = z.infer<typeof newAddProductSchema>;
+export type NewAddUserType = z.infer<typeof newAddUserSchema>;

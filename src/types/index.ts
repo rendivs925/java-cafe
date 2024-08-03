@@ -12,6 +12,7 @@ interface User {
   username: string;
   email: string;
   role: "admin" | "user";
+  imgUrl: string;
 }
 
 interface formattedDataType {
@@ -31,7 +32,7 @@ interface TotalSalesData {
 
 interface AppContextType {
   user: User;
-  handleLogout: () => Promise<void>;
+  handleLogout: () => void;
   isAuthenticated: boolean;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
   setUser: (value: User | ((val: User) => User)) => void;

@@ -19,7 +19,7 @@ const UserSchema: Schema<IUser> = new Schema(
       default: "user",
     },
     password: { type: String, required: true },
-    imgUrl: { type: String },
+    imgUrl: { type: String, required: true },
   },
   { timestamps: true }
 );
