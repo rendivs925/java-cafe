@@ -77,10 +77,11 @@ export async function addUserAction(formData: FormData) {
     const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
     // Determine the role based on credentials
-    const role =
+    let role =
       payload.email === ADMIN_EMAIL && payload.password === ADMIN_PASSWORD
         ? "admin"
         : "user";
+    role = payload.role === "admin" ? "admin" : "user";
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(payload.password, 10);

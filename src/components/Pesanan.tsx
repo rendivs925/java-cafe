@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import Line from "./Line";
 import useAppContext from "@/hooks/useAppContext";
+import { paymentAction } from "@/actions/paymentAction";
 
 function Pesanan() {
   const { formatToRupiah } = useAppContext();
@@ -13,6 +14,20 @@ function Pesanan() {
     { label: "Total harga item", value: 300000 },
     { label: "Total harga", value: 330000 },
   ];
+
+  const handlePayment = async () => {
+    const payload = {
+      email: "hardleberg@gmail.com",
+      firstName: "Rendi vir",
+      grossAmount: 10000,
+      orderId: "111112292100902920190100000",
+      phone: 6285733300369,
+    };
+
+    const response = await paymentAction(payload);
+
+    console.log("payment response: ", response);
+  };
 
   return (
     <CardContainer className="px-6">
@@ -40,7 +55,9 @@ function Pesanan() {
       </CardContent>
       <Line />
       <CardFooter className="pt-6 px-0">
-        <Button size="default">Proses Pembayaran</Button>
+        <Button size="default" onClick={handlePayment}>
+          Proses Pembayaran
+        </Button>
       </CardFooter>
     </CardContainer>
   );

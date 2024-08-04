@@ -14,7 +14,10 @@ export default function HamburgerMenuWithCartAndAuthButtons(): ReactElement {
         <AuthNavButtons />
         <CartIcon />
         {user.imgUrl && (
-          <div className="empty:hidden text-sm bg-secondary text-secondary-foreground rounded-full leading-0 flex items-center justify-center size-9">
+          <div
+            suppressHydrationWarning
+            className="empty:hidden text-sm bg-secondary text-secondary-foreground rounded-full leading-0 flex items-center justify-center size-9"
+          >
             <Avatar className="size-full">
               <AvatarImage src={user.imgUrl} />
             </Avatar>
