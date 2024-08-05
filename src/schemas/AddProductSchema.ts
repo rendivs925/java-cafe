@@ -11,6 +11,18 @@ export const addProductSchema = z.object({
     .number()
     .min(1000, "Price must be at least IDR 1K")
     .max(10000000000000, "Price cannot exceed 10000000000000"),
+  capital: z.coerce
+    .number()
+    .min(1000, "Capital must be at least IDR 1K")
+    .max(10000000000000, "Capital cannot exceed 10000000000000"),
+  profit: z.coerce
+    .number()
+    .min(1000, "Profit must be at least IDR 1K")
+    .max(10000000000000, "Profit cannot exceed 10000000000000"),
+  weight: z.coerce
+    .number()
+    .min(1, "Weight must be at least 1g")
+    .max(1000000000, "Weight cannot exceed 1000000000g"), // Adjusted for weight consistency
   description: z
     .string()
     .min(1, "Description is required")
@@ -26,11 +38,9 @@ export const addProductSchema = z.object({
     .default(1),
   productImage: z
     .any()
-    .refine((files) => {
-      return files?.size <= MAX_FILE_SIZE;
-    }, `Max image size is 5MB.`)
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
     .refine(
-      (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.type),
+      (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type),
       "Only .jpg, .jpeg, .png and .webp formats are supported."
     ),
 });
@@ -41,7 +51,7 @@ export const newAddProductSchema = addProductSchema
     imgUrl: z
       .string()
       .url()
-      .min(5, "newField must be at least 5 characters long"),
+      .min(5, "Image URL must be at least 5 characters long"),
   });
 
 // Define TypeScript type based on the add product schema

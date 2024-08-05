@@ -28,11 +28,10 @@ export default function useAddProduct() {
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
-      title: "Your product title",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis",
-      price: 1000,
-      category: "espresso",
+      title: "",
+      description: "",
+      price: 0,
+      category: "",
       stock: 0,
       productImage: undefined,
     },

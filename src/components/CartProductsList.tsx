@@ -1,36 +1,32 @@
-"use client";
-import { type ReactElement } from "react";
+import { getCartProductListAction } from "@/actions/getCartProductListAction";
 import CartProductCard from "./CartProductCard";
-import useAppContext from "@/hooks/useAppContext";
-import useClientComponent from "@/hooks/useClientComponent";
+import { ICartProduct } from "@/models/Cart";
 
 export interface CartProductsListProps {
   className?: string;
+  userId: string;
 }
 
-export default function CartProductsList({
+export default async function CartProductsList({
   className = "",
-}: CartProductsListProps): ReactElement {
-  const { cartProductList } = useAppContext();
-  const isClient = useClientComponent();
+  userId,
+}: CartProductsListProps) {
+  const response = await getCartProductListAction(userId);
+
+  const cartProductList = response.cartProductList as ICartProduct[];
 
   return (
     <ul className={`flex flex-col gap-12 ${className}`}>
-      {cartProductList.length !== 0 && isClient ? (
-        cartProductList.map(
-          ({ id, title, stock, price, imgUrl, category, qty }) => (
-            <CartProductCard
-              key={id}
-              id={id}
-              qty={qty}
-              title={title}
-              stock={stock}
-              price={price}
-              imgUrl={imgUrl}
-              category={category}
-            />
-          )
-        )
+      {cartProductList.length !== 0 ? (
+        cartProductList.map(({ title, stock, price, imgUrl, qty }) => (
+          <CartProductCard
+            qty={qty}
+            title={title}
+            stock={stock}
+            price={price}
+            imgUrl={imgUrl}
+          />
+        ))
       ) : (
         <li key="empty">
           <p className="mt-0">

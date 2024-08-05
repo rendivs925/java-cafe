@@ -3,31 +3,14 @@ import { CartProduct } from "@/types";
 import Image from "next/legacy/image";
 import { Button } from "./ui/button";
 import { Card, CardTitle } from "./ui/card";
-import useAppContext from "@/hooks/useAppContext";
 
 export default function CartProductCard({
   imgUrl,
   title,
   stock,
   price,
-  // category,
-  id,
   qty,
 }: CartProduct): ReactElement {
-  const { formatNumber, updateQuantity, setCartProductList } = useAppContext();
-
-  const incrementQuantity = () => {
-    updateQuantity(id as number, "increment");
-  };
-
-  const deleteProductFromCart = () => {
-    setCartProductList((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const decrementQuantity = () => {
-    updateQuantity(id as number, "decrement");
-  };
-
   return (
     <li>
       <Card className="cart-item bg-transparent overflow-visible shadow-none">
@@ -46,13 +29,11 @@ export default function CartProductCard({
           <CardTitle className="title">{title}</CardTitle>
           <p className="stock">Stok : {stock}</p>
         </div>
-        <h4 className="price font-medium mt-4">
-          IDR {formatNumber(price * qty)}
-        </h4>
+        <h4 className="price font-medium mt-4">IDR {price * qty}</h4>
         <div className="qty-btn flex text-muted-foreground items-center">
           <Button
             size="sm"
-            onClick={decrementQuantity}
+            // onClick={decrementQuantity}
             className="p-5 h-0  rounded-none"
           >
             -
@@ -62,7 +43,7 @@ export default function CartProductCard({
           </span>
           <Button
             size="sm"
-            onClick={incrementQuantity}
+            // onClick={incrementQuantity}
             className="rounded-none p-5 h-0"
           >
             +
@@ -71,7 +52,7 @@ export default function CartProductCard({
         <Button
           size="icon"
           variant="ghost"
-          onClick={deleteProductFromCart}
+          // onClick={deleteProductFromCart}
           className="close-btn text-xl"
         >
           x

@@ -3,9 +3,7 @@ import mongoose, { ConnectOptions } from "mongoose";
 const DB_URL = process.env.DB_URL as string;
 
 if (DB_URL === "" || DB_URL === null || DB_URL === undefined) {
-  throw new Error(
-    "Please define the DB_URL environment variable inside .env.local"
-  );
+  throw new Error("Please define the DB_URL environment variable inside .env");
 }
 
 let cachedClient: mongoose.Mongoose | null = null;

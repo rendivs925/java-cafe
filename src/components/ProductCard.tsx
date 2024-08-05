@@ -11,35 +11,34 @@ import {
 import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
 import { addProductToCartAction } from "@/actions/addProductToCartAction";
-import { IProduct } from "@/models/Product";
-import { ObjectId } from "mongoose";
+import { Product } from "@/types";
 
 function ProductCard({
   title,
-  description,
   price,
   imgUrl,
-  capital,
-  profit,
-  rating,
-  reviews,
-  weight,
   category,
   productId,
   stock,
-}: IProduct): ReactElement {
-  const {
-    setCartProductList,
-    cartProductList,
-    user,
-    updateQuantity,
-    formatNumber,
-  } = useAppContext();
+  description,
+}: Product & { productId: string }): ReactElement {
+  const { user, formatNumber } = useAppContext();
 
   const addProductToCart = async () => {
     await addProductToCartAction({
       userId: user._id,
-      products: [{ productId, qty: 1 }],
+      products: [
+        {
+          productId,
+          qty: 1,
+          title,
+          category,
+          description,
+          imgUrl,
+          price,
+          stock,
+        },
+      ],
     });
   };
 

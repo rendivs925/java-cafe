@@ -48,14 +48,13 @@ interface AppContextType {
   updateQuantity: (productId: number, operation: Operation) => void;
 }
 
-interface CartProduct extends Omit<Product, "description"> {
+interface CartProduct extends Omit<Product, "description" | "category"> {
   qty: number;
 }
 
 type Operation = "increment" | "decrement";
 
 interface Product {
-  id: string | number;
   title: string;
   stock: number;
   price: number;

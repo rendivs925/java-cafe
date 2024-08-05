@@ -22,11 +22,14 @@ export async function addProductAction(formData: FormData) {
     await connectToDatabase();
 
     const data: AddProductType = {
-      category: formData.get("category") as string,
-      description: formData.get("description") as string,
-      price: Number(formData.get("price")) as number,
-      stock: Number(formData.get("stock")) as number,
       title: formData.get("title") as string,
+      price: Number(formData.get("price")),
+      capital: Number(formData.get("capital")),
+      profit: Number(formData.get("profit")),
+      weight: Number(formData.get("weight")),
+      description: formData.get("description") as string,
+      category: formData.get("category") as string,
+      stock: Number(formData.get("stock")),
       productImage: formData.get("productImage") as string,
     };
 

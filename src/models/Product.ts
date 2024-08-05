@@ -3,12 +3,11 @@ import mongoose, { Model, Schema, Document } from "mongoose";
 // Define the TypeScript interface for the document
 export interface IReview {
   userId: mongoose.Types.ObjectId;
-  rating: number;
+  // rating: number;
   comment: string;
 }
 
 export interface IProduct {
-  productId: mongoose.Types.ObjectId;
   category: string;
   description: string;
   imgUrl: string;
@@ -18,21 +17,20 @@ export interface IProduct {
   stock: number;
   title: string;
   weight: number;
-  rating: number;
-  reviews: IReview[];
+  // rating: number;
+  // reviews: IReview[];
 }
 
 // Create the Mongoose schema for reviews
 const ReviewSchema: Schema<IReview> = new Schema({
-  userId: { type: Schema.Types.ObjectId, required: true },
-  rating: { type: Number, required: true },
+  userId: { type: Schema.Types.ObjectId, required: false },
+  rating: { type: Number, required: false },
   comment: { type: String, required: false },
 });
 
 // Create the Mongoose schema for products
 const ProductSchema: Schema<IProduct> = new Schema(
   {
-    productId: { type: Schema.Types.ObjectId, required: true, unique: true },
     category: { type: String, required: true },
     description: { type: String, required: true },
     imgUrl: { type: String, required: true },
@@ -42,8 +40,8 @@ const ProductSchema: Schema<IProduct> = new Schema(
     stock: { type: Number, required: true },
     title: { type: String, required: true, unique: true },
     weight: { type: Number, required: true },
-    rating: { type: Number, required: true },
-    reviews: [ReviewSchema],
+    // rating: { type: Number, required: false },
+    // reviews: [ReviewSchema],
   },
   { timestamps: true }
 );

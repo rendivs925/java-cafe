@@ -1,22 +1,32 @@
 import mongoose, { Model, Schema } from "mongoose";
 
-// Define the TypeScript interface for the document
-export interface ICart {
-  userId: mongoose.Types.ObjectId | string;
-  products: {
-    productId: mongoose.Types.ObjectId;
-    qty: number;
-  }[];
+export interface ICartProduct {
+  productId: string;
+  qty: number;
+  title: string;
+  stock: number;
+  price: number;
+  imgUrl: string;
 }
 
-// Create the Mongoose schema
+// Define the TypeScript interface for the cart document
+export interface ICart {
+  userId: string;
+  products: ICartProduct[];
+}
+
+// Create the Mongoose schema for the cart
 const CartSchema: Schema<ICart> = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, required: true },
+    userId: { type: String, required: true },
     products: [
       {
-        productId: { type: Schema.Types.ObjectId, required: true },
+        productId: { type: String, required: true },
         qty: { type: Number, default: 1 },
+        title: { type: String, required: true },
+        stock: { type: Number, required: true },
+        price: { type: Number, required: true },
+        imgUrl: { type: String, required: true },
       },
     ],
   },

@@ -33,7 +33,17 @@ export default function AddProductForm(): ReactElement {
     isLoading,
     imageFile,
   } = useAddProduct();
-  const { title, category, description, price, stock } = formData;
+  const {
+    title,
+    capital,
+    profit,
+    weight,
+    productImage,
+    category,
+    description,
+    price,
+    stock,
+  } = formData;
 
   const formFields: FormField[] = [
     {
@@ -49,6 +59,28 @@ export default function AddProductForm(): ReactElement {
       label: "Price",
       type: "number",
     },
+    {
+      name: "capital",
+      id: "capital",
+      placeholder: "Enter capital amount",
+      label: "Capital",
+      type: "number",
+    },
+    {
+      name: "profit",
+      id: "profit",
+      placeholder: "Enter profit amount",
+      label: "Profit",
+      type: "number",
+    },
+    {
+      name: "weight",
+      id: "weight",
+      placeholder: "Enter weight (g)",
+      label: "Weight",
+      type: "number",
+    },
+
     {
       name: "description",
       id: "description",
@@ -78,7 +110,7 @@ export default function AddProductForm(): ReactElement {
       name: "productImage",
       id: "productImage",
       placeholder: "Enter product image",
-      label: "Product image",
+      label: "Product Image",
       type: "file",
       onChange: handleImageChange,
     },
@@ -95,11 +127,17 @@ export default function AddProductForm(): ReactElement {
                   setIsLoading(true);
                   const formData = new FormData();
                   formData.append("title", title);
-                  formData.append("price", String(price) as string);
+                  formData.append("price", String(price));
+                  formData.append("capital", String(capital));
+                  formData.append("profit", String(profit));
+                  formData.append("weight", String(weight));
                   formData.append("description", description);
                   formData.append("category", category);
-                  formData.append("stock", String(stock) as string);
+                  formData.append("stock", String(stock));
                   formData.append("productImage", imageFile as File);
+
+                  // Handle reviews as a JSON string since it's an array of objects
+                  // formData.append("reviews", JSON.stringify(reviews));
 
                   const response = await addProductAction(formData);
 
