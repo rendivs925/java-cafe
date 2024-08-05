@@ -17,6 +17,8 @@ export default async function middleware(req: NextRequest) {
   if (!verifiedToken) {
     // Allow unauthenticated access to /auth routes
     if (pathname.startsWith("/auth")) return NextResponse.next(); // Allow the request to continue
+    if (pathname.startsWith("/shipping"))
+      return NextResponse.redirect(new URL("/", origin));
   }
 
   const userRole = (verifiedToken as UserJwtPayload)?.role || "user";
@@ -31,12 +33,14 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/auth/login", origin));
   }
 
+  // Check for shipping access
+  if (pathname.startsWith("/shipping")) {
+    if (userRole !== "user") return NextResponse.redirect(new URL("/", origin));
+  }
+
   return NextResponse.next(); // Allow the request to continue
 }
 
 export const config = {
-  matcher: [
-    "/admin/:path*", // Protect all /admin routes
-    "/auth/:path*", // Protect all /auth routes
-  ],
+  matcher: ["/admin/:path*", "/auth/:path*", "/shipping/:path*"],
 };

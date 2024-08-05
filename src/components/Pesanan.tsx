@@ -5,6 +5,9 @@ import { CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import Line from "./Line";
 import useAppContext from "@/hooks/useAppContext";
 import { paymentAction } from "@/actions/paymentAction";
+import { getOrderStatusAction } from "@/actions/getOrderStatusAction";
+import { createOrderAction } from "@/actions/createOrderAction";
+import mongoose from "mongoose";
 
 function Pesanan() {
   const { formatToRupiah } = useAppContext();
@@ -19,14 +22,38 @@ function Pesanan() {
     const payload = {
       email: "hardleberg@gmail.com",
       firstName: "Rendi vir",
-      grossAmount: 10000,
-      orderId: "111112292100902920190100000",
+      grossAmount: 120000,
+      orderId: "128821190100000",
       phone: 6285733300369,
     };
 
-    const response = await paymentAction(payload);
+    // const response = await paymentAction(payload);
+    //
+    // console.log("payment response: ", response);
 
-    console.log("payment response: ", response);
+    // const response2 = await getOrderStatusAction({ orderId: payload.orderId });
+
+    // console.log("Status:", response2);
+
+    const response3 = await createOrderAction({
+      orderId: "19191829201",
+      user: new mongoose.Types.ObjectId("66aded26d645f8186bd6abdd"),
+      address: "Jalan merdeka no 10",
+      phone: 123456789011,
+      subtotal: 120000,
+      payment: 150000,
+      shippingCost: 10000,
+      products: [
+        {
+          productId: new mongoose.Types.ObjectId("66a72b9823bd0268c0920735"),
+          qty: 1,
+          totalPrice: 150000,
+          profit: 200000,
+        },
+      ],
+    });
+
+    console.log("Order Status: ", response3);
   };
 
   return (

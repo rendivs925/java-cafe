@@ -1,9 +1,13 @@
 "use server";
 import midtransClient from "midtrans-client";
 
-interface getOrderStatusActionProps {}
+interface getOrderStatusActionProps {
+  orderId: string;
+}
 
-export async function getOrderStatusAction({}: getOrderStatusActionProps) {
+export async function getOrderStatusAction({
+  orderId,
+}: getOrderStatusActionProps) {
   try {
     const snap = new midtransClient.Snap({
       isProduction: false,
@@ -11,6 +15,22 @@ export async function getOrderStatusAction({}: getOrderStatusActionProps) {
       clientKey: process.env.CLIENT_KEY,
     });
 
-    snap.transaction.status(origin).then();
+    return snap.transaction
+      .status(orderId)
+      .then((response: unknown) => {
+        return {
+          status: "success",
+          response,
+        };
+      })
+      .catch((error: unknown) => {
+        const errorMessage = (error as { message: string }).message;
+        console.log("Error:", errorMessage);
+
+        return {
+          status: "error",
+          message: errorMessage,
+        };
+      });
   } catch (error) {}
 }
