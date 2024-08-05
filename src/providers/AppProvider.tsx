@@ -28,6 +28,7 @@ export default function AppProvider({
 }: AppProviderProps): ReactElement {
   const router = useRouter();
   const defaultUser: User = {
+    _id: "",
     username: "",
     email: "",
     role: "user",
@@ -53,11 +54,10 @@ export default function AppProvider({
   };
 
   useEffect(() => {
-    if (user.username === "" && user.email === "")
-      return setIsAuthenticated(false);
+    if (user._id === "") return setIsAuthenticated(false);
 
     setIsAuthenticated(true);
-  }, [user.username, user.role, user.email]);
+  }, [user._id, user.username, user.role, user.email]);
 
   const moveRoute = (route: string) => {
     router.push(route);

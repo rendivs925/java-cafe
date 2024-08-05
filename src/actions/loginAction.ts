@@ -84,6 +84,7 @@ export async function loginAction(formData: FormData) {
       status: "success",
       message: "Authenticated!",
       user: {
+        _id: user._id.toString(),
         username: user.username,
         role: user.role,
         email: user.email,

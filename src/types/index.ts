@@ -1,3 +1,4 @@
+import { ICart } from "@/models/Cart";
 import React, { Dispatch, SetStateAction } from "react";
 
 interface ChartData {
@@ -9,6 +10,7 @@ interface ChartData {
 }
 
 interface User {
+  _id: string;
   username: string;
   email: string;
   role: "admin" | "user";
@@ -41,10 +43,8 @@ interface AppContextType {
   formatNumber: (value: number) => string;
   formatDate: (date: Date) => string;
   getTotalSalesData: (data: TotalSalesData[]) => formattedDataType[];
-  cartProductList: CartProduct[];
-  setCartProductList: (
-    value: CartProduct[] | ((val: CartProduct[]) => CartProduct[])
-  ) => void;
+  cartProductList: ICart[];
+  setCartProductList: (value: ICart[] | ((val: ICart[]) => ICart[])) => void;
   updateQuantity: (productId: number, operation: Operation) => void;
 }
 

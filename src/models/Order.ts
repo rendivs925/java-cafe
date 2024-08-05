@@ -11,7 +11,7 @@ interface IOrderProduct {
 // Define the TypeScript interface for the order document
 export interface IOrder {
   orderId: string;
-  user: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   address: string;
   phone: number;
   subtotal: number;
@@ -27,7 +27,7 @@ export interface IOrder {
 const OrderSchema: Schema<IOrder> = new Schema(
   {
     orderId: { type: String, required: true },
-    user: { type: Schema.Types.ObjectId, required: true },
+    userId: { type: Schema.Types.ObjectId, required: true },
     address: { type: String, required: true },
     phone: { type: Number, required: true },
     subtotal: { type: Number, required: true },

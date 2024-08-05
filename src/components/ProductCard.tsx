@@ -9,34 +9,38 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Button } from "./ui/button";
-import { Product } from "@/types";
 import useAppContext from "@/hooks/useAppContext";
+import { addProductToCartAction } from "@/actions/addProductToCartAction";
+import { IProduct } from "@/models/Product";
+import { ObjectId } from "mongoose";
 
 function ProductCard({
   title,
   description,
   price,
   imgUrl,
-  id,
+  capital,
+  profit,
+  rating,
+  reviews,
+  weight,
   category,
+  productId,
   stock,
-}: Product): ReactElement {
-  const { setCartProductList, cartProductList, updateQuantity, formatNumber } =
-    useAppContext();
+}: IProduct): ReactElement {
+  const {
+    setCartProductList,
+    cartProductList,
+    user,
+    updateQuantity,
+    formatNumber,
+  } = useAppContext();
 
-  const addProductToCart = () => {
-    const existingCartProductItem = cartProductList.find(
-      (item) => item.id === id
-    );
-
-    if (existingCartProductItem) {
-      return updateQuantity(existingCartProductItem.id as number, "increment");
-    }
-
-    setCartProductList((prev) => [
-      ...prev,
-      { id, title, category, imgUrl, price, stock, qty: 1 },
-    ]);
+  const addProductToCart = async () => {
+    await addProductToCartAction({
+      userId: user._id,
+      products: [{ productId, qty: 1 }],
+    });
   };
 
   return (

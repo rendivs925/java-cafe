@@ -1,27 +1,38 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose, { Model, Schema, Document } from "mongoose";
 
 // Define the TypeScript interface for the document
-interface IProduct extends Document {
+export interface IReview {
+  userId: mongoose.Types.ObjectId;
+  rating: number;
+  comment: string;
+}
+
+export interface IProduct {
+  productId: mongoose.Types.ObjectId;
   category: string;
   description: string;
   imgUrl: string;
   price: number;
-  stock: number;
-  title: string;
   capital: number;
   profit: number;
+  stock: number;
+  title: string;
   weight: number;
   rating: number;
-  reviews: {
-    user: mongoose.Types.ObjectId;
-    rating: number;
-    comment: string;
-  }[];
+  reviews: IReview[];
 }
 
-// Create the Mongoose schema
+// Create the Mongoose schema for reviews
+const ReviewSchema: Schema<IReview> = new Schema({
+  userId: { type: Schema.Types.ObjectId, required: true },
+  rating: { type: Number, required: true },
+  comment: { type: String, required: false },
+});
+
+// Create the Mongoose schema for products
 const ProductSchema: Schema<IProduct> = new Schema(
   {
+    productId: { type: Schema.Types.ObjectId, required: true, unique: true },
     category: { type: String, required: true },
     description: { type: String, required: true },
     imgUrl: { type: String, required: true },
@@ -32,13 +43,7 @@ const ProductSchema: Schema<IProduct> = new Schema(
     title: { type: String, required: true, unique: true },
     weight: { type: Number, required: true },
     rating: { type: Number, required: true },
-    reviews: [
-      {
-        user: { type: Schema.Types.ObjectId, required: true },
-        rating: { type: Number, required: true },
-        comment: { type: String, required: false },
-      },
-    ],
+    reviews: [ReviewSchema],
   },
   { timestamps: true }
 );
