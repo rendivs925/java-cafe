@@ -32,8 +32,6 @@ function ProductCard({
           productId,
           qty: 1,
           title,
-          category,
-          description,
           imgUrl,
           price,
           stock,

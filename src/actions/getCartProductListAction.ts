@@ -5,6 +5,7 @@ export async function getCartProductListAction(userId: string) {
   try {
     await connectToDatabase();
 
+    console.log("UserId:", userId);
     const cartProductList = await Cart.findOne({ userId }).populate("products");
 
     console.log("cartProductList:", cartProductList);

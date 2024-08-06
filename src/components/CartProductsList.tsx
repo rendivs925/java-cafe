@@ -1,24 +1,56 @@
-import { getCartProductListAction } from "@/actions/getCartProductListAction";
-import CartProductCard from "./CartProductCard";
+"use client";
 import { ICartProduct } from "@/models/Cart";
+import CartProductCard from "./CartProductCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import useAppContext from "@/hooks/useAppContext";
 
 export interface CartProductsListProps {
   className?: string;
-  userId: string;
 }
 
-export default async function CartProductsList({
+export default function CartProductsList({
   className = "",
-  userId,
 }: CartProductsListProps) {
-  const response = await getCartProductListAction(userId);
+  const { user } = useAppContext();
+  const [cart, setCart] = useState<ICartProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const cartProductList = response.cartProductList as ICartProduct[];
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        // Replace with the actual userId
+        const response = await axios.get(`/api/cart`, {
+          headers: {
+            userId: user._id,
+          },
+        });
+
+        console.log(response);
+
+        if (response.status === 200) {
+          if (response.data.cart.products)
+            return setCart(response.data?.cart.products);
+        } else {
+          setError(response.data.message);
+          setCart([]);
+        }
+      } catch (error) {
+        setError("Error fetching cart data");
+        setCart([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCart();
+  }, []);
 
   return (
     <ul className={`flex flex-col gap-12 ${className}`}>
-      {cartProductList.length !== 0 ? (
-        cartProductList.map(({ title, stock, price, imgUrl, qty }) => (
+      {cart?.length !== 0 ? (
+        cart?.map(({ title, stock, price, imgUrl, qty }) => (
           <CartProductCard
             qty={qty}
             title={title}

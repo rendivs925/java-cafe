@@ -1,10 +1,54 @@
 "use server";
 
-import Cart, { ICart } from "@/models/Cart";
+import Cart, { ICart, ICartProduct } from "@/models/Cart";
 
 export async function addProductToCartAction(body: ICart) {
   try {
-    await Cart.create(body);
+    // Find the existing cart for the user
+    const myCart = await Cart.findOne({ userId: body.userId }).lean();
+
+    // Log the request and current cart state
+    console.log(body);
+    console.log(myCart);
+
+    if (!myCart) {
+      // If no cart exists, create a new one
+      await Cart.create(body);
+    } else {
+      // Update the existing cart
+      const updatedProducts = myCart.products.map(
+        (existingProduct: ICartProduct) => {
+          // Check if the product in the cart is the same as the one being added
+          const newProduct = body.products.find(
+            (product) => product.productId === existingProduct.productId
+          );
+
+          if (newProduct) {
+            // If product already exists, update the quantity
+            existingProduct.qty += newProduct.qty;
+          }
+
+          return existingProduct;
+        }
+      );
+
+      // Add new products that are not in the existing cart
+      body.products.forEach((newProduct) => {
+        if (
+          !myCart.products.some(
+            (existingProduct) =>
+              existingProduct.productId === newProduct.productId
+          )
+        ) {
+          updatedProducts.push(newProduct);
+        }
+      });
+
+      await Cart.updateOne(
+        { userId: body.userId },
+        { products: updatedProducts }
+      );
+    }
 
     console.log("Cart product added successfully.");
 
@@ -13,8 +57,6 @@ export async function addProductToCartAction(body: ICart) {
       message: "Cart product added successfully.",
     };
   } catch (error) {
-    console.log("Error adding cart product.");
-
     return {
       status: "error",
       message: "Error adding cart product.",
