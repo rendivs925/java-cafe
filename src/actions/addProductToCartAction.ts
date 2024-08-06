@@ -7,10 +7,6 @@ export async function addProductToCartAction(body: ICart) {
     // Find the existing cart for the user
     const myCart = await Cart.findOne({ userId: body.userId }).lean();
 
-    // Log the request and current cart state
-    console.log(body);
-    console.log(myCart);
-
     if (!myCart) {
       // If no cart exists, create a new one
       await Cart.create(body);
@@ -49,8 +45,6 @@ export async function addProductToCartAction(body: ICart) {
         { products: updatedProducts }
       );
     }
-
-    console.log("Cart product added successfully.");
 
     return {
       status: "success",

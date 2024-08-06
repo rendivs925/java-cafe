@@ -31,7 +31,7 @@ export default function AppProvider({
     _id: "",
     username: "",
     email: "",
-    role: "user",
+    role: "",
     imgUrl: "",
   };
 
