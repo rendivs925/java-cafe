@@ -1,5 +1,4 @@
 "use client";
-import { ICartProduct } from "@/models/Cart";
 import CartProductCard from "./CartProductCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,8 +11,7 @@ export interface CartProductsListProps {
 export default function CartProductsList({
   className = "",
 }: CartProductsListProps) {
-  const { user } = useAppContext();
-  const [cart, setCart] = useState<ICartProduct[]>([]);
+  const { user, cart, optimisticCart, defaultCart, setCart } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,18 +25,15 @@ export default function CartProductsList({
           },
         });
 
-        console.log(response);
-
         if (response.status === 200) {
-          if (response.data.cart.products)
-            return setCart(response.data?.cart.products);
+          if (response.data.cart) return setCart(response.data?.cart);
         } else {
           setError(response.data.message);
-          setCart([]);
+          setCart(defaultCart);
         }
       } catch (error) {
         setError("Error fetching cart data");
-        setCart([]);
+        setCart(defaultCart);
       } finally {
         setLoading(false);
       }
@@ -49,16 +44,19 @@ export default function CartProductsList({
 
   return (
     <ul className={`flex flex-col gap-12 ${className}`}>
-      {cart?.length !== 0 ? (
-        cart?.map(({ title, stock, price, imgUrl, qty }) => (
-          <CartProductCard
-            qty={qty}
-            title={title}
-            stock={stock}
-            price={price}
-            imgUrl={imgUrl}
-          />
-        ))
+      {optimisticCart?.products ? (
+        optimisticCart?.products?.map(
+          ({ title, productId, stock, price, imgUrl, qty }) => (
+            <CartProductCard
+              qty={qty as number}
+              title={title}
+              stock={stock}
+              productId={productId}
+              price={price}
+              imgUrl={imgUrl}
+            />
+          )
+        )
       ) : (
         <li key="empty">
           <p className="mt-0">

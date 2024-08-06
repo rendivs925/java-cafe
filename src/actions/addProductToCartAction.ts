@@ -21,7 +21,9 @@ export async function addProductToCartAction(body: ICart) {
 
           if (newProduct) {
             // If product already exists, update the quantity
-            existingProduct.qty += newProduct.qty;
+            if (existingProduct.qty && newProduct.qty) {
+              existingProduct.qty += newProduct.qty;
+            }
           }
 
           return existingProduct;

@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ReactNode, ReactElement, useState, useEffect } from "react";
+import {
+  ReactNode,
+  ReactElement,
+  useState,
+  useEffect,
+  useOptimistic,
+} from "react";
 import { createContext } from "use-context-selector";
 import {
   AppContextType,
@@ -15,6 +21,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { logoutAction } from "@/actions/logoutAction";
+import { ICart, ICartProduct } from "@/models/Cart";
 
 // Create the context with a default value
 export const AppContext = createContext<AppContextType | null>(null);
@@ -31,15 +38,17 @@ export default function AppProvider({
     _id: "",
     username: "",
     email: "",
-    role: "",
+    role: "user",
     imgUrl: "",
+  };
+  const defaultCart: ICart = {
+    userId: "",
+    products: [],
   };
 
   const [user, setUser] = useLocalStorage<User>("user", defaultUser);
-  const [cartProductList, setCartProductList] = useLocalStorage<CartProduct[]>(
-    "cartProductList",
-    []
-  );
+  const [cart, setCart] = useState<ICart>(defaultCart);
+  const [optimisticCart, setOptimisticCart] = useOptimistic(cart);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const handleLogout = async () => {
@@ -61,21 +70,6 @@ export default function AppProvider({
 
   const moveRoute = (route: string) => {
     router.push(route);
-  };
-
-  const updateQuantity = (productId: number, operation: Operation) => {
-    setCartProductList((prev) =>
-      prev.map((item) => {
-        if (item.id === productId) {
-          if (operation === "increment" && item.qty < item.stock) {
-            return { ...item, qty: item.qty + 1 };
-          } else if (operation === "decrement" && item.qty > 1) {
-            return { ...item, qty: item.qty - 1 };
-          }
-        }
-        return item;
-      })
-    );
   };
 
   const formatNumber = (value: number) => {
@@ -131,18 +125,20 @@ export default function AppProvider({
 
   const contextValues: AppContextType = {
     moveRoute,
-    updateQuantity,
     handleLogout,
     formatToRupiah,
     formatNumber,
+    cart,
+    setCart,
+    optimisticCart,
+    setOptimisticCart,
     formatDate,
     getTotalSalesData,
-    cartProductList,
-    setCartProductList,
     user,
     setUser,
     isAuthenticated,
     setIsAuthenticated,
+    defaultCart,
   };
 
   return (

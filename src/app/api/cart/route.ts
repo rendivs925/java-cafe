@@ -25,7 +25,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       {
-        status: "success",
         cart: cart || [],
       },
       { status: 200 }
@@ -34,7 +33,6 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching cart product list:", error);
     return NextResponse.json(
       {
-        status: "error",
         message: "Error fetching cart product list",
         cart: [],
       },

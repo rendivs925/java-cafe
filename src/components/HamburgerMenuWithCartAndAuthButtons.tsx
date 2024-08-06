@@ -14,7 +14,7 @@ export default function HamburgerMenuWithCartAndAuthButtons(): ReactElement {
     <>
       <div className="flex gap-6 items-center">
         <AuthNavButtons />
-        {user.role === "user" && isClient && <CartIcon />}
+        {user.role === "user" && user._id !== "" && isClient && <CartIcon />}
         {user.imgUrl && isClient && (
           <div
             suppressHydrationWarning

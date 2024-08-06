@@ -30,7 +30,6 @@ function ProductCard({
       products: [
         {
           productId,
-          qty: 1,
           title,
           imgUrl,
           price,

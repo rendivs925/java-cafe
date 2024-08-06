@@ -2,7 +2,7 @@ import mongoose, { Model, Schema } from "mongoose";
 
 export interface ICartProduct {
   productId: string;
-  qty: number;
+  qty?: number;
   title: string;
   stock: number;
   price: number;
