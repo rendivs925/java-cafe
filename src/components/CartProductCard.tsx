@@ -1,18 +1,109 @@
-import { type ReactElement } from "react";
+import { memo, startTransition, type ReactElement, useState } from "react";
 import { CartProduct } from "@/types";
 import Image from "next/legacy/image";
 import { Button } from "./ui/button";
 import { Card, CardTitle } from "./ui/card";
 import CartProductPrice from "./CartProductPrice";
+import { ICart } from "@/models/Cart";
+import { incrementQtyAction } from "@/actions/incrementQtyAction";
+import { decrementQtyAction } from "@/actions/decrementQtyAction";
+import { deleteCartProductAction } from "@/actions/deleteCartProductAction";
 
-export default function CartProductCard({
+function CartProductCard({
   imgUrl,
   title,
   stock,
   price,
   qty,
   productId,
-}: CartProduct & { productId: string }): ReactElement {
+  optimisticCart,
+  setOptimisticCart,
+  userId,
+  cart,
+}: CartProduct & {
+  productId: string;
+  userId: string;
+  cart: ICart;
+  optimisticCart: ICart;
+  setOptimisticCart: (action: ICart | ((pendingState: ICart) => ICart)) => void;
+}): ReactElement {
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const updateQuantity = async (type: "increment" | "decrement") => {
+    if (isUpdating) return; // Prevent overlapping updates
+    setIsUpdating(true);
+
+    try {
+      const itemIndex = cart.products.findIndex(
+        (product) => product.productId === productId
+      );
+
+      if (itemIndex !== -1) {
+        startTransition(() => {
+          setOptimisticCart((prev) => {
+            const updatedProducts = [...prev.products];
+            if (
+              type === "increment" &&
+              (updatedProducts[itemIndex] as { qty: number }).qty <
+                updatedProducts[itemIndex].stock
+            ) {
+              (updatedProducts[itemIndex] as { qty: number }).qty += 1;
+            } else if (
+              type === "decrement" &&
+              (updatedProducts[itemIndex] as { qty: number }).qty > 0
+            ) {
+              (updatedProducts[itemIndex] as { qty: number }).qty -= 1;
+            }
+
+            return {
+              userId: optimisticCart.userId,
+              products: updatedProducts,
+            };
+          });
+        });
+
+        if (type === "increment") {
+          await incrementQtyAction({ productId, userId });
+        } else {
+          await decrementQtyAction({ productId, userId });
+        }
+      }
+    } catch (error) {
+      console.error(`Failed to ${type} quantity`, error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const deleteProductFromCart = async () => {
+    try {
+      const itemIndex = cart.products.findIndex(
+        (product) => product.productId === productId
+      );
+
+      if (itemIndex !== -1) {
+        startTransition(() => {
+          setOptimisticCart((prev) => {
+            const updatedProducts = prev.products.filter(
+              (item) => item.productId !== productId
+            );
+
+            console.log("updatedProducts:", updatedProducts);
+
+            return {
+              userId: optimisticCart.userId,
+              products: updatedProducts,
+            };
+          });
+        });
+      }
+
+      await deleteCartProductAction({ userId, productId });
+    } catch (error) {
+      console.error("Failed to delete product from cart", error);
+    }
+  };
+
   return (
     <li>
       <Card className="cart-item bg-transparent overflow-visible shadow-none">
@@ -35,8 +126,8 @@ export default function CartProductCard({
         <div className="qty-btn flex text-muted-foreground items-center">
           <Button
             size="sm"
-            // onClick={decrementQuantity}
-            className="p-5 h-0  rounded-none"
+            onClick={() => updateQuantity("decrement")}
+            className="p-5 h-0 rounded-none"
           >
             -
           </Button>
@@ -45,7 +136,7 @@ export default function CartProductCard({
           </span>
           <Button
             size="sm"
-            // onClick={incrementQuantity}
+            onClick={() => updateQuantity("increment")}
             className="rounded-none p-5 h-0"
           >
             +
@@ -54,7 +145,7 @@ export default function CartProductCard({
         <Button
           size="icon"
           variant="ghost"
-          // onClick={deleteProductFromCart}
+          onClick={deleteProductFromCart}
           className="close-btn text-xl"
         >
           x
@@ -63,3 +154,5 @@ export default function CartProductCard({
     </li>
   );
 }
+
+export default memo(CartProductCard);

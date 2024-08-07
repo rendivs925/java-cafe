@@ -1,8 +1,10 @@
 "use server";
+
 import { connectToDatabase } from "@/lib/dbConnect";
 import Cart from "@/models/Cart";
+import { revalidateTag } from "next/cache";
 
-export async function incrementQtyAction({
+export async function deleteCartProductAction({
   userId,
   productId,
 }: {
@@ -22,24 +24,25 @@ export async function incrementQtyAction({
       return { status: "error", message: "Cart not found" };
     }
 
-    const itemIndex = cart.products.findIndex(
-      (item) => item.productId.toString() === productId
+    // Remove the product from the cart
+    const initialProductCount = cart.products.length;
+
+    cart.products = cart.products.filter(
+      (item) => item.productId.toString() !== productId
     );
 
-    if (itemIndex === -1) {
+    if (cart.products.length === initialProductCount) {
+      // No product was removed
       return { status: "error", message: "Product not found in cart" };
-    }
-
-    const selectedProduct = cart.products[itemIndex];
-
-    if ((selectedProduct as { qty: number }).qty < selectedProduct.stock) {
-      (selectedProduct as { qty: number }).qty += 1;
     }
 
     await cart.save();
 
-    return { status: "success", message: "Cart updated successfully" };
+    revalidateTag("/cart");
+
+    return { status: "success", message: "Product removed successfully" };
   } catch (error) {
+    console.error("Failed to remove product:", error);
     return { status: "error", message: "Internal Server Error" };
   }
 }

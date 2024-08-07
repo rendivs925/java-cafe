@@ -1,31 +1,36 @@
-import { getUserCartAction } from "@/actions/getUserCartAction";
+"use client";
 import CartProductCard from "./CartProductCard";
+import { useOptimistic } from "react";
+import { ICart } from "@/models/Cart";
 
-export default async function CartProductsList({
-  userId,
+export default function CartProductsList({
+  cart,
   className,
 }: {
-  userId: string;
+  cart: ICart;
   className?: string;
 }) {
-  const data = await getUserCartAction(userId);
+  const [optimisticCart, setOptimisticCart] = useOptimistic(cart);
+  const products = optimisticCart?.products;
 
   return (
     <ul className={`flex flex-col gap-12 ${className}`}>
-      {data?.cart?.products ? (
-        data?.cart?.products?.map(
-          ({ title, productId, stock, price, imgUrl, qty }) => (
-            <CartProductCard
-              key={productId}
-              qty={qty as number}
-              title={title}
-              stock={stock}
-              productId={productId}
-              price={price}
-              imgUrl={imgUrl}
-            />
-          )
-        )
+      {products.length !== 0 ? (
+        products.map(({ title, productId, stock, price, imgUrl, qty }) => (
+          <CartProductCard
+            key={productId}
+            cart={cart}
+            optimisticCart={optimisticCart}
+            setOptimisticCart={setOptimisticCart}
+            qty={qty as number}
+            title={title}
+            stock={stock}
+            productId={productId}
+            price={price}
+            imgUrl={imgUrl}
+            userId={cart.userId}
+          />
+        ))
       ) : (
         <li key="empty">
           <p className="mt-0">

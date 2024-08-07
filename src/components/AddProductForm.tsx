@@ -38,7 +38,6 @@ export default function AddProductForm(): ReactElement {
     capital,
     profit,
     weight,
-    productImage,
     category,
     description,
     price,
@@ -212,7 +211,7 @@ export default function AddProductForm(): ReactElement {
         key={title}
         category={category}
         description={description}
-        id={title}
+        productId={title}
         price={price}
         stock={stock}
         title={title}

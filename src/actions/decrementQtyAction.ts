@@ -2,7 +2,7 @@
 import { connectToDatabase } from "@/lib/dbConnect";
 import Cart from "@/models/Cart";
 
-export async function incrementQtyAction({
+export async function decrementQtyAction({
   userId,
   productId,
 }: {
@@ -32,8 +32,8 @@ export async function incrementQtyAction({
 
     const selectedProduct = cart.products[itemIndex];
 
-    if ((selectedProduct as { qty: number }).qty < selectedProduct.stock) {
-      (selectedProduct as { qty: number }).qty += 1;
+    if ((selectedProduct as { qty: number }).qty > 0) {
+      (selectedProduct as { qty: number }).qty -= 1;
     }
 
     await cart.save();

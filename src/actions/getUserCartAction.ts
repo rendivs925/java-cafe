@@ -17,7 +17,7 @@ export async function getUserCartAction(userId: string) {
 
     return {
       status: "success",
-      cart: cart || { userId: "", products: [] },
+      cart: JSON.parse(JSON.stringify(cart)) || { userId: "", products: [] },
     };
   } catch (error) {
     console.error("Error fetching cart product list:", error);
