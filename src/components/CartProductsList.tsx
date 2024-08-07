@@ -48,6 +48,7 @@ export default function CartProductsList({
         optimisticCart?.products?.map(
           ({ title, productId, stock, price, imgUrl, qty }) => (
             <CartProductCard
+              key={productId}
               qty={qty as number}
               title={title}
               stock={stock}

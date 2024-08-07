@@ -16,7 +16,7 @@ export default function CartProductCard({
 }: CartProduct & { productId: string }): ReactElement {
   const { setCart, cart, optimisticCart, setOptimisticCart } = useAppContext();
 
-  const incrementQuantity = async (userId: string, productId: string) => {
+  const incrementQuantity = async () => {
     try {
       // Find the product index
       const itemIndex = optimisticCart.products.findIndex(
@@ -40,7 +40,7 @@ export default function CartProductCard({
       }
 
       const response = await axios.post("/api/cart/increment", {
-        userId,
+        userId: cart.userId,
         productId,
       });
 
@@ -98,7 +98,7 @@ export default function CartProductCard({
           </span>
           <Button
             size="sm"
-            onClick={() => incrementQuantity(cart?.userId as string, productId)}
+            onClick={incrementQuantity}
             className="rounded-none p-5 h-0"
           >
             +

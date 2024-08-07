@@ -8,7 +8,7 @@ import useAppContext from "@/hooks/useAppContext";
 export default function CartIcon(): ReactElement {
   const { cart } = useAppContext();
   const isClient = useClientComponent();
-  const totalItems = cart?.products?.length;
+  const totalItems = cart?.products?.length || 0;
 
   return (
     <>
@@ -16,7 +16,7 @@ export default function CartIcon(): ReactElement {
         <Link href="/cart" className="relative hover:after:w-0">
           {" "}
           <IoCart className="text-2xl relative" />
-          {totalItems && (
+          {totalItems !== 0 && (
             <span className="absolute -top-2 -right-2 bg-blue-500 text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
               {totalItems}
             </span>

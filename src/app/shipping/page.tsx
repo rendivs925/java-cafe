@@ -9,10 +9,10 @@ import { type ReactElement } from "react";
 export default function Shipping(): ReactElement | null {
   const renderContent = useShipping();
   const isClient = useClientComponent();
-  const { cartProductList } = useAppContext();
+  const { optimisticCart } = useAppContext();
   const { back } = useRouter();
 
-  if (cartProductList.length === 0 && isClient) {
+  if (optimisticCart.products.length === 0 && isClient) {
     back();
     return null;
   }
