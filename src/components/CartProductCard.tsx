@@ -3,8 +3,7 @@ import { CartProduct } from "@/types";
 import Image from "next/legacy/image";
 import { Button } from "./ui/button";
 import { Card, CardTitle } from "./ui/card";
-import useAppContext from "@/hooks/useAppContext";
-import axios from "axios";
+import CartProductPrice from "./CartProductPrice";
 
 export default function CartProductCard({
   imgUrl,
@@ -14,58 +13,6 @@ export default function CartProductCard({
   qty,
   productId,
 }: CartProduct & { productId: string }): ReactElement {
-  const { setCart, cart, optimisticCart, setOptimisticCart } = useAppContext();
-
-  const incrementQuantity = async () => {
-    try {
-      // Find the product index
-      const itemIndex = optimisticCart.products.findIndex(
-        (item) => item.productId === productId
-      );
-
-      if (itemIndex !== -1) {
-        // Optimistically update the cart state
-        setOptimisticCart((prevCart) => {
-          const updatedProducts = [...prevCart.products];
-          updatedProducts[itemIndex] = {
-            ...updatedProducts[itemIndex],
-            qty: (updatedProducts[itemIndex] as { qty: number }).qty + 1,
-          };
-
-          return {
-            ...prevCart,
-            products: updatedProducts,
-          };
-        });
-      }
-
-      const response = await axios.post("/api/cart/increment", {
-        userId: cart.userId,
-        productId,
-      });
-
-      if (response.status !== 200) {
-        throw new Error(response.data.message);
-      }
-
-      // Refetch the updated cart data
-      const updatedCartResponse = await axios.get(`/api/cart`, {
-        headers: {
-          userId: cart?.userId,
-        },
-      });
-      const updatedCart = updatedCartResponse.data.cart;
-
-      // Update the cart state with the refetched data
-      setCart(updatedCart);
-    } catch (error) {
-      console.error(
-        "Failed to increment quantity:",
-        (error as { message: string }).message
-      );
-    }
-  };
-
   return (
     <li>
       <Card className="cart-item bg-transparent overflow-visible shadow-none">
@@ -84,7 +31,7 @@ export default function CartProductCard({
           <CardTitle className="title">{title}</CardTitle>
           <p className="stock">Stok : {stock}</p>
         </div>
-        <h4 className="price font-medium mt-4">IDR {price * qty}</h4>
+        <CartProductPrice price={price} qty={qty} />
         <div className="qty-btn flex text-muted-foreground items-center">
           <Button
             size="sm"
@@ -98,7 +45,7 @@ export default function CartProductCard({
           </span>
           <Button
             size="sm"
-            onClick={incrementQuantity}
+            // onClick={incrementQuantity}
             className="rounded-none p-5 h-0"
           >
             +

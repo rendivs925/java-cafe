@@ -3,10 +3,14 @@ import useAppContext from "@/hooks/useAppContext";
 import { useEffect, useState, type ReactElement } from "react";
 import { CardContent } from "./ui/card";
 import useClientComponent from "@/hooks/useClientComponent";
-import { ICartProduct } from "@/models/Cart";
+import { ICart, ICartProduct } from "@/models/Cart";
 
-export default function OrderSummaryContent(): ReactElement {
-  const { cart, formatNumber } = useAppContext();
+export default function OrderSummaryContent({
+  cart,
+}: {
+  cart: ICart;
+}): ReactElement {
+  const { formatNumber } = useAppContext();
   const isClient = useClientComponent();
   const [subHarga, setSubHarga] = useState(0);
 
@@ -23,7 +27,7 @@ export default function OrderSummaryContent(): ReactElement {
     if (cart?.products) {
       setSubHarga(cart?.products.reduce(cartProductsReducer, 0));
     }
-  }, [cart]);
+  }, [cart.products]);
 
   return (
     <>

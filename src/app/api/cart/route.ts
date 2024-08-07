@@ -1,5 +1,3 @@
-// app/api/cart/route.ts
-
 import { connectToDatabase } from "@/lib/dbConnect";
 import Cart from "@/models/Cart";
 import { NextRequest, NextResponse } from "next/server";
