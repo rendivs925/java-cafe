@@ -4,7 +4,12 @@ import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
 
 export default function AuthNavButtons(): ReactElement {
-  const { moveRoute, isAuthenticated, handleLogout, user } = useAppContext();
+  const {
+    pushRoute: moveRoute,
+    isAuthenticated,
+    handleLogout,
+    user,
+  } = useAppContext();
 
   return (
     <div className="flex gap-6 max-sm:hidden">

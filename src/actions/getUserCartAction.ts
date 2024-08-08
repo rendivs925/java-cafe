@@ -1,3 +1,4 @@
+"use server";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Cart from "@/models/Cart";
 

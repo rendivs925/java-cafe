@@ -1,11 +1,16 @@
 "use server";
 
 import Cart, { ICart, ICartProduct } from "@/models/Cart";
+import mongoose, { ClientSession } from "mongoose";
+import { revalidateTag } from "next/cache";
 
 export async function addProductToCartAction(body: ICart) {
+  const session: ClientSession = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     // Find the existing cart for the user
-    const myCart = await Cart.findOne({ userId: body.userId }).lean();
+    const myCart = await Cart.findOne({ userId: body.userId }).session(session);
 
     if (!myCart) {
       // If no cart exists, create a new one
@@ -21,9 +26,8 @@ export async function addProductToCartAction(body: ICart) {
 
           if (newProduct) {
             // If product already exists, update the quantity
-            if (existingProduct.qty && newProduct.qty) {
-              existingProduct.qty += newProduct.qty;
-            }
+            existingProduct.qty =
+              (existingProduct.qty || 1) + (newProduct.qty || 1);
           }
 
           return existingProduct;
@@ -42,20 +46,33 @@ export async function addProductToCartAction(body: ICart) {
         }
       });
 
+      console.log("updatedProducts:", updatedProducts);
+
       await Cart.updateOne(
         { userId: body.userId },
-        { products: updatedProducts }
+        { products: updatedProducts },
+        { session }
       );
+
+      revalidateTag("/cart");
+
+      await session.commitTransaction();
+
+      return {
+        status: "success",
+        totalItems: updatedProducts.length,
+        message: "Cart product added successfully.",
+      };
     }
+  } catch (error) {
+    await session.abortTransaction();
 
     return {
-      status: "success",
-      message: "Cart product added successfully.",
-    };
-  } catch (error) {
-    return {
       status: "error",
+      totalItems: 0,
       message: "Error adding cart product.",
     };
+  } finally {
+    session.endSession();
   }
 }

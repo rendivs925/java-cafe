@@ -16,7 +16,7 @@ interface ErrorResponse {
 }
 
 export default function useLogin() {
-  const { moveRoute, setUser } = useAppContext();
+  const { pushRoute: moveRoute, setUser } = useAppContext();
   const [isLoading, setIsloading] = useState(false);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof baseUserSchema>>({
@@ -40,6 +40,7 @@ export default function useLogin() {
       const { data } = await axios.post("/api/auth/login", payload);
 
       const user: User = {
+        _id: data._id,
         username: data.username,
         email: data.email,
         role: data.role,

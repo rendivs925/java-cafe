@@ -1,4 +1,3 @@
-import { ICart } from "@/models/Cart";
 import React, { Dispatch, SetStateAction } from "react";
 
 interface ChartData {
@@ -33,19 +32,14 @@ interface TotalSalesData {
 }
 
 interface AppContextType {
-  cart: ICart;
-  setCart: Dispatch<SetStateAction<ICart>>;
-  defaultCart: ICart;
-  optimisticCart: ICart;
-  setOptimisticCart: (
-    action: number | ((pendingState: number) => ICart)
-  ) => void;
+  totalItems: number;
   user: User;
+  setTotalItems: (value: number | ((val: number) => number)) => void;
   handleLogout: () => void;
   isAuthenticated: boolean;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
   setUser: (value: User | ((val: User) => User)) => void;
-  moveRoute: (route: string) => void;
+  pushRoute: (route: string) => void;
   formatToRupiah: (value: number) => string;
   formatNumber: (value: number) => string;
   formatDate: (date: Date) => string;

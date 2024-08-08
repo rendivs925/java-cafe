@@ -19,8 +19,6 @@ export async function loginAction(formData: FormData) {
       password: formData.get("password") as string,
     };
 
-    console.log(data);
-
     // Validate the data against the schema
     const parseResult = baseUserSchema.safeParse(data);
     if (!parseResult.success) {
@@ -57,6 +55,7 @@ export async function loginAction(formData: FormData) {
 
     // Create JWT token
     const token = await new SignJWT({
+      _id: user._id,
       role: user.role,
       email: user.email,
       username: user.username,
@@ -77,6 +76,8 @@ export async function loginAction(formData: FormData) {
       sameSite: "strict",
       expires: new Date(Date.now() + MAX_AGE),
     });
+
+    console.log("TOKEN:", cookies().get(COOKIE_NAME));
 
     revalidatePath("/auth/login");
 

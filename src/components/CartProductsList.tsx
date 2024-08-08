@@ -1,16 +1,16 @@
 "use client";
 import CartProductCard from "./CartProductCard";
-import { useOptimistic } from "react";
 import { ICart } from "@/models/Cart";
 
 export default function CartProductsList({
-  cart,
+  optimisticCart,
   className,
+  setOptimisticCart,
 }: {
-  cart: ICart;
+  optimisticCart: ICart;
+  setOptimisticCart: (action: ICart | ((pendingState: ICart) => ICart)) => void;
   className?: string;
 }) {
-  const [optimisticCart, setOptimisticCart] = useOptimistic(cart);
   const products = optimisticCart?.products;
 
   return (
@@ -19,7 +19,6 @@ export default function CartProductsList({
         products.map(({ title, productId, stock, price, imgUrl, qty }) => (
           <CartProductCard
             key={productId}
-            cart={cart}
             optimisticCart={optimisticCart}
             setOptimisticCart={setOptimisticCart}
             qty={qty as number}
@@ -28,7 +27,7 @@ export default function CartProductsList({
             productId={productId}
             price={price}
             imgUrl={imgUrl}
-            userId={cart.userId}
+            userId={optimisticCart.userId}
           />
         ))
       ) : (

@@ -20,7 +20,7 @@ interface ErrorResponse {
 }
 
 export default function useAddProduct() {
-  const { moveRoute } = useAppContext();
+  const { pushRoute: moveRoute } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);

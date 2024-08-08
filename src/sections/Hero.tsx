@@ -5,10 +5,8 @@ import Image from "next/legacy/image";
 import { Button } from "@/components/ui/button";
 import useAppContext from "@/hooks/useAppContext";
 
-export interface HeroProps {}
-
-export default function Hero(props: HeroProps): ReactElement {
-  const { moveRoute } = useAppContext();
+export default function Hero(): ReactElement {
+  const { pushRoute: moveRoute } = useAppContext();
 
   return (
     <section id="hero">

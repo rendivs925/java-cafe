@@ -2,7 +2,9 @@
 
 import { connectToDatabase } from "@/lib/dbConnect";
 import Cart from "@/models/Cart";
-import { revalidateTag } from "next/cache";
+import mongoose from "mongoose";
+import { ClientSession } from "mongoose";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function deleteCartProductAction({
   userId,
@@ -11,6 +13,9 @@ export async function deleteCartProductAction({
   userId: string;
   productId: string;
 }) {
+  const session: ClientSession = await mongoose.startSession();
+  session.startTransaction();
+
   if (!userId || !productId) {
     return { status: "error", message: "Missing userId or productId" };
   }
@@ -21,6 +26,7 @@ export async function deleteCartProductAction({
     const cart = await Cart.findOne({ userId });
 
     if (!cart) {
+      await session.abortTransaction();
       return { status: "error", message: "Cart not found" };
     }
 
@@ -32,17 +38,23 @@ export async function deleteCartProductAction({
     );
 
     if (cart.products.length === initialProductCount) {
+      await session.abortTransaction();
       // No product was removed
       return { status: "error", message: "Product not found in cart" };
     }
 
-    await cart.save();
+    await cart.save({ session });
 
-    revalidateTag("/cart");
+    revalidateTag("/");
+
+    await session.commitTransaction();
 
     return { status: "success", message: "Product removed successfully" };
   } catch (error) {
+    await session.abortTransaction();
     console.error("Failed to remove product:", error);
     return { status: "error", message: "Internal Server Error" };
+  } finally {
+    session.endSession();
   }
 }

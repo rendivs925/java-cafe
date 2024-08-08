@@ -3,6 +3,7 @@ import { jwtVerify } from "jose";
 export interface UserJwtPayload {
   jti: string;
   iat: number;
+  _id: string;
   username: string;
   email: string;
   role: "admin" | "user";

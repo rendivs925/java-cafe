@@ -12,6 +12,7 @@ import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
 import { addProductToCartAction } from "@/actions/addProductToCartAction";
 import { Product } from "@/types";
+import { toast } from "./ui/use-toast";
 
 function ProductCard({
   title,
@@ -22,10 +23,10 @@ function ProductCard({
   stock,
   description,
 }: Product & { productId: string }): ReactElement {
-  const { user, formatNumber } = useAppContext();
+  const { user, setTotalItems, formatNumber } = useAppContext();
 
   const addProductToCart = async () => {
-    await addProductToCartAction({
+    const data = await addProductToCartAction({
       userId: user._id,
       products: [
         {
@@ -37,6 +38,12 @@ function ProductCard({
         },
       ],
     });
+
+    setTotalItems(data?.totalItems as number);
+
+    if (data?.status === "success") {
+      toast({ description: data.message, variant: "success" });
+    }
   };
 
   return (

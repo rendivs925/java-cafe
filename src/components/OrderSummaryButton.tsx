@@ -1,17 +1,27 @@
-"use client";
 import { type ReactElement } from "react";
 import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
+import { ICart } from "@/models/Cart";
+import { setCartAction } from "@/actions/setCartAction";
 
-export default function OrderSummaryButton(): ReactElement {
-  const { moveRoute, cart } = useAppContext();
-  const isDisabled = cart.products.length === 0;
+export default function OrderSummaryButton({
+  optimisticCart,
+}: {
+  optimisticCart: ICart;
+}): ReactElement {
+  const { pushRoute } = useAppContext();
+  const isDisabled = optimisticCart.products.length === 0;
+
+  const handleCheckout = async () => {
+    setCartAction(optimisticCart);
+    // pushRoute("/shipping");
+  };
 
   return (
     <Button
       size="default"
       variant="default"
-      onClick={() => moveRoute("/shipping")}
+      onClick={handleCheckout}
       disabled={isDisabled}
       className={`${isDisabled && "cursor-not-allowed"}`}
     >

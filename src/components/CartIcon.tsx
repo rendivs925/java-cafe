@@ -1,28 +1,12 @@
-import { useEffect, useState, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import { IoCart } from "react-icons/io5";
 import Link from "next/link";
 import useClientComponent from "@/hooks/useClientComponent";
 import useAppContext from "@/hooks/useAppContext";
-import axios from "axios";
 
 export default function CartIcon(): ReactElement {
-  const { user } = useAppContext();
-  const [totalItems, setTotalItems] = useState<number>(0);
+  const { user, totalItems } = useAppContext();
   const isClient = useClientComponent();
-
-  useEffect(() => {
-    const getTotalItems = async () => {
-      const response = await axios.get("/api/cart/get-total-items", {
-        params: {
-          userId: user._id,
-        },
-      });
-
-      setTotalItems(response.data.totalItems);
-    };
-
-    getTotalItems();
-  }, []);
 
   return (
     <>

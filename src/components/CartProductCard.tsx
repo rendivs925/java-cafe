@@ -1,13 +1,12 @@
-import { memo, startTransition, type ReactElement, useState } from "react";
+import { memo, startTransition, useState, type ReactElement } from "react";
 import { CartProduct } from "@/types";
 import Image from "next/legacy/image";
 import { Button } from "./ui/button";
 import { Card, CardTitle } from "./ui/card";
 import CartProductPrice from "./CartProductPrice";
 import { ICart } from "@/models/Cart";
-import { incrementQtyAction } from "@/actions/incrementQtyAction";
-import { decrementQtyAction } from "@/actions/decrementQtyAction";
 import { deleteCartProductAction } from "@/actions/deleteCartProductAction";
+import useAppContext from "@/hooks/useAppContext";
 
 function CartProductCard({
   imgUrl,
@@ -19,22 +18,21 @@ function CartProductCard({
   optimisticCart,
   setOptimisticCart,
   userId,
-  cart,
 }: CartProduct & {
   productId: string;
   userId: string;
-  cart: ICart;
   optimisticCart: ICart;
   setOptimisticCart: (action: ICart | ((pendingState: ICart) => ICart)) => void;
 }): ReactElement {
   const [isUpdating, setIsUpdating] = useState(false);
+  const { setTotalItems } = useAppContext();
 
-  const updateQuantity = async (type: "increment" | "decrement") => {
-    if (isUpdating) return; // Prevent overlapping updates
+  const updateQuantity = (type: "increment" | "decrement") => {
+    if (isUpdating) return;
     setIsUpdating(true);
 
     try {
-      const itemIndex = cart.products.findIndex(
+      const itemIndex = optimisticCart.products.findIndex(
         (product) => product.productId === productId
       );
 
@@ -50,7 +48,7 @@ function CartProductCard({
               (updatedProducts[itemIndex] as { qty: number }).qty += 1;
             } else if (
               type === "decrement" &&
-              (updatedProducts[itemIndex] as { qty: number }).qty > 0
+              (updatedProducts[itemIndex] as { qty: number }).qty > 1
             ) {
               (updatedProducts[itemIndex] as { qty: number }).qty -= 1;
             }
@@ -61,12 +59,6 @@ function CartProductCard({
             };
           });
         });
-
-        if (type === "increment") {
-          await incrementQtyAction({ productId, userId });
-        } else {
-          await decrementQtyAction({ productId, userId });
-        }
       }
     } catch (error) {
       console.error(`Failed to ${type} quantity`, error);
@@ -77,7 +69,7 @@ function CartProductCard({
 
   const deleteProductFromCart = async () => {
     try {
-      const itemIndex = cart.products.findIndex(
+      const itemIndex = optimisticCart.products.findIndex(
         (product) => product.productId === productId
       );
 
@@ -88,7 +80,7 @@ function CartProductCard({
               (item) => item.productId !== productId
             );
 
-            console.log("updatedProducts:", updatedProducts);
+            setTotalItems(updatedProducts.length);
 
             return {
               userId: optimisticCart.userId,

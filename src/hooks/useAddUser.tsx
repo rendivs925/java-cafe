@@ -16,7 +16,7 @@ interface ErrorResponse {
 }
 
 export default function useSignUp() {
-  const { moveRoute } = useAppContext();
+  const { pushRoute: moveRoute } = useAppContext();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);

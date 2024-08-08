@@ -21,7 +21,7 @@ export default function PaginationControls({
   hasPrevPage,
   totalItemsLength,
 }: PaginationControlsProps): ReactElement {
-  const { moveRoute } = useAppContext();
+  const { pushRoute: moveRoute } = useAppContext();
   const searchParams = useSearchParams();
   const pathname = usePathname();
 

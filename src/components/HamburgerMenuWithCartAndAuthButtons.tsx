@@ -17,7 +17,6 @@ export default function HamburgerMenuWithCartAndAuthButtons(): ReactElement {
         {user.role === "user" && user._id !== "" && isClient && <CartIcon />}
         {user.imgUrl && isClient && (
           <div
-            suppressHydrationWarning
             className="empty:hidden text-sm bg-secondary text-secondary-foreground rounded-full leading-0 flex items-center justify-center size-9"
           >
             <Avatar className="size-full">

@@ -1,19 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import {
-  ReactNode,
-  ReactElement,
-  useState,
-  useEffect,
-  useOptimistic,
-} from "react";
+import { ReactNode, ReactElement, useState, useEffect } from "react";
 import { createContext } from "use-context-selector";
 import {
   AppContextType,
-  CartProduct,
   formattedDataType,
-  Operation,
   TotalSalesData,
   User,
 } from "@/types";
@@ -21,7 +13,6 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { logoutAction } from "@/actions/logoutAction";
-import { ICart, ICartProduct } from "@/models/Cart";
 
 // Create the context with a default value
 export const AppContext = createContext<AppContextType | null>(null);
@@ -41,21 +32,16 @@ export default function AppProvider({
     role: "user",
     imgUrl: "",
   };
-  const defaultCart: ICart = {
-    userId: "",
-    products: [],
-  };
 
   const [user, setUser] = useLocalStorage<User>("user", defaultUser);
-  const [cart, setCart] = useState<ICart>(defaultCart);
-  const [optimisticCart, setOptimisticCart] = useOptimistic(cart);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [totalItems, setTotalItems] = useLocalStorage("totalItems", 0);
 
   const handleLogout = async () => {
     try {
       await logoutAction();
       setUser(defaultUser);
-      moveRoute("/");
+      pushRoute("/");
     } catch (err) {
       const error = err as AxiosError;
       toast({ description: error.message, variant: "destructive" });
@@ -68,7 +54,7 @@ export default function AppProvider({
     setIsAuthenticated(true);
   }, [user._id, user.username, user.role, user.email]);
 
-  const moveRoute = (route: string) => {
+  const pushRoute = (route: string) => {
     router.push(route);
   };
 
@@ -124,21 +110,18 @@ export default function AppProvider({
   };
 
   const contextValues: AppContextType = {
-    moveRoute,
+    pushRoute,
+    setTotalItems,
+    totalItems,
     handleLogout,
     formatToRupiah,
     formatNumber,
-    cart,
-    setCart,
-    optimisticCart,
-    setOptimisticCart,
     formatDate,
     getTotalSalesData,
     user,
     setUser,
     isAuthenticated,
     setIsAuthenticated,
-    defaultCart,
   };
 
   return (
