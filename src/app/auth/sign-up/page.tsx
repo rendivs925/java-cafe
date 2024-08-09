@@ -22,12 +22,11 @@ export default function SignUp(): ReactElement {
     formData,
     handleImageChange,
     setIsLoading,
-    onSubmit,
     isLoading,
     imageFile,
     imageSrc,
   } = useSignUp();
-  const { email, password, username, profileImage, role } = formData;
+  const { email, password, username, role } = formData;
 
   const formFields = [
     {

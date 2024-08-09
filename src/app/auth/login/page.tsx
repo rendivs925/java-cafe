@@ -44,7 +44,7 @@ const formFields: FormField[] = [
 ];
 
 export default function Login(): ReactElement {
-  const { form, onSubmit, isLoading, formData } = useLogin();
+  const { form, isLoading, formData, setIsloading } = useLogin();
   const { pushRoute, setUser, setTotalItems } = useAppContext();
 
   const { email, password } = formData;
