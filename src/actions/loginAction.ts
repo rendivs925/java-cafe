@@ -78,7 +78,7 @@ export async function loginAction(formData: FormData) {
       expires: new Date(Date.now() + MAX_AGE),
     });
 
-    const cartResponse = await getUserCartAction(user._id.toString());
+    const cartResponse = await getUserCartAction();
 
     revalidateTag("/");
 

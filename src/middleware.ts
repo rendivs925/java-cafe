@@ -14,7 +14,6 @@ export default async function middleware(req: NextRequest) {
     }));
 
   const { pathname, origin } = req.nextUrl;
-  const userId = (verifiedToken as UserJwtPayload)?._id; // Extract user ID from token
   const userRole = (verifiedToken as UserJwtPayload)?.role || "user";
 
   if (!verifiedToken) {
@@ -37,14 +36,6 @@ export default async function middleware(req: NextRequest) {
   // Check for shipping access
   if (pathname.startsWith("/shipping")) {
     if (userRole !== "user") return NextResponse.redirect(new URL("/", origin));
-  }
-
-  // Check for cart access (ensure user can only access their own cart)
-  if (pathname.startsWith("/cart")) {
-    // Ensure that the cart is for the current user
-    const cartUserId = req.nextUrl.searchParams.get("user_id"); // Assuming user ID is passed as a query parameter
-    if (cartUserId && cartUserId !== userId)
-      return NextResponse.redirect(new URL("/", origin));
   }
 
   return NextResponse.next(); // Allow the request to continue

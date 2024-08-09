@@ -6,13 +6,8 @@ export const metadata: Metadata = {
   title: "Java Cafe | Shipping",
 };
 
-export default async function Shipping({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const userId = (searchParams["user_id"] as string) ?? "";
-  const data = await getUserCartAction(userId);
+export default async function Shipping() {
+  const data = await getUserCartAction();
   const cart = data?.cart;
 
   return (
