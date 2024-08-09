@@ -1,9 +1,9 @@
 "use server";
 import Order, { IOrder } from "@/models/Order";
 
-export async function createOrderAction(body: IOrder) {
+export async function createOrderAction(data: IOrder) {
   try {
-    await Order.create(body);
+    await Order.create(JSON.parse(JSON.stringify(data)));
 
     return {
       status: "success",

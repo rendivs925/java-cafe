@@ -7,6 +7,7 @@ import CartProductPrice from "./CartProductPrice";
 import { ICart } from "@/models/Cart";
 import { deleteCartProductAction } from "@/actions/deleteCartProductAction";
 import useAppContext from "@/hooks/useAppContext";
+import { setCartAction } from "@/actions/setCartAction";
 
 function CartProductCard({
   imgUrl,
@@ -89,6 +90,13 @@ function CartProductCard({
           });
         });
       }
+
+      const newCart = {
+        userId: optimisticCart.userId,
+        products: optimisticCart.products,
+      };
+
+      await setCartAction(newCart);
 
       await deleteCartProductAction({ userId, productId });
     } catch (error) {

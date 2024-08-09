@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CardContainer from "./CardContainer";
 import { Button } from "./ui/button";
 import { CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
@@ -8,15 +8,33 @@ import { paymentAction } from "@/actions/paymentAction";
 import { getOrderStatusAction } from "@/actions/getOrderStatusAction";
 import { createOrderAction } from "@/actions/createOrderAction";
 import mongoose from "mongoose";
+import { ICart, ICartProduct } from "@/models/Cart";
 
-function Pesanan() {
+function Pesanan({ cart }: { cart: ICart }) {
   const { formatToRupiah } = useAppContext();
+  const [subHarga, setSubHarga] = useState(0);
+  const products = cart.products;
   const orderDetails = [
-    { label: "Total item", value: 4 },
+    { label: "Total item", value: products.length },
     { label: "Ongkir", value: 30000 },
-    { label: "Total harga item", value: 300000 },
+    { label: "Total harga item", value: subHarga },
     { label: "Total harga", value: 330000 },
   ];
+
+  const cartProductsReducer = (
+    accumulator: number,
+    currentValue: ICartProduct
+  ): number => {
+    return (
+      currentValue.price * (currentValue as { qty: number }).qty + accumulator
+    );
+  };
+
+  useEffect(() => {
+    if (products) {
+      setSubHarga(products.reduce(cartProductsReducer, 0));
+    }
+  }, [products]);
 
   const handlePayment = async () => {
     const payload = {
@@ -37,7 +55,7 @@ function Pesanan() {
 
     const response3 = await createOrderAction({
       orderId: "19191829201",
-      user: new mongoose.Types.ObjectId("66aded26d645f8186bd6abdd"),
+      userId: "66aded26d645f8186bd6abdd",
       address: "Jalan merdeka no 10",
       phone: 123456789011,
       subtotal: 120000,
@@ -45,7 +63,7 @@ function Pesanan() {
       shippingCost: 10000,
       products: [
         {
-          productId: new mongoose.Types.ObjectId("66a72b9823bd0268c0920735"),
+          productId: "66a72b9823bd0268c0920735",
           qty: 1,
           totalPrice: 150000,
           profit: 200000,

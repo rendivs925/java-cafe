@@ -1,21 +1,23 @@
-"use client";
+import { getUserCartAction } from "@/actions/getUserCartAction";
+import ShippingSteps from "@/components/ShippingSteps";
+import { Metadata } from "next";
 
-import useAppContext from "@/hooks/useAppContext";
-import useClientComponent from "@/hooks/useClientComponent";
-import useShipping from "@/hooks/useShipping";
-import { useRouter } from "next/navigation";
-import { type ReactElement } from "react";
+export const metadata: Metadata = {
+  title: "Java Cafe | Shipping",
+};
 
-export default function Shipping(): ReactElement | null {
-  const renderContent = useShipping();
-  const isClient = useClientComponent();
-  const { optimisticCart } = useAppContext();
-  const { back } = useRouter();
+export default async function Shipping({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const userId = (searchParams["user_id"] as string) ?? "";
+  const data = await getUserCartAction(userId);
+  const cart = data?.cart;
 
-  if (optimisticCart.products.length === 0 && isClient) {
-    back();
-    return null;
-  }
-
-  return <section>{isClient && renderContent()}</section>;
+  return (
+    <div className="container">
+      <ShippingSteps cart={cart} />
+    </div>
+  );
 }

@@ -7,13 +7,12 @@ import useAppContext from "@/hooks/useAppContext";
 
 export default function BarangYangDibeliCard({
   title,
-  category,
-  id,
+  productId,
   imgUrl,
   price,
   qty,
   stock,
-}: CartProduct): ReactElement {
+}: CartProduct & { productId: string }): ReactElement {
   const { formatNumber } = useAppContext();
 
   return (

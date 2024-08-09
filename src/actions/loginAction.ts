@@ -2,13 +2,14 @@
 import bcrypt from "bcrypt";
 import { connectToDatabase } from "@/lib/dbConnect";
 import User from "@/models/User";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { baseUserSchema, BaseUserType } from "@/schemas/UserSchema";
 import { COOKIE_NAME } from "@/constanst";
 import { nanoid } from "nanoid";
 import { getJwtSecretKey } from "@/lib/auth";
 import { SignJWT } from "jose";
+import { getUserCartAction } from "./getUserCartAction";
 
 const MAX_AGE = 60 * 60 * 24 * 30; // 30 days in seconds
 
@@ -77,12 +78,13 @@ export async function loginAction(formData: FormData) {
       expires: new Date(Date.now() + MAX_AGE),
     });
 
-    console.log("TOKEN:", cookies().get(COOKIE_NAME));
+    const cartResponse = await getUserCartAction(user._id.toString());
 
-    revalidatePath("/auth/login");
+    revalidateTag("/");
 
     return {
       status: "success",
+      totalItems: cartResponse.cart.products.length,
       message: "Authenticated!",
       user: {
         _id: user._id.toString(),
@@ -95,6 +97,7 @@ export async function loginAction(formData: FormData) {
   } catch (error) {
     return {
       status: "error",
+      totalItems: 0,
       message:
         (error as { message: string }).message || "Internal server error.",
     };

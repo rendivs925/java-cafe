@@ -9,12 +9,12 @@ export default function OrderSummaryButton({
 }: {
   optimisticCart: ICart;
 }): ReactElement {
-  const { pushRoute } = useAppContext();
+  const { pushRoute, user } = useAppContext();
   const isDisabled = optimisticCart.products.length === 0;
 
   const handleCheckout = async () => {
-    setCartAction(optimisticCart);
-    // pushRoute("/shipping");
+    await setCartAction(optimisticCart);
+    pushRoute(`/shipping?user_id=${user._id}`);
   };
 
   return (

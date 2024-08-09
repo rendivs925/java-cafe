@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import { getUserCartAction } from "@/actions/getUserCartAction";
 import CartContent from "@/components/CartContent";
+
+export const metadata: Metadata = {
+  title: "Java Cafe | Cart",
+};
 
 export default async function Cart({
   searchParams,

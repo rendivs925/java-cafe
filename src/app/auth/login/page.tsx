@@ -45,7 +45,7 @@ const formFields: FormField[] = [
 
 export default function Login(): ReactElement {
   const { form, onSubmit, isLoading, formData } = useLogin();
-  const { setUser } = useAppContext();
+  const { pushRoute, setUser, setTotalItems } = useAppContext();
 
   const { email, password } = formData;
 
@@ -76,7 +76,11 @@ export default function Login(): ReactElement {
                     variant: "success",
                   });
 
+                  setTotalItems(response.totalItems);
+
                   setUser(response.user as User);
+
+                  pushRoute("/");
                 }
               } catch (error) {
               } finally {

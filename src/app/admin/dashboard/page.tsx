@@ -9,6 +9,11 @@ import DashboardHeader from "@/components/DashboardHeader";
 import DashboardContent from "@/components/DashboardContent";
 import SearchBar from "@/components/SearchBar";
 import DashboardGreater from "@/components/DashboardGreater";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Admin | Dashboard",
+};
 
 const page = () => {
   return (
