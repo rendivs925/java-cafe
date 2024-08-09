@@ -1,7 +1,6 @@
 import { getUserCartAction } from "@/actions/getUserCartAction";
 import ShippingSteps from "@/components/ShippingSteps";
 import { Metadata } from "next";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Java Cafe | Shipping",
@@ -18,9 +17,7 @@ export default async function Shipping({
 
   return (
     <div className="container">
-      <Suspense>
-        <ShippingSteps cart={cart} />
-      </Suspense>
+      <ShippingSteps cart={cart} />
     </div>
   );
 }
