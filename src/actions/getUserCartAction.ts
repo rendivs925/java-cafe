@@ -6,27 +6,27 @@ import Cart from "@/models/Cart";
 import { cookies } from "next/headers";
 
 export async function getUserCartAction() {
-  const token = cookies().get(COOKIE_NAME);
-  // Verify the JWT token
-  const verifiedToken =
-    token &&
-    (await verifyAuth(token.value).catch((err) => {
-      console.log("Verification error:", err);
-      return null; // Explicitly return null in case of error
-    }));
-
-  const userId = (verifiedToken as UserJwtPayload)?._id;
-  (verifiedToken as UserJwtPayload)?._id;
-
-  if (!userId) {
-    return {
-      status: "error",
-      message: "User ID is required",
-      cart: { userId: "", products: [] },
-    };
-  }
-
   try {
+    const token = cookies().get(COOKIE_NAME);
+    // Verify the JWT token
+    const verifiedToken =
+      token &&
+      (await verifyAuth(token.value).catch((err) => {
+        console.log("Verification error:", err);
+        return null;
+      }));
+
+    const userId = (verifiedToken as UserJwtPayload)?._id;
+    (verifiedToken as UserJwtPayload)?._id;
+
+    if (!userId) {
+      return {
+        status: "error",
+        message: "User ID is required",
+        cart: { userId: "", products: [] },
+      };
+    }
+
     await connectToDatabase();
 
     const cart = await Cart.findOne({ userId }).lean();

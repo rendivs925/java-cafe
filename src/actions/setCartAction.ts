@@ -36,8 +36,7 @@ export async function setCartAction(data: ICart) {
 
     await cart.save({ session });
 
-    revalidateTag("/cart");
-    revalidateTag("/shipping");
+    revalidateTag("/");
 
     await session.commitTransaction();
 

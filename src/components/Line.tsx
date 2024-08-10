@@ -6,6 +6,8 @@ export interface LineProps {
 
 export default function Line({ className = "" }: LineProps): ReactElement {
   return (
-    <div className={`h-[1px] w-full bg-muted-foreground/30 ${className}`}></div>
+    <div
+      className={`h-[1px] w-full box-border bg-muted-foreground/30 ${className}`}
+    ></div>
   );
 }

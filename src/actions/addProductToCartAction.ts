@@ -46,8 +46,6 @@ export async function addProductToCartAction(body: ICart) {
         }
       });
 
-      console.log("updatedProducts:", updatedProducts);
-
       await Cart.updateOne(
         { userId: body.userId },
         { products: updatedProducts },

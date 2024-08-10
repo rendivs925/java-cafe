@@ -33,6 +33,8 @@ export default function useAddProduct() {
       price: 0,
       category: "",
       stock: 0,
+      capital: 0,
+      weight: 0,
       productImage: undefined,
     },
   });

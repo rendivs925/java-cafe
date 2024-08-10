@@ -60,9 +60,9 @@ export default function AppProvider({
 
   const formatNumber = (value: number) => {
     if (value >= 1000000) {
-      return (value / 1000000).toFixed(3) + "M";
+      return (value / 1000000).toFixed(0) + "M";
     } else if (value >= 1000) {
-      return (value / 1000).toFixed(3);
+      return (value / 1000).toFixed(0) + "K";
     }
     return String(value);
   };
@@ -75,7 +75,7 @@ export default function AppProvider({
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
-      minimumFractionDigits: 0,
+      minimumFractionDigits: 2,
     }).format(value);
   };
 

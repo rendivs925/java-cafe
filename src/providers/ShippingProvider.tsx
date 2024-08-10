@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, type ReactElement } from "react";
+import { ReactNode, useState, type ReactElement } from "react";
 import { createContext } from "use-context-selector";
 import { ShippingContextType } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -21,7 +21,7 @@ export interface ShippingProviderProps {
 export default function ShippingProvider({
   children,
 }: ShippingProviderProps): ReactElement {
-  const [activeStep, setActiveStep] = useLocalStorage<number>("activeStep", 1);
+  const [activeStep, setActiveStep] = useState(1);
 
   const incrementStep = () => {
     setActiveStep((prevStep) => {

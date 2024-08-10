@@ -10,16 +10,17 @@ function BlogCard({
 }: Omit<Blog, "id">): ReactElement {
   return (
     <Card className="bg-transparent space-y-6 shadow-none rounded-lg overflow-hidden">
-      <CardHeader className="relative aspect-video">
+      <CardHeader className="relative aspect-video rounded-lg">
         <Image
           src={imgUrl}
+          className="rounded-lg"
           alt="Blog"
           objectFit="cover"
           loading="eager"
           layout="fill"
         />
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="pb-6 px-0">
         <CardTitle>{title}</CardTitle>
         <p>{description}</p>
       </CardContent>

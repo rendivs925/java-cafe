@@ -4,17 +4,29 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "@/components/ui/use-toast";
 
+// Define the validation schema using zod
 const FormSchema = z.object({
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
+  provinsi: z.string({
+    required_error: "Provinsi is required.",
+  }),
+  kota: z.string({
+    required_error: "Kota is required.",
+  }),
+  kurir: z.string({
+    required_error: "Kurir is required.",
+  }),
+  layanan: z.string().min(1, "Please select a service."),
 });
 
 function useKonfirmasi() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      provinsi: "",
+      kota: "",
+      kurir: "",
+      layanan: "",
+    },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {

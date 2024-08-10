@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { MutableRefObject, RefObject, useEffect, useState } from "react";
 import CardContainer from "./CardContainer";
 import { Button } from "./ui/button";
 import { CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
@@ -9,16 +9,37 @@ import { getOrderStatusAction } from "@/actions/getOrderStatusAction";
 import { createOrderAction } from "@/actions/createOrderAction";
 import mongoose from "mongoose";
 import { ICart, ICartProduct } from "@/models/Cart";
+import { getMyOrderAction } from "@/actions/getMyOrderAction";
+import { UseFormReturn } from "react-hook-form";
 
-function Pesanan({ cart }: { cart: ICart }) {
+function Pesanan({
+  cart,
+  formRef,
+  form,
+}: {
+  cart: ICart;
+  formRef: RefObject<HTMLFormElement> | null;
+  form: UseFormReturn<
+    {
+      kota: string;
+      kurir: string;
+      layanan: string;
+      provinsi: string;
+    },
+    any,
+    undefined
+  >;
+}) {
   const { formatToRupiah } = useAppContext();
   const [subHarga, setSubHarga] = useState(0);
+  const { kota, kurir, layanan, provinsi } = form.watch();
+
   const products = cart.products;
   const orderDetails = [
     { label: "Total item", value: products.length },
-    { label: "Ongkir", value: 30000 },
+    { label: "Ongkir", value: Number(layanan) },
     { label: "Total harga item", value: subHarga },
-    { label: "Total harga", value: 330000 },
+    { label: "Total harga", value: subHarga + Number(layanan) },
   ];
 
   const cartProductsReducer = (
@@ -45,6 +66,8 @@ function Pesanan({ cart }: { cart: ICart }) {
       phone: 6285733300369,
     };
 
+    formRef?.current?.requestSubmit();
+
     // const response = await paymentAction(payload);
     //
     // console.log("payment response: ", response);
@@ -53,29 +76,32 @@ function Pesanan({ cart }: { cart: ICart }) {
 
     // console.log("Status:", response2);
 
-    const response3 = await createOrderAction({
-      orderId: "19191829201",
-      userId: "66aded26d645f8186bd6abdd",
-      address: "Jalan merdeka no 10",
-      phone: 123456789011,
-      subtotal: 120000,
-      payment: 150000,
-      shippingCost: 10000,
-      products: [
-        {
-          productId: "66a72b9823bd0268c0920735",
-          qty: 1,
-          totalPrice: 150000,
-          profit: 200000,
-        },
-      ],
-    });
+    // const response3 = await createOrderAction({
+    //   userId: cart.userId,
+    //   address: "Jalan merdeka no 10",
+    //   phone: 123456789011,
+    //   subtotal: 120000,
+    //   payment: 150000,
+    //   shippingCost: 10000,
+    //   products: [
+    //     {
+    //       productId: "66a72b9823bd0268c0920735",
+    //       qty: 1,
+    //       totalPrice: 150000,
+    //       profit: 200000,
+    //     },
+    //   ],
+    // });
+    //
+    // console.log("Order Status: ", response3);
 
-    console.log("Order Status: ", response3);
+    const myOrderResponse = await getMyOrderAction();
+
+    console.log("My order:", myOrderResponse?.order);
   };
 
   return (
-    <CardContainer className="px-6">
+    <CardContainer className="px-6 box-border w-full">
       <CardHeader className="px-0">
         <CardTitle>Pesanan</CardTitle>
       </CardHeader>

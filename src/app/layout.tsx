@@ -26,7 +26,7 @@ export default function RootLayout({
           className={`${inter.className} ${isDashboard && "flex max-h-svh"}`}
         >
           {!isDashboard ? <Navbar /> : <Sidebar />}
-          <div className="w-full">{children}</div>
+          <div className="w-svw">{children}</div>
           <Toaster />
         </body>
       </AppProvider>

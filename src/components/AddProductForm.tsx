@@ -33,16 +33,8 @@ export default function AddProductForm(): ReactElement {
     isLoading,
     imageFile,
   } = useAddProduct();
-  const {
-    title,
-    capital,
-    profit,
-    weight,
-    category,
-    description,
-    price,
-    stock,
-  } = formData;
+  const { title, capital, weight, category, description, price, stock } =
+    formData;
 
   const formFields: FormField[] = [
     {
@@ -63,13 +55,6 @@ export default function AddProductForm(): ReactElement {
       id: "capital",
       placeholder: "Enter capital amount",
       label: "Capital",
-      type: "number",
-    },
-    {
-      name: "profit",
-      id: "profit",
-      placeholder: "Enter profit amount",
-      label: "Profit",
       type: "number",
     },
     {
@@ -128,7 +113,6 @@ export default function AddProductForm(): ReactElement {
                   formData.append("title", title);
                   formData.append("price", String(price));
                   formData.append("capital", String(capital));
-                  formData.append("profit", String(profit));
                   formData.append("weight", String(weight));
                   formData.append("description", description);
                   formData.append("category", category);

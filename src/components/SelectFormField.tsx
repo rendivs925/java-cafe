@@ -13,8 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Control } from "react-hook-form"; // Adjust the import according to your form library
-import { nanoid } from "nanoid";
+import { Control } from "react-hook-form";
 
 export interface Option {
   value: string;
@@ -40,26 +39,24 @@ const SelectFormField: React.FC<SelectFormFieldProps> = ({
       name={name}
       render={({ field }) => {
         return (
-          <FormItem className="bg-background w-full">
+          <FormItem className="bg-background box-border px-0 w-full">
             <FormLabel>{label}</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select
+              {...field}
+              defaultValue={field.value}
+              onValueChange={field.onChange}
+            >
               <FormControl className="bg-background">
                 <SelectTrigger>
                   <SelectValue placeholder={`Pilih ${label.toLowerCase()}`} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {options.map((option) => {
-                  return (
-                    <SelectItem
-                      key={option.label}
-                      id={option.label}
-                      value={option.value}
-                    >
-                      {option.label}
-                    </SelectItem>
-                  );
-                })}
+                {options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <FormMessage />
@@ -70,4 +67,4 @@ const SelectFormField: React.FC<SelectFormFieldProps> = ({
   );
 };
 
-export default memo(SelectFormField);
+export default SelectFormField;

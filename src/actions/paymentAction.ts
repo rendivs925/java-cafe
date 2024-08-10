@@ -16,8 +16,6 @@ export async function paymentAction({
   firstName,
   phone,
 }: paymentActionProps) {
-  console.log("Proses Pembayaran");
-
   try {
     const snap = new midtransClient.Snap({
       isProduction: false,

@@ -9,6 +9,16 @@ export interface UserJwtPayload {
   role: "admin" | "user";
 }
 
+export const getRajaOngkirApiKey = (): string => {
+  const apiKey = process.env.RAJA_ONGKIR_API_KEY;
+
+  if (!apiKey || apiKey.length === 0) {
+    throw new Error("The environment variable RAJA_ONGKIR_API_KEY is not set.");
+  }
+
+  return apiKey;
+};
+
 export const getJwtSecretKey = (): string => {
   const secret = process.env.JWT_SECRET;
 

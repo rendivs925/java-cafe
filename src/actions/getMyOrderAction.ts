@@ -1,23 +1,34 @@
 "use server";
+import { COOKIE_NAME } from "@/constanst";
+import { verifyAuth } from "@/lib/auth";
 import Order from "@/models/Order";
+import { cookies } from "next/headers";
 
-interface getMyOrderActionProps {
-  orderId: string;
-}
+export async function getMyOrderAction() {
+  const token = cookies().get(COOKIE_NAME);
 
-export async function getMyOrderAction({ orderId }: getMyOrderActionProps) {
+  const verifiedToken =
+    token &&
+    (await verifyAuth(token.value).catch((err) => {
+      console.log("Verification error:", err);
+      return null;
+    }));
+
   try {
-    const order = await Order.find({ orderId })
-      .sort({ createdAt: -1 })
-      .populate({
-        path: "products",
-        populate: { path: "productId", model: "Product" },
-      })
-      .exec();
+    const order = await Order.find({ userId: verifiedToken?._id }).sort({
+      createdAt: -1,
+    });
+
+    if (!order)
+      return {
+        status: "error",
+        message: "Product tidak dapat ditemukan.",
+      };
 
     return {
       status: "success",
-      order,
+      message: "Order fetched successfully.",
+      order: JSON.parse(JSON.stringify(order)),
     };
   } catch (error) {
     return {

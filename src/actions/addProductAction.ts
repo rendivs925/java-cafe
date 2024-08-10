@@ -7,7 +7,7 @@ import {
   addProductSchema,
   newAddProductType,
 } from "@/schemas/AddProductSchema";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 const handleUpload = async (file: File) => {
   const folder = "products/";
@@ -25,7 +25,7 @@ export async function addProductAction(formData: FormData) {
       title: formData.get("title") as string,
       price: Number(formData.get("price")),
       capital: Number(formData.get("capital")),
-      profit: Number(formData.get("profit")),
+      profit: Number(formData.get("price")) - Number(formData.get("capital")),
       weight: Number(formData.get("weight")),
       description: formData.get("description") as string,
       category: formData.get("category") as string,
@@ -54,8 +54,7 @@ export async function addProductAction(formData: FormData) {
     const newProduct = new Product(payload);
     await newProduct.save();
 
-    revalidatePath("/admin/products/add");
-    revalidatePath("/admin/products");
+    revalidateTag("/admin/products");
 
     return {
       status: "success",

@@ -47,8 +47,8 @@ function ProductCard({
   };
 
   return (
-    <Card className="flex flex-col w-full rounded-lg overflow-hidden shadow">
-      <CardHeader className="relative aspect-[2/3] overflow-hidden">
+    <Card className="flex flex-col w-full rounded-lg overflow-hidden shadow p-6">
+      <CardHeader className="relative aspect-square rounded-md shadow overflow-hidden">
         <Image
           src={imgUrl}
           loading="eager"
@@ -57,7 +57,7 @@ function ProductCard({
           objectFit="cover"
         />
       </CardHeader>
-      <CardContent className="bg-background px-6 py-6">
+      <CardContent className="bg-background px-0 pt-6 pb-0">
         <CardDescription className="mt-0 mb-4 bg-secondary py-1 px-5 font-normal rounded-lg text-sm w-min text-secondary-foreground">
           {category}
         </CardDescription>
