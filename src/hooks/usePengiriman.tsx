@@ -30,13 +30,13 @@ export default function usePengiriman() {
   useEffect(() => {
     const result = DetailPengirimanSchema.safeParse(formData);
 
+    form.clearErrors();
+
     if (!result.success) {
       result.error.issues.forEach((issue) => {
-        const path = issue.path[0] as keyof DetailPengirimanType; // Type assertion here
+        const path = issue.path[0] as keyof DetailPengirimanType;
         form.setError(path, { message: issue.message });
       });
-    } else {
-      form.clearErrors();
     }
   }, [formData.alamatLengkap, formData.noHandphone]);
 
@@ -46,7 +46,7 @@ export default function usePengiriman() {
 
     if (!result.success) {
       result.error.issues.forEach((issue) => {
-        const path = issue.path[0] as keyof DetailPengirimanType; // Type assertion here
+        const path = issue.path[0] as keyof DetailPengirimanType;
         form.setError(path, { message: issue.message });
       });
     }

@@ -16,7 +16,7 @@ const formFields = [
   {
     name: "noHandphone",
     id: "no-handphone",
-    placeholder: "123456789011",
+    placeholder: "Masukkan nomor anda",
     label: "No Handphone",
   },
 ];
