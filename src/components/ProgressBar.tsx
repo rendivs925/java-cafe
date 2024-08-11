@@ -18,7 +18,7 @@ export default function ProgressBar(props: ProgressBarProps): ReactElement {
       suppressHydrationWarning
       className={`mb-0 py-2 px-5 sm:py-3 sm:px-6 md:py-4 md:px-7 sm-text rounded-lg font-medium transition ${
         isActive
-          ? "bg-primary/85 text-primary-foreground"
+          ? "bg-primary/70 text-primary-foreground"
           : "bg-background text-foreground"
       }`}
     >

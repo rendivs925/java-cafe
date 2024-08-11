@@ -1,32 +1,32 @@
 "use server";
+import { getVerifiedToken } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/dbConnect";
 import DetailPengiriman from "@/models/DetailPengiriman";
 import { DetailPengirimanSchema } from "@/schemas/DetailPengirimanSchema";
 import { revalidateTag } from "next/cache";
 
-export async function createUserDetailAction(formData: FormData) {
+export async function createUserDetailAction(data: unknown) {
   try {
-    const data = {
-      alamatLengkap: formData.get("alamatLengkap") as string,
-      noHandphone: formData.get("noHandphone") as string,
-    };
+    const verifiedToken = await getVerifiedToken();
+    (data as { userId?: string }).userId = verifiedToken?._id;
 
     // Validate the data against the schema
     const parseResult = DetailPengirimanSchema.safeParse(data);
     if (!parseResult.success) {
       return {
         message: "Invalid input",
-        errors: parseResult.error.errors,
+        issues: parseResult.error.issues,
         status: "error",
       };
     }
 
-    const { alamatLengkap, noHandphone } = parseResult.data;
+    const { alamatLengkap, noHandphone, userId } = parseResult.data;
 
     await connectToDatabase();
 
     // Create a new address document
     const detailPengiriman = new DetailPengiriman({
+      userId,
       alamatLengkap,
       noHandphone,
     });
@@ -38,11 +38,6 @@ export async function createUserDetailAction(formData: FormData) {
     return {
       status: "success",
       message: "Detail pengiriman created successfully!",
-      address: {
-        id: detailPengiriman._id.toString(),
-        addressLine: detailPengiriman.addressLine,
-        phoneNumber: detailPengiriman.phoneNumber,
-      },
     };
   } catch (error) {
     return {

@@ -6,6 +6,9 @@ import {
   DetailPengirimanSchema,
   DetailPengirimanType,
 } from "@/schemas/DetailPengirimanSchema";
+import { createUserDetailAction } from "@/actions/createUserDetailAction";
+import { toast } from "@/components/ui/use-toast";
+import { getUserDetailAction } from "@/actions/getUserDetailAction";
 
 export default function usePengiriman() {
   const { incrementStep } = useShippingContext();
@@ -20,13 +23,19 @@ export default function usePengiriman() {
 
   const formData = useDeferredValue(form.watch());
 
-  // Function to handle form submission
-  function onSubmit(values: DetailPengirimanType) {
-    console.log("Form Submitted:", values);
-    incrementStep();
-  }
+  const getPrevUserDetail = async () => {
+    const response = await getUserDetailAction();
 
-  // Effect to handle validation and set errors
+    if (response.status === "success" && response.detailPengiriman) {
+      form.setValue("alamatLengkap", response.detailPengiriman.alamatLengkap);
+      form.setValue("noHandphone", response.detailPengiriman.noHandphone);
+    }
+  };
+
+  useEffect(() => {
+    getPrevUserDetail();
+  }, []);
+
   useEffect(() => {
     const result = DetailPengirimanSchema.safeParse(formData);
 
@@ -49,10 +58,27 @@ export default function usePengiriman() {
         const path = issue.path[0] as keyof DetailPengirimanType;
         form.setError(path, { message: issue.message });
       });
+      return;
     }
 
-    console.log(result.data);
+    try {
+      const response = await createUserDetailAction(result.data);
+
+      if (response.issues && response.status === "error") {
+        response.issues.forEach((issue) => {
+          const path = issue.path[0] as keyof DetailPengirimanType;
+          form.setError(path, { message: issue.message });
+        });
+        return;
+      }
+
+      if (response.status === "error")
+        return toast({ description: response.message, variant: "destructive" });
+
+      toast({ description: response.message });
+      incrementStep();
+    } catch (error) {}
   };
 
-  return { form, handleFormAction, onSubmit };
+  return { form, handleFormAction };
 }

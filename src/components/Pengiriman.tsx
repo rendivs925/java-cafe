@@ -22,7 +22,7 @@ const formFields = [
 ];
 
 export default function Pengiriman(): ReactElement {
-  const { form, onSubmit, handleFormAction } = usePengiriman();
+  const { form, handleFormAction } = usePengiriman();
 
   return (
     <CardContainer className="max-w-[700px] mt-14 me-auto ms-auto bg-background">

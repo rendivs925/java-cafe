@@ -1,8 +1,8 @@
 "use client";
-import { ReactNode, useState, type ReactElement } from "react";
+import { ReactNode, useEffect, useState, type ReactElement } from "react";
 import { createContext } from "use-context-selector";
 import { ShippingContextType } from "@/types";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useAppContext from "@/hooks/useAppContext";
 
 const shippingContextDefaultValues: ShippingContextType = {
   activeStep: 1,

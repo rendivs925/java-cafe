@@ -2,6 +2,7 @@ import { z } from "zod";
 
 // Define the validation schema using zod
 export const DetailPengirimanSchema = z.object({
+  userId: z.string().optional(),
   alamatLengkap: z.string().min(5, {
     message: "Alamat lengkap minimal 5 karakter.",
   }),

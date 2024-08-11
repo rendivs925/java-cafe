@@ -78,7 +78,6 @@ export default function useSignUp() {
       toast({
         title: "Signed up successfully.",
         description: "Time to login to your account..",
-        variant: "success",
       });
 
       moveRoute("/auth/login");

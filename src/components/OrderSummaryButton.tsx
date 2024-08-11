@@ -12,9 +12,18 @@ export default function OrderSummaryButton({
   const { pushRoute } = useAppContext();
   const isDisabled = optimisticCart.products.length === 0;
 
-  const handleCheckout = async () => {
-    await setCartAction(optimisticCart);
-    pushRoute("/shipping");
+  const handleCheckout = () => {
+    // Change the route immediately
+    pushRoute("/shipping?step=1");
+
+    // Update the cart in the background
+    (async () => {
+      try {
+        await setCartAction(optimisticCart);
+      } catch (error) {
+        console.error("Failed to update cart:", error);
+      }
+    })();
   };
 
   return (

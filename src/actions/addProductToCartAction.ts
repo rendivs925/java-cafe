@@ -1,11 +1,12 @@
 "use server";
 
+import { connectToDatabase } from "@/lib/dbConnect";
 import Cart, { ICart, ICartProduct } from "@/models/Cart";
-import mongoose, { ClientSession } from "mongoose";
+import { ClientSession } from "mongoose";
 import { revalidateTag } from "next/cache";
 
 export async function addProductToCartAction(body: ICart) {
-  const session: ClientSession = await mongoose.startSession();
+  const session: ClientSession = await connectToDatabase();
   session.startTransaction();
 
   try {
@@ -13,6 +14,8 @@ export async function addProductToCartAction(body: ICart) {
     const myCart = await Cart.findOne({ userId: body.userId }).session(session);
 
     if (!myCart) {
+      await session.abortTransaction();
+
       // If no cart exists, create a new one
       await Cart.create(body);
     } else {
@@ -64,6 +67,8 @@ export async function addProductToCartAction(body: ICart) {
     }
   } catch (error) {
     await session.abortTransaction();
+
+    console.log(error);
 
     return {
       status: "error",

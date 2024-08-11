@@ -101,6 +101,7 @@ function CartProductCard({
       await deleteCartProductAction({ userId, productId });
     } catch (error) {
       console.error("Failed to delete product from cart", error);
+    } finally {
     }
   };
 

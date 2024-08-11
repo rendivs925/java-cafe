@@ -1,13 +1,18 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 // Define the interface for the Address document
-export interface IDetailPengiriman extends Document {
+export interface IDetailPengiriman {
+  userId: string;
   alamatLengkap: string;
   noHandphone: string;
 }
 
 // Create the schema with the updated field names
 const detailPengirimanSchema: Schema<IDetailPengiriman> = new Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
   alamatLengkap: {
     type: String,
     required: true,
@@ -24,6 +29,6 @@ const detailPengirimanSchema: Schema<IDetailPengiriman> = new Schema({
 // Create the model
 const DetailPengiriman =
   mongoose.models.DetailPengiriman ||
-  mongoose.model<IDetailPengiriman>("Address", detailPengirimanSchema);
+  mongoose.model<IDetailPengiriman>("DetailPengiriman", detailPengirimanSchema);
 
 export default DetailPengiriman;

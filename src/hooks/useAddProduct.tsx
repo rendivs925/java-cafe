@@ -85,7 +85,7 @@ export default function useAddProduct() {
         return;
       }
 
-      toast({ description: "Product added successfully.", variant: "success" });
+      toast({ description: "Product added successfully." });
       setIsLoading(false);
 
       form.reset();

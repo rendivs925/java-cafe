@@ -73,7 +73,6 @@ export default function Login(): ReactElement {
                   console.log(response.user);
                   toast({
                     description: "Logged in successfully.",
-                    variant: "success",
                   });
 
                   setTotalItems(response.totalItems);

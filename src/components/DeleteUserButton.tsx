@@ -23,7 +23,7 @@ export default function DeleteUserButton({
           description: response.message as string,
           variant: "destructive",
         });
-      toast({ description: response.message as string, variant: "success" });
+      toast({ description: response.message as string });
     } catch (error) {
       toast({
         description: (error as { message: string }).message,

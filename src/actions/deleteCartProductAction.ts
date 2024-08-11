@@ -2,9 +2,8 @@
 
 import { connectToDatabase } from "@/lib/dbConnect";
 import Cart from "@/models/Cart";
-import mongoose from "mongoose";
 import { ClientSession } from "mongoose";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function deleteCartProductAction({
   userId,
@@ -13,7 +12,7 @@ export async function deleteCartProductAction({
   userId: string;
   productId: string;
 }) {
-  const session: ClientSession = await mongoose.startSession();
+  const session: ClientSession = await connectToDatabase();
   session.startTransaction();
 
   if (!userId || !productId) {
@@ -21,9 +20,7 @@ export async function deleteCartProductAction({
   }
 
   try {
-    await connectToDatabase();
-
-    const cart = await Cart.findOne({ userId });
+    const cart = await Cart.findOne({ userId }).session(session);
 
     if (!cart) {
       await session.abortTransaction();

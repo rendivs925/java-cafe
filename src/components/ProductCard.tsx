@@ -42,7 +42,7 @@ function ProductCard({
     setTotalItems(data?.totalItems as number);
 
     if (data?.status === "success") {
-      toast({ description: data.message, variant: "success" });
+      toast({ description: data.message });
     }
   };
 

@@ -1,4 +1,6 @@
+import { COOKIE_NAME } from "@/constanst";
 import { jwtVerify } from "jose";
+import { cookies } from "next/headers";
 
 export interface UserJwtPayload {
   jti: string;
@@ -17,6 +19,19 @@ export const getRajaOngkirApiKey = (): string => {
   }
 
   return apiKey;
+};
+
+export const getVerifiedToken = async () => {
+  const token = cookies().get(COOKIE_NAME);
+
+  const verifiedToken =
+    token &&
+    (await verifyAuth(token.value).catch((err) => {
+      console.log("Verification error:", err);
+      return null;
+    }));
+
+  return verifiedToken;
 };
 
 export const getJwtSecretKey = (): string => {
