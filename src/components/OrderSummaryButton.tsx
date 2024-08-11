@@ -13,17 +13,17 @@ export default function OrderSummaryButton({
   const isDisabled = optimisticCart.products.length === 0;
 
   const handleCheckout = () => {
-    // Change the route immediately
     pushRoute("/shipping?step=1");
 
-    // Update the cart in the background
-    (async () => {
-      try {
-        await setCartAction(optimisticCart);
-      } catch (error) {
-        console.error("Failed to update cart:", error);
-      }
-    })();
+    setTimeout(() => {
+      (async () => {
+        try {
+          await setCartAction(optimisticCart);
+        } catch (error) {
+          console.error("Failed to update cart:", error);
+        }
+      })();
+    }, 1000);
   };
 
   return (
