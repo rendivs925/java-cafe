@@ -7,30 +7,16 @@ import Line from "./Line";
 import { ICart } from "@/models/Cart";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { PengirimanSchema, PengirimanType } from "@/schemas/PengirimanSchema";
 
 export interface KonfirmasiProps {
   cart: ICart;
 }
 
-// Define the validation schema using zod
-const FormSchema = z.object({
-  provinsi: z.string({
-    required_error: "Provinsi is required.",
-  }),
-  kota: z.string({
-    required_error: "Kota is required.",
-  }),
-  kurir: z.string({
-    required_error: "Kurir is required.",
-  }),
-  layanan: z.string().min(1, "Please select a service."),
-});
-
 export default function Konfirmasi({ cart }: KonfirmasiProps): ReactElement {
   const formRef = useRef<HTMLFormElement>(null);
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<PengirimanType>({
+    resolver: zodResolver(PengirimanSchema),
     defaultValues: {
       provinsi: "",
       kota: "",
@@ -45,8 +31,8 @@ export default function Konfirmasi({ cart }: KonfirmasiProps): ReactElement {
       <BarangYangDibeli cart={cart} />
       <Line className="my-14" />
       <div className="grid pb-1 box-border items-start lg:grid-cols-2 gap-10">
-        <PengirimanForm form={form} formRef={formRef} />
-        <Pesanan formRef={formRef} form={form} cart={cart} />
+        <PengirimanForm form={form} ref={formRef} />
+        <Pesanan ref={formRef} form={form} cart={cart} />
       </div>
     </section>
   );

@@ -16,13 +16,13 @@ const formFields = [
   {
     name: "noHandphone",
     id: "no-handphone",
-    placeholder: "08123456789",
+    placeholder: "123456789011",
     label: "No Handphone",
   },
 ];
 
 export default function Pengiriman(): ReactElement {
-  const { form, onSubmit } = usePengiriman();
+  const { form, onSubmit, handleFormAction } = usePengiriman();
 
   return (
     <CardContainer className="max-w-[700px] mt-14 me-auto ms-auto bg-background">
@@ -31,7 +31,7 @@ export default function Pengiriman(): ReactElement {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form action={handleFormAction} className="space-y-5">
             {formFields.map((field) => (
               <InputFormField
                 key={field.name}

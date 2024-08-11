@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import {
   FormControl,
   FormItem,
@@ -52,8 +52,8 @@ const SelectFormField: React.FC<SelectFormFieldProps> = ({
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {options.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
+                {options.map((option, index) => (
+                  <SelectItem key={index} value={option.value}>
                     {option.label}
                   </SelectItem>
                 ))}

@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { Form } from "@/components/ui/form";
 import SelectFormField from "./SelectFormField";
 import CardContainer from "./CardContainer";
@@ -14,23 +14,17 @@ export type Option = {
   label: string;
 };
 
-function PengirimanForm({
-  formRef,
-  form,
-}: {
-  formRef: RefObject<HTMLFormElement>;
-  form: UseFormReturn<
-    {
-      kota: string;
-      kurir: string;
-      layanan: string;
-      provinsi: string;
-    },
-    any,
-    undefined
-  >;
-}) {
-  const { kota, kurir, layanan, provinsi } = form.watch();
+const PengirimanForm = forwardRef<
+  HTMLFormElement,
+  {
+    form: UseFormReturn<
+      { kota: string; kurir: string; layanan: string; provinsi: string },
+      any,
+      undefined
+    >;
+  }
+>(({ form }, ref) => {
+  const { kota, kurir, provinsi } = form.watch();
 
   const [provinsiOptions, setProvinsiOptions] = useState<Option[]>([]);
   const [kotaOptions, setKotaOptions] = useState<Option[]>([]);
@@ -42,58 +36,63 @@ function PengirimanForm({
     { value: "tiki", label: "TIKI" },
   ];
 
-  useEffect(() => {
-    const loadProvinces = async () => {
+  const handleFetchError = (
+    setter: React.Dispatch<React.SetStateAction<Option[]>>
+  ) => {
+    setter([]);
+  };
+
+  const loadProvinces = async () => {
+    try {
       const result = await fetchProvincesAction();
       if (result.status === "success" && result.response) {
         setProvinsiOptions(
-          result?.response.map(
+          result.response.map(
             (provinsi: { province_id: string; province: string }) => ({
               value: provinsi.province_id,
               label: provinsi.province,
             })
           )
         );
+      } else {
+        handleFetchError(setProvinsiOptions);
       }
-    };
+    } catch (error) {
+      handleFetchError(setProvinsiOptions);
+    }
+  };
 
-    loadProvinces();
-  }, []);
-
-  useEffect(() => {
-    const loadCities = async () => {
-      if (provinsi) {
-        const result = await fetchCitiesAction({ province: provinsi });
-        if (result.status === "success" && result.response) {
-          setKotaOptions(
-            result?.response.map(
-              (city: { city_id: string; city_name: string }) => ({
-                value: city.city_id,
-                label: city.city_name,
-              })
-            )
-          );
-        }
+  const loadCities = async (province: string) => {
+    try {
+      const result = await fetchCitiesAction({ province });
+      if (result.status === "success" && result.response) {
+        setKotaOptions(
+          result.response.map(
+            (city: { city_id: string; city_name: string }) => ({
+              value: city.city_id,
+              label: city.city_name,
+            })
+          )
+        );
+      } else {
+        handleFetchError(setKotaOptions);
       }
-    };
+    } catch (error) {
+      handleFetchError(setKotaOptions);
+    }
+  };
 
-    loadCities();
-  }, [provinsi]);
-
-  useEffect(() => {
-    const loadLayananOptions = async () => {
-      // Simulate fetching layanan options. Replace this with actual fetch logic if needed.
+  const loadLayananOptions = async (courier: string, destination: string) => {
+    try {
       const result = await calculateShippingAction({
-        courier: kurir,
-        destination: kota,
+        courier,
+        destination,
         origin: "162",
         weight: 300,
       });
       if (result.status === "success" && result.response) {
-        console.table(layanan);
-
         setLayananOptions(
-          result?.response[0]?.costs.map((costDetail) => ({
+          result.response[0]?.costs.map((costDetail) => ({
             value: costDetail.cost[0].value.toString(),
             label: `${costDetail.service} - ${
               costDetail.description
@@ -103,13 +102,33 @@ function PengirimanForm({
             })} (${costDetail.cost[0]?.etd} days)`,
           }))
         );
+      } else {
+        handleFetchError(setLayananOptions);
       }
-    };
-
-    if (kota && kurir) {
-      loadLayananOptions();
+    } catch (error) {
+      handleFetchError(setLayananOptions);
     }
-  }, [kota, kurir, layanan]);
+  };
+
+  useEffect(() => {
+    loadProvinces();
+  }, []);
+
+  useEffect(() => {
+    if (provinsi) {
+      loadCities(provinsi);
+      form.setValue("kota", "");
+      form.setValue("kurir", "");
+      form.setValue("layanan", "");
+    }
+  }, [provinsi]);
+
+  useEffect(() => {
+    if (kota && kurir) {
+      form.setValue("layanan", "");
+      loadLayananOptions(kurir, kota);
+    }
+  }, [kota, kurir]);
 
   return (
     <CardContainer className="px-6 box-border w-full">
@@ -119,8 +138,9 @@ function PengirimanForm({
       <CardContent className="px-0 box-border">
         <Form {...form}>
           <form
-            ref={formRef}
-            action={async () => {
+            ref={ref}
+            onSubmit={async (e) => {
+              e.preventDefault();
               const formData = form.watch();
               console.log("Data:", formData);
 
@@ -164,6 +184,8 @@ function PengirimanForm({
       </CardContent>
     </CardContainer>
   );
-}
+});
+
+PengirimanForm.displayName = "PengirimanForm";
 
 export default PengirimanForm;
