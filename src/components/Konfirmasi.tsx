@@ -31,7 +31,7 @@ export default function Konfirmasi({ cart }: KonfirmasiProps): ReactElement {
       <BarangYangDibeli cart={cart} />
       <Line className="my-14" />
       <div className="grid pb-1 box-border items-start lg:grid-cols-2 gap-10">
-        <PengirimanForm form={form} ref={formRef} />
+        <PengirimanForm form={form} cart={cart} ref={formRef} />
         <Pesanan ref={formRef} form={form} cart={cart} />
       </div>
     </section>

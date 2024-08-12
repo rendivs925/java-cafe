@@ -47,8 +47,6 @@ export async function POST(request: NextRequest) {
     // Commit the transaction
     await session.commitTransaction();
 
-    await new Promise((resolve) => setTimeout(resolve, 20000));
-
     return NextResponse.json(
       { message: "Cart updated successfully" },
       { status: 200 } // OK

@@ -35,6 +35,8 @@ export async function createUserDetailAction(data: unknown) {
 
     revalidateTag("/");
 
+    await new Promise((resolve) => setTimeout(resolve, 20000));
+
     return {
       status: "success",
       message: "Detail pengiriman created successfully!",

@@ -6,9 +6,11 @@ import {
   DetailPengirimanSchema,
   DetailPengirimanType,
 } from "@/schemas/DetailPengirimanSchema";
-import { createUserDetailAction } from "@/actions/createUserDetailAction";
 import { toast } from "@/components/ui/use-toast";
 import { getUserDetailAction } from "@/actions/getUserDetailAction";
+import WorkerBuilder from "@/worker/workerBuilder";
+import saveUserDetailWorker from "@/worker/saveUserDetailWorker";
+import { ZodIssueBase } from "zod";
 
 export default function usePengiriman() {
   const { incrementStep } = useShippingContext();
@@ -24,11 +26,18 @@ export default function usePengiriman() {
   const formData = useDeferredValue(form.watch());
 
   const getPrevUserDetail = async () => {
-    const response = await getUserDetailAction();
-
-    if (response.status === "success" && response.detailPengiriman) {
-      form.setValue("alamatLengkap", response.detailPengiriman.alamatLengkap);
-      form.setValue("noHandphone", response.detailPengiriman.noHandphone);
+    try {
+      const response = await getUserDetailAction();
+      if (response.detailPengiriman) {
+        form.setValue("alamatLengkap", response.detailPengiriman.alamatLengkap);
+        form.setValue("noHandphone", response.detailPengiriman.noHandphone);
+      }
+    } catch (error) {
+      console.error("Failed to fetch previous user details:", error);
+      toast({
+        description: "Failed to fetch previous user details.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -41,8 +50,11 @@ export default function usePengiriman() {
 
     form.clearErrors();
 
-    if (!result.success) {
-      result.error.issues.forEach((issue) => {
+    if (
+      (!result.success && formData.alamatLengkap) ||
+      (!result.success && formData.noHandphone)
+    ) {
+      result.error.issues.forEach((issue: ZodIssueBase) => {
         const path = issue.path[0] as keyof DetailPengirimanType;
         form.setError(path, { message: issue.message });
       });
@@ -54,7 +66,7 @@ export default function usePengiriman() {
     const result = DetailPengirimanSchema.safeParse(formData);
 
     if (!result.success) {
-      result.error.issues.forEach((issue) => {
+      result.error.issues.forEach((issue: ZodIssueBase) => {
         const path = issue.path[0] as keyof DetailPengirimanType;
         form.setError(path, { message: issue.message });
       });
@@ -62,22 +74,54 @@ export default function usePengiriman() {
     }
 
     try {
-      const response = await createUserDetailAction(result.data);
-
-      if (response.issues && response.status === "error") {
-        response.issues.forEach((issue) => {
-          const path = issue.path[0] as keyof DetailPengirimanType;
-          form.setError(path, { message: issue.message });
-        });
-        return;
-      }
-
-      if (response.status === "error")
-        return toast({ description: response.message, variant: "destructive" });
-
-      toast({ description: response.message });
       incrementStep();
-    } catch (error) {}
+
+      const worker = WorkerBuilder(saveUserDetailWorker);
+
+      worker.postMessage({ userDetail: result.data });
+
+      worker.onmessage = (event) => {
+        const { success, result: response, status, error } = event.data;
+        if (success) {
+          if (response.issues && response.status === "error") {
+            response.issues.forEach((issue: ZodIssueBase) => {
+              const path = issue.path[0] as keyof DetailPengirimanType;
+              form.setError(path, { message: issue.message });
+            });
+            return;
+          }
+
+          if (status !== 201) {
+            return toast({
+              description: response.message,
+              variant: "destructive",
+            });
+          }
+
+          toast({ description: response.message });
+        } else {
+          console.error("Failed to update user details:", error);
+          toast({
+            description: "Failed to update user details.",
+            variant: "destructive",
+          });
+        }
+      };
+
+      worker.onerror = (error) => {
+        console.error("Worker error:", error.message);
+        toast({
+          description: "Worker error occurred.",
+          variant: "destructive",
+        });
+      };
+    } catch (error) {
+      console.error("Error in handleFormAction:", error);
+      toast({
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    }
   };
 
   return { form, handleFormAction };

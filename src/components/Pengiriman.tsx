@@ -31,7 +31,10 @@ export default function Pengiriman(): ReactElement {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form action={handleFormAction} className="space-y-5">
+          <form
+            onSubmit={form.handleSubmit(handleFormAction)}
+            className="space-y-5"
+          >
             {formFields.map((field) => (
               <InputFormField
                 key={field.name}

@@ -3,8 +3,6 @@ export default () => {
   self.onmessage = async function (event) {
     const { cart } = event.data;
 
-    console.log(cart);
-
     try {
       // Perform the API call to set the cart
       const response = await fetch("http://localhost:3000/api/cart/set-cart", {

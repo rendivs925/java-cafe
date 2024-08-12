@@ -7,6 +7,7 @@ import { fetchCitiesAction } from "@/actions/fetchCitiesAction";
 import { fetchProvincesAction } from "@/actions/fetchProvinceAction";
 import { calculateShippingAction } from "@/actions/calculateShippingAction";
 import { UseFormReturn } from "react-hook-form";
+import { ICart, ICartProduct } from "@/models/Cart";
 
 // Define a type alias for option objects
 export type Option = {
@@ -17,18 +18,20 @@ export type Option = {
 const PengirimanForm = forwardRef<
   HTMLFormElement,
   {
+    cart: ICart;
     form: UseFormReturn<
       { kota: string; kurir: string; layanan: string; provinsi: string },
       any,
       undefined
     >;
   }
->(({ form }, ref) => {
+>(({ form, cart }, ref) => {
   const { kota, kurir, provinsi } = form.watch();
 
   const [provinsiOptions, setProvinsiOptions] = useState<Option[]>([]);
   const [kotaOptions, setKotaOptions] = useState<Option[]>([]);
   const [layananOptions, setLayananOptions] = useState<Option[]>([]);
+  const [totalWeight, setTotalWeight] = useState<number>(0);
 
   const kurirOptions: Option[] = [
     { value: "jne", label: "JNE" },
@@ -66,8 +69,12 @@ const PengirimanForm = forwardRef<
     try {
       const result = await fetchCitiesAction({ province });
       if (result.status === "success" && result.response) {
+        const filteredCities = result.response.filter(
+          (city) => city.type.toLowerCase() !== "kota"
+        );
+
         setKotaOptions(
-          result.response.map(
+          filteredCities.map(
             (city: { city_id: string; city_name: string }) => ({
               value: city.city_id,
               label: city.city_name,
@@ -88,7 +95,7 @@ const PengirimanForm = forwardRef<
         courier,
         destination,
         origin: "162",
-        weight: 300,
+        weight: totalWeight,
       });
       if (result.status === "success" && result.response) {
         setLayananOptions(
@@ -112,6 +119,19 @@ const PengirimanForm = forwardRef<
 
   useEffect(() => {
     loadProvinces();
+  }, []);
+
+  const cartProductsReducer = (
+    accumulator: number,
+    currentValue: ICartProduct
+  ): number => {
+    return currentValue.weight + accumulator;
+  };
+
+  useEffect(() => {
+    if (cart?.products) {
+      setTotalWeight(cart.products.reduce(cartProductsReducer, 0));
+    }
   }, []);
 
   useEffect(() => {
@@ -143,12 +163,13 @@ const PengirimanForm = forwardRef<
               e.preventDefault();
               const formData = form.watch();
               console.log("Data:", formData);
+              console.log("weight:", totalWeight);
 
               const response = await calculateShippingAction({
                 courier: formData.kurir,
                 destination: formData.kota,
                 origin: "162",
-                weight: 200,
+                weight: totalWeight,
               });
 
               console.log("Response:", response);

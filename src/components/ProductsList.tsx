@@ -28,6 +28,7 @@ const ProductsList: React.FC<ProductsListProps> = ({ products }) => {
   const renderSlide = (product: ProductType) => (
     <CarouselItem className="pl-12 md:basis-1/2 lg:basis-1/3" key={product._id}>
       <ProductCard
+        weight={product.weight}
         title={product.title}
         price={product.price}
         category={product.category}
