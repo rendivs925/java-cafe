@@ -1,13 +1,10 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Cart, { ICart } from "@/models/Cart";
-import mongoose, { ClientSession } from "mongoose";
-import { revalidateTag } from "next/cache";
+import { ClientSession } from "mongoose";
 
 export async function setCartAction(data: ICart) {
-  await connectToDatabase();
-
-  const session: ClientSession = await mongoose.startSession();
+  const session: ClientSession = await connectToDatabase();
   session.startTransaction();
 
   try {
@@ -35,8 +32,6 @@ export async function setCartAction(data: ICart) {
     cart.products = data.products;
 
     await cart.save({ session });
-
-    // revalidateTag("/");
 
     await session.commitTransaction();
 

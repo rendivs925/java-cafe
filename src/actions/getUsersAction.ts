@@ -1,3 +1,4 @@
+"use server";
 import { connectToDatabase } from "@/lib/dbConnect";
 import User from "@/models/User";
 import { AddUserType } from "@/schemas/AddUserSchema";

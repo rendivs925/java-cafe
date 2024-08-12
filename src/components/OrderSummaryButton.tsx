@@ -2,7 +2,8 @@ import { type ReactElement } from "react";
 import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
 import { ICart } from "@/models/Cart";
-import { setCartAction } from "@/actions/setCartAction";
+import WorkerBuilder from "@/worker/workerBuilder";
+import cartWorkerScript from "@/worker/cartWorkerScript";
 
 export default function OrderSummaryButton({
   optimisticCart,
@@ -15,15 +16,22 @@ export default function OrderSummaryButton({
   const handleCheckout = () => {
     pushRoute("/shipping?step=1");
 
-    setTimeout(() => {
-      (async () => {
-        try {
-          await setCartAction(optimisticCart);
-        } catch (error) {
-          console.error("Failed to update cart:", error);
-        }
-      })();
-    }, 1000);
+    const worker = WorkerBuilder(cartWorkerScript);
+
+    worker.postMessage({ cart: optimisticCart });
+
+    worker.onmessage = (event) => {
+      const { success, result, error } = event.data;
+      if (success) {
+        console.log("Cart updated successfully:", result);
+      } else {
+        console.error("Failed to update cart:", error);
+      }
+    };
+
+    worker.onerror = (error) => {
+      console.error("Worker error:", error.message);
+    };
   };
 
   return (

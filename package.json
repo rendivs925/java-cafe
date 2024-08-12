@@ -24,6 +24,7 @@
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "comlink-fetch": "^0.1.2",
     "embla-carousel-react": "^8.1.5",
     "firebase": "^10.12.4",
     "jose": "^5.6.3",
@@ -51,7 +52,6 @@
     "@types/react": "^18",
     "eslint-config-next": "14.2.4",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5",
-    "worker-plugin": "^5.0.1"
+    "typescript": "^5"
   }
 }

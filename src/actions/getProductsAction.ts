@@ -1,3 +1,4 @@
+"use server";
 import { ProductType } from "@/components/ProductsList";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Product from "@/models/Product";

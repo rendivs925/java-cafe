@@ -69,8 +69,8 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       }
 
       // Uncomment these lines if you need to perform the actual actions
-      // const paymentResponse = await paymentAction(payload);
-      // console.log("Payment response: ", paymentResponse);
+      const paymentResponse = await paymentAction(payload);
+      console.log("Payment response: ", paymentResponse);
 
       // const orderStatusResponse = await getOrderStatusAction({ orderId: payload.orderId });
       // console.log("Order Status:", orderStatusResponse);
@@ -93,8 +93,8 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       // });
       // console.log("Create Order Response: ", createOrderResponse);
 
-      const myOrderResponse = await getMyOrderAction();
-      console.log("My order:", myOrderResponse?.order);
+      // const myOrderResponse = await getMyOrderAction();
+      // console.log("My order:", myOrderResponse?.order);
     };
 
     return (
