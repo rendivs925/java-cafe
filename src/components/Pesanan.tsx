@@ -55,6 +55,22 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       }
     }, [products]);
 
+    useEffect(() => {
+      const midtransScriptUrl = process.env.MIDTRANS_URL as string;
+
+      let scriptTag = document.createElement("script");
+      scriptTag.src = midtransScriptUrl;
+
+      const myMidtransClientKey = process.env.CLIENT_KEY as string;
+      scriptTag.setAttribute("data-client-key", myMidtransClientKey);
+
+      document.body.appendChild(scriptTag);
+
+      return () => {
+        document.body.removeChild(scriptTag);
+      };
+    }, []);
+
     const handlePayment = async () => {
       const payload = {
         email: "hardleberg@gmail.com",
@@ -72,26 +88,34 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       const paymentResponse = await paymentAction(payload);
       console.log("Payment response: ", paymentResponse);
 
+      if (window.snap && typeof window.snap.pay === "function") {
+        window.snap.pay(paymentResponse.token as string, {
+          onSuccess: async (result) => {
+            const createOrderResponse = await createOrderAction({
+              userId: cart.userId,
+              address: "Jalan Merdeka No 10",
+              phone: 123456789011,
+              subtotal: 120000,
+              payment: 150000,
+              shippingCost: 10000,
+              products: [
+                {
+                  productId: "66a72b9823bd0268c0920735",
+                  qty: 1,
+                  totalPrice: 150000,
+                  profit: 200000,
+                },
+              ],
+            });
+            console.log("Create Order Response: ", createOrderResponse);
+          },
+        });
+      } else {
+        console.error("Snap.js is not loaded or pay function is unavailable.");
+      }
+
       // const orderStatusResponse = await getOrderStatusAction({ orderId: payload.orderId });
       // console.log("Order Status:", orderStatusResponse);
-
-      // const createOrderResponse = await createOrderAction({
-      //   userId: cart.userId,
-      //   address: "Jalan Merdeka No 10",
-      //   phone: 123456789011,
-      //   subtotal: 120000,
-      //   payment: 150000,
-      //   shippingCost: 10000,
-      //   products: [
-      //     {
-      //       productId: "66a72b9823bd0268c0920735",
-      //       qty: 1,
-      //       totalPrice: 150000,
-      //       profit: 200000,
-      //     },
-      //   ],
-      // });
-      // console.log("Create Order Response: ", createOrderResponse);
 
       // const myOrderResponse = await getMyOrderAction();
       // console.log("My order:", myOrderResponse?.order);

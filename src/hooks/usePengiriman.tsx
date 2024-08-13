@@ -7,10 +7,11 @@ import {
   DetailPengirimanType,
 } from "@/schemas/DetailPengirimanSchema";
 import { toast } from "@/components/ui/use-toast";
-import { getUserDetailAction } from "@/actions/getUserDetailAction";
 import WorkerBuilder from "@/worker/workerBuilder";
+import getDetailPengirimanWorker from "@/worker/getDetailPengirimanWorker";
 import saveUserDetailWorker from "@/worker/saveUserDetailWorker";
 import { ZodIssueBase } from "zod";
+import { BASE_URL } from "@/constanst";
 
 export default function usePengiriman() {
   const { incrementStep } = useShippingContext();
@@ -27,11 +28,28 @@ export default function usePengiriman() {
 
   const getPrevUserDetail = async () => {
     try {
-      const response = await getUserDetailAction();
-      if (response.detailPengiriman) {
-        form.setValue("alamatLengkap", response.detailPengiriman.alamatLengkap);
-        form.setValue("noHandphone", response.detailPengiriman.noHandphone);
-      }
+      const worker = WorkerBuilder(getDetailPengirimanWorker);
+
+      worker.postMessage({ BASE_URL });
+
+      worker.onmessage = (event) => {
+        const { success, result: response, error } = event.data;
+        if (success) {
+          if (response.detailPengiriman) {
+            form.setValue(
+              "alamatLengkap",
+              response.detailPengiriman.alamatLengkap
+            );
+            form.setValue("noHandphone", response.detailPengiriman.noHandphone);
+          }
+        } else {
+          console.error("Failed to get detail pengiriman:", error);
+        }
+      };
+
+      worker.onerror = (error) => {
+        console.error("Worker error:", error.message);
+      };
     } catch (error) {
       console.error("Failed to fetch previous user details:", error);
       toast({
@@ -64,6 +82,7 @@ export default function usePengiriman() {
   // Function to handle form action
   const handleFormAction = async () => {
     const result = DetailPengirimanSchema.safeParse(formData);
+    console.log(result.data);
 
     if (!result.success) {
       result.error.issues.forEach((issue: ZodIssueBase) => {
@@ -78,7 +97,7 @@ export default function usePengiriman() {
 
       const worker = WorkerBuilder(saveUserDetailWorker);
 
-      worker.postMessage({ userDetail: result.data });
+      worker.postMessage({ userDetail: result.data, BASE_URL });
 
       worker.onmessage = (event) => {
         const { success, result: response, status, error } = event.data;

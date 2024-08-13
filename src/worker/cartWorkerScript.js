@@ -1,12 +1,15 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
   self.onmessage = async function (event) {
-    const { cart } = event.data;
+    const { cart, BASE_URL } = event.data;
 
     try {
+      if (!BASE_URL) {
+        throw new Error("Base URL is not defined");
+      }
+
       // Perform the API call to set the cart
-      const response = await fetch("http://localhost:3000/api/cart/set-cart", {
-        // Use the absolute URL here
+      const response = await fetch(`${BASE_URL}/api/cart/set-cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,8 +24,10 @@ export default () => {
       const result = await response.json();
       self.postMessage({ success: true, result });
     } catch (error) {
-      console.log(error);
-      self.postMessage({ success: false, error: error.message });
+      self.postMessage({
+        success: false,
+        error: error.message,
+      });
     }
   };
 };

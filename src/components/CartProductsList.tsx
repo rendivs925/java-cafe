@@ -15,8 +15,8 @@ export default function CartProductsList({
 
   return (
     <ul className={`flex flex-col gap-12 ${className}`}>
-      {products.length !== 0 ? (
-        products.map(({ title, productId, stock, price, imgUrl, qty }) => (
+      {products?.length !== 0 ? (
+        products?.map(({ title, productId, stock, price, imgUrl, qty }) => (
           <CartProductCard
             key={productId}
             optimisticCart={optimisticCart}

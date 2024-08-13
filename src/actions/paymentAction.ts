@@ -9,18 +9,29 @@ interface paymentActionProps {
   phone: number;
 }
 
+interface TransactionResponse {
+  token: string;
+}
+
 export async function paymentAction({
   orderId,
   grossAmount,
   email,
   firstName,
   phone,
-}: paymentActionProps) {
+}: paymentActionProps): Promise<{
+  status: string;
+  message: string;
+  token?: string;
+  dataPayment?: {
+    midtransResponse: string;
+  };
+}> {
   try {
     const snap = new midtransClient.Snap({
       isProduction: false,
-      serverKey: process.env.SERVER_KEY,
-      clientKey: process.env.CLIENT_KEY,
+      serverKey: process.env.SERVER_KEY!,
+      clientKey: process.env.CLIENT_KEY!,
     });
 
     const parameter = {
@@ -33,7 +44,7 @@ export async function paymentAction({
       callback: {
         finish: `${process.env.DOMAIN}`,
       },
-      enabled_payment: [
+      enabled_payments: [
         "mandiri_clicpay",
         "bca_clicpay",
         "bni_va",
@@ -43,29 +54,23 @@ export async function paymentAction({
       ],
     };
 
-    return snap
-      .createTransaction(parameter)
-      .then((transaction: unknown) => {
-        const dataPayment = {
-          midtransResponse: JSON.stringify(transaction),
-        };
+    const transaction = await snap.createTransaction(parameter);
+    const transactionToken = (transaction as TransactionResponse).token;
 
-        const transactionToken = (transaction as { token: string }).token;
+    return {
+      status: "success",
+      message: "Pembayaran sudah berhasil.",
+      token: transactionToken,
+      dataPayment: {
+        midtransResponse: transaction,
+      },
+    };
+  } catch (error) {
+    console.error((error as Error).message);
 
-        return {
-          status: "success",
-          message: "Pembayaran sudah berhasil.",
-          token: transactionToken,
-          dataPayment,
-        };
-      })
-      .catch((error: unknown) => {
-        console.log((error as { message: string }).message);
-
-        return {
-          status: "error",
-          message: (error as { message: string }).message,
-        };
-      });
-  } catch (error) {}
+    return {
+      status: "error",
+      message: (error as Error).message,
+    };
+  }
 }

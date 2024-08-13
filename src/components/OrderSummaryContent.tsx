@@ -24,13 +24,13 @@ export default function OrderSummaryContent({
     if (optimisticCart?.products) {
       setSubHarga(optimisticCart?.products.reduce(cartProductsReducer, 0));
     }
-  }, [optimisticCart.products]);
+  }, [optimisticCart?.products]);
 
   return (
     <>
       <CardContent className="pt-6 px-0">
         <p className="text-foreground m-0">
-          Total item : {optimisticCart.products.length}
+          Total item : {optimisticCart?.products?.length}
         </p>
         <p className="text-foreground m-0">
           Sub harga : IDR {formatNumber(subHarga)}

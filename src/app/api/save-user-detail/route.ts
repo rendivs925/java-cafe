@@ -35,21 +35,19 @@ export async function POST(request: NextRequest) {
 
     await connectToDatabase();
 
-    // Create a new address document
-    const detailPengiriman = new DetailPengiriman({
-      userId,
-      alamatLengkap,
-      noHandphone,
-    });
-
-    await detailPengiriman.save();
-
-    // Simulate delay
-    // await new Promise((resolve) => setTimeout(resolve, 20000));
+    // Update the existing address document or create it if it does not exist
+    await DetailPengiriman.findOneAndUpdate(
+      { userId }, // Filter to find the document
+      { alamatLengkap, noHandphone }, // Fields to update
+      {
+        new: true, // Return the updated document
+        upsert: true, // Create if not found
+      }
+    );
 
     return NextResponse.json(
       {
-        message: "Detail pengiriman created successfully!",
+        message: "Detail pengiriman updated successfully!",
       },
       { status: 201 }
     );

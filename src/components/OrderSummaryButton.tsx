@@ -4,6 +4,7 @@ import useAppContext from "@/hooks/useAppContext";
 import { ICart } from "@/models/Cart";
 import WorkerBuilder from "@/worker/workerBuilder";
 import cartWorkerScript from "@/worker/cartWorkerScript";
+import { BASE_URL } from "@/constanst";
 
 export default function OrderSummaryButton({
   optimisticCart,
@@ -11,14 +12,14 @@ export default function OrderSummaryButton({
   optimisticCart: ICart;
 }): ReactElement {
   const { pushRoute } = useAppContext();
-  const isDisabled = optimisticCart.products.length === 0;
+  const isDisabled = optimisticCart?.products?.length === 0;
 
   const handleCheckout = () => {
     pushRoute("/shipping?step=1");
 
     const worker = WorkerBuilder(cartWorkerScript);
 
-    worker.postMessage({ cart: optimisticCart });
+    worker.postMessage({ cart: optimisticCart, BASE_URL });
 
     worker.onmessage = (event) => {
       const { success, result, error } = event.data;

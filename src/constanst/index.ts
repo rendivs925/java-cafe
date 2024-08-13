@@ -1,6 +1,7 @@
 import { Blog, Contact, NavbarLink, WorkingHour } from "@/types";
 
 const COOKIE_NAME = "user-token";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const MAX_FILE_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_IMAGE_MIME_TYPES = [
@@ -95,4 +96,5 @@ export {
   COOKIE_NAME,
   contactUs,
   blogs,
+  BASE_URL,
 };
