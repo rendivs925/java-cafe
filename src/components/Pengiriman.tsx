@@ -5,6 +5,7 @@ import CardContainer from "./CardContainer";
 import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import InputFormField from "./InputFormField";
 import usePengiriman from "@/hooks/usePengiriman";
+import LoadingButton from "./LoadingButton";
 
 const formFields = [
   {
@@ -22,7 +23,7 @@ const formFields = [
 ];
 
 export default function Pengiriman(): ReactElement {
-  const { form, handleFormAction } = usePengiriman();
+  const { form, handleFormAction, isPending } = usePengiriman();
 
   return (
     <CardContainer className="max-w-[700px] mt-14 me-auto ms-auto bg-background">
@@ -31,10 +32,7 @@ export default function Pengiriman(): ReactElement {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleFormAction)}
-            className="space-y-5"
-          >
+          <form action={handleFormAction} className="space-y-5">
             {formFields.map((field) => (
               <InputFormField
                 key={field.name}
@@ -46,9 +44,13 @@ export default function Pengiriman(): ReactElement {
                 errors={form.formState.errors}
               />
             ))}
-            <Button type="submit" size="default">
-              Konfirmasi Pesanan
-            </Button>
+            {isPending ? (
+              <LoadingButton className="w-fit">Processing...</LoadingButton>
+            ) : (
+              <Button size="default" variant="default" type="submit">
+                Konfirmasi Pesanan
+              </Button>
+            )}
           </form>
         </Form>
       </CardContent>

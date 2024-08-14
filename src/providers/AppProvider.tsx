@@ -36,6 +36,10 @@ export default function AppProvider({
   const [user, setUser] = useLocalStorage<User>("user", defaultUser);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [totalItems, setTotalItems] = useLocalStorage("totalItems", 0);
+  const [detailPengiriman, setDetailPengiriman] = useLocalStorage(
+    "detailPengiriman",
+    { username: "", noHandphone: "", alamatLengkap: "" }
+  );
 
   const handleLogout = async () => {
     try {
@@ -111,6 +115,8 @@ export default function AppProvider({
 
   const contextValues: AppContextType = {
     pushRoute,
+    setDetailPengiriman,
+    detailPengiriman,
     setTotalItems,
     totalItems,
     handleLogout,

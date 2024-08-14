@@ -24,18 +24,16 @@ export async function createUserDetailAction(data: unknown) {
 
     await connectToDatabase();
 
-    // Create a new address document
-    const detailPengiriman = new DetailPengiriman({
-      userId,
-      alamatLengkap,
-      noHandphone,
-    });
-
-    await detailPengiriman.save();
-
+    // Update the existing address document or create it if it does not exist
+    await DetailPengiriman.findOneAndUpdate(
+      { userId }, // Filter to find the document
+      { alamatLengkap, noHandphone }, // Fields to update
+      {
+        new: true, // Return the updated document
+        upsert: true, // Create if not found
+      }
+    );
     revalidateTag("/");
-
-    await new Promise((resolve) => setTimeout(resolve, 20000));
 
     return {
       status: "success",

@@ -33,10 +33,32 @@ interface TotalSalesData {
 
 interface AppContextType {
   totalItems: number;
+  detailPengiriman: {
+    username: string;
+    noHandphone: string;
+    alamatLengkap: string;
+  };
   user: User;
   setTotalItems: (value: number | ((val: number) => number)) => void;
   handleLogout: () => void;
   isAuthenticated: boolean;
+  setDetailPengiriman: (
+    value:
+      | {
+          username: string;
+          noHandphone: string;
+          alamatLengkap: string;
+        }
+      | ((val: {
+          username: string;
+          noHandphone: string;
+          alamatLengkap: string;
+        }) => {
+          username: string;
+          noHandphone: string;
+          alamatLengkap: string;
+        })
+  ) => void;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
   setUser: (value: User | ((val: User) => User)) => void;
   pushRoute: (route: string) => void;

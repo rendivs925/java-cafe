@@ -16,7 +16,7 @@ export async function getUserDetailAction() {
       userId,
     });
 
-    revalidateTag("/");
+    // revalidateTag("/");
 
     return {
       status: "success",
@@ -24,6 +24,7 @@ export async function getUserDetailAction() {
       detailPengiriman: {
         alamatLengkap: detailPengiriman.alamatLengkap,
         noHandphone: detailPengiriman.noHandphone,
+        username: verifiedToken?.username,
       },
     };
   } catch (error) {

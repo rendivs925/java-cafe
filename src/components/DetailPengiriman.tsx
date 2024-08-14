@@ -1,27 +1,13 @@
 import useAppContext from "@/hooks/useAppContext";
-import { useEffect, useState, type ReactElement } from "react";
-import { getUserDetailAction } from "@/actions/getUserDetailAction";
 
-export default function DetailPengiriman(): ReactElement {
-  const { user } = useAppContext();
-  const [noHandphone, setNoHandphone] = useState(0);
-  const [address, setAddress] = useState("");
-
-  const getPrevUserDetail = async () => {
-    const response = await getUserDetailAction();
-
-    if (response.status === "success" && response.detailPengiriman) {
-      setAddress(response.detailPengiriman.alamatLengkap);
-      setNoHandphone(response.detailPengiriman.noHandphone);
-    }
-  };
-
-  useEffect(() => {
-    getPrevUserDetail();
-  }, []);
+export default function DetailPengiriman() {
+  const { detailPengiriman } = useAppContext();
+  const address = detailPengiriman?.alamatLengkap;
+  const noHandphone = detailPengiriman?.noHandphone;
+  const username = detailPengiriman?.username;
 
   const detailData = [
-    { label: "Nama", value: user.username },
+    { label: "Nama", value: username },
     { label: "No Handphone", value: noHandphone },
     { label: "Alamat", value: address },
   ];
@@ -35,7 +21,7 @@ export default function DetailPengiriman(): ReactElement {
             <label
               key={index}
               className={`grid grid-cols-detail sm:grid-cols-sm-detail ${
-                (detail.value === 0 || detail.value === "") && "hidden"
+                detail.value === "" && "hidden"
               }`}
             >
               <span className="font-medium text-muted-foreground">

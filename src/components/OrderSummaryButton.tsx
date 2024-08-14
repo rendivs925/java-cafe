@@ -1,8 +1,9 @@
-import { type ReactElement, useRef, useEffect } from "react";
+import { type ReactElement, useState } from "react";
 import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
 import { ICart } from "@/models/Cart";
 import { setCartAction } from "@/actions/setCartAction";
+import LoadingButton from "./LoadingButton";
 
 export default function OrderSummaryButton({
   optimisticCart,
@@ -10,40 +11,31 @@ export default function OrderSummaryButton({
   optimisticCart: ICart;
 }): ReactElement {
   const { pushRoute } = useAppContext();
-  const isDisabled = optimisticCart.products.length === 0;
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [loading, setLoading] = useState(false); // Add loading state
+  const isDisabled = optimisticCart.products.length === 0 || loading;
 
-  const handleCheckout = () => {
-    pushRoute("/shipping?step=1");
+  const handleCheckout = async () => {
+    setLoading(true); // Set loading state to true
 
-    timeoutRef.current = setTimeout(() => {
-      (async () => {
-        try {
-          await setCartAction(optimisticCart);
-        } catch (error) {
-          console.error("Failed to update cart:", error);
-        }
-      })();
-    }, 200);
-
-    window.addEventListener("beforeunload", handleClearTimeout);
-  };
-
-  const handleClearTimeout = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+    try {
+      await setCartAction(optimisticCart);
+      pushRoute("/shipping?step=1");
+    } catch (error) {
+      console.error("Failed to update cart:", error);
+    } finally {
+      setLoading(false); // Set loading state to false
     }
   };
 
   return (
-    <Button
-      size="default"
-      variant="default"
-      onClick={handleCheckout}
-      disabled={isDisabled}
-      className={`${isDisabled && "cursor-not-allowed"}`}
-    >
-      Checkout
-    </Button>
+    <>
+      {loading ? (
+        <LoadingButton className="w-fit">Processing...</LoadingButton>
+      ) : (
+        <Button size="default" variant="default" onClick={handleCheckout}>
+          Checkout
+        </Button>
+      )}
+    </>
   );
 }

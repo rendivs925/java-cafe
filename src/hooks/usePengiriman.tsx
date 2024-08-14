@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDeferredValue, useEffect } from "react";
+import { useDeferredValue, useEffect, useTransition } from "react";
 import useShippingContext from "./useShippingContext";
 import {
   DetailPengirimanSchema,
@@ -9,9 +9,12 @@ import {
 import { createUserDetailAction } from "@/actions/createUserDetailAction";
 import { toast } from "@/components/ui/use-toast";
 import { getUserDetailAction } from "@/actions/getUserDetailAction";
+import useAppContext from "./useAppContext";
 
 export default function usePengiriman() {
   const { incrementStep } = useShippingContext();
+  const { setDetailPengiriman, user } = useAppContext();
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<DetailPengirimanType>({
     resolver: zodResolver(DetailPengirimanSchema),
@@ -50,38 +53,49 @@ export default function usePengiriman() {
         form.setError(path, { message: issue.message });
       });
     }
-  }, [formData.alamatLengkap, formData.noHandphone]);
+  }, [formData]);
 
   // Function to handle form action
-  const handleFormAction = async () => {
-    const result = DetailPengirimanSchema.safeParse(formData);
+  const handleFormAction = () => {
+    startTransition(async () => {
+      const result = DetailPengirimanSchema.safeParse(formData);
 
-    if (!result.success) {
-      result.error.issues.forEach((issue) => {
-        const path = issue.path[0] as keyof DetailPengirimanType;
-        form.setError(path, { message: issue.message });
-      });
-      return;
-    }
-
-    try {
-      const response = await createUserDetailAction(result.data);
-
-      if (response.issues && response.status === "error") {
-        response.issues.forEach((issue) => {
+      if (!result.success) {
+        result.error.issues.forEach((issue) => {
           const path = issue.path[0] as keyof DetailPengirimanType;
           form.setError(path, { message: issue.message });
         });
         return;
       }
 
-      if (response.status === "error")
-        return toast({ description: response.message, variant: "destructive" });
+      setDetailPengiriman({ ...result.data, username: user.username });
 
-      toast({ description: response.message });
-      incrementStep();
-    } catch (error) {}
+      try {
+        const response = await createUserDetailAction(result.data);
+
+        if (response.issues && response.status === "error") {
+          response.issues.forEach((issue) => {
+            const path = issue.path[0] as keyof DetailPengirimanType;
+            form.setError(path, { message: issue.message });
+          });
+          return;
+        }
+
+        if (response.status === "error") {
+          toast({ description: response.message, variant: "destructive" });
+        } else {
+          toast({ description: response.message });
+          incrementStep();
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        toast({
+          description: "An error occurred, please try again.",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
-  return { form, handleFormAction };
+  return { form, handleFormAction, isPending }; // Return isPending state
 }
