@@ -12,7 +12,7 @@ import { getUserDetailAction } from "@/actions/getUserDetailAction";
 import useAppContext from "./useAppContext";
 
 export default function usePengiriman() {
-  const { incrementStep } = useShippingContext();
+  const { incrementStep, activeStep } = useShippingContext();
   const { setDetailPengiriman, user } = useAppContext();
   const [isPending, startTransition] = useTransition();
 
@@ -37,7 +37,7 @@ export default function usePengiriman() {
 
   useEffect(() => {
     getPrevUserDetail();
-  }, []);
+  }, [activeStep]);
 
   useEffect(() => {
     const result = DetailPengirimanSchema.safeParse(formData);
