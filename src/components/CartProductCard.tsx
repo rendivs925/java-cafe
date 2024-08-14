@@ -5,9 +5,6 @@ import { Button } from "./ui/button";
 import { Card, CardTitle } from "./ui/card";
 import CartProductPrice from "./CartProductPrice";
 import { ICart } from "@/models/Cart";
-import { deleteCartProductAction } from "@/actions/deleteCartProductAction";
-import useAppContext from "@/hooks/useAppContext";
-import { setCartAction } from "@/actions/setCartAction";
 
 function CartProductCard({
   imgUrl,
@@ -18,15 +15,14 @@ function CartProductCard({
   productId,
   optimisticCart,
   setOptimisticCart,
-  userId,
+  deleteProductFromCart,
 }: CartProduct & {
   productId: string;
-  userId: string;
   optimisticCart: ICart;
   setOptimisticCart: (action: ICart | ((pendingState: ICart) => ICart)) => void;
+  deleteProductFromCart: (productId: string) => void;
 }): ReactElement {
   const [isUpdating, setIsUpdating] = useState(false);
-  const { setTotalItems } = useAppContext();
 
   const updateQuantity = (type: "increment" | "decrement") => {
     if (isUpdating) return;
@@ -65,43 +61,6 @@ function CartProductCard({
       console.error(`Failed to ${type} quantity`, error);
     } finally {
       setIsUpdating(false);
-    }
-  };
-
-  const deleteProductFromCart = async () => {
-    try {
-      const itemIndex = optimisticCart.products.findIndex(
-        (product) => product.productId === productId
-      );
-
-      if (itemIndex !== -1) {
-        startTransition(() => {
-          setOptimisticCart((prev) => {
-            const updatedProducts = prev.products.filter(
-              (item) => item.productId !== productId
-            );
-
-            setTotalItems(updatedProducts.length);
-
-            return {
-              userId: optimisticCart.userId,
-              products: updatedProducts,
-            };
-          });
-        });
-      }
-
-      const newCart = {
-        userId: optimisticCart.userId,
-        products: optimisticCart.products,
-      };
-
-      await setCartAction(newCart);
-
-      await deleteCartProductAction({ userId, productId });
-    } catch (error) {
-      console.error("Failed to delete product from cart", error);
-    } finally {
     }
   };
 
@@ -146,7 +105,7 @@ function CartProductCard({
         <Button
           size="icon"
           variant="ghost"
-          onClick={deleteProductFromCart}
+          onClick={() => deleteProductFromCart(productId)}
           className="close-btn text-xl"
         >
           x

@@ -1,10 +1,8 @@
-import { type ReactElement } from "react";
+import { type ReactElement, useRef, useEffect } from "react";
 import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
 import { ICart } from "@/models/Cart";
-import WorkerBuilder from "@/worker/workerBuilder";
-import cartWorkerScript from "@/worker/cartWorkerScript";
-import { BASE_URL } from "@/constanst";
+import { setCartAction } from "@/actions/setCartAction";
 
 export default function OrderSummaryButton({
   optimisticCart,
@@ -12,27 +10,29 @@ export default function OrderSummaryButton({
   optimisticCart: ICart;
 }): ReactElement {
   const { pushRoute } = useAppContext();
-  const isDisabled = optimisticCart?.products?.length === 0;
+  const isDisabled = optimisticCart.products.length === 0;
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleCheckout = () => {
     pushRoute("/shipping?step=1");
 
-    const worker = WorkerBuilder(cartWorkerScript);
+    timeoutRef.current = setTimeout(() => {
+      (async () => {
+        try {
+          await setCartAction(optimisticCart);
+        } catch (error) {
+          console.error("Failed to update cart:", error);
+        }
+      })();
+    }, 200);
 
-    worker.postMessage({ cart: optimisticCart, BASE_URL });
+    window.addEventListener("beforeunload", handleClearTimeout);
+  };
 
-    worker.onmessage = (event) => {
-      const { success, result, error } = event.data;
-      if (success) {
-        console.log("Cart updated successfully:", result);
-      } else {
-        console.error("Failed to update cart:", error);
-      }
-    };
-
-    worker.onerror = (error) => {
-      console.error("Worker error:", error.message);
-    };
+  const handleClearTimeout = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
   };
 
   return (

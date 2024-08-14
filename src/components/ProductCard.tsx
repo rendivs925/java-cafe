@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/legacy/image";
+import { useState } from "react";
 import { type ReactElement } from "react";
 import {
   Card,
@@ -25,26 +26,34 @@ function ProductCard({
   weight,
 }: Product & { productId: string; weight: number }): ReactElement {
   const { user, setTotalItems, formatNumber } = useAppContext();
+  const [loading, setLoading] = useState(false);
 
   const addProductToCart = async () => {
-    const data = await addProductToCartAction({
-      userId: user._id,
-      products: [
-        {
-          productId,
-          title,
-          imgUrl,
-          price,
-          stock,
-          weight,
-        },
-      ],
-    });
+    setLoading(true); // Set loading state to true
+    try {
+      const data = await addProductToCartAction({
+        userId: user._id,
+        products: [
+          {
+            productId,
+            title,
+            imgUrl,
+            price,
+            stock,
+            weight,
+          },
+        ],
+      });
 
-    setTotalItems(data?.totalItems as number);
+      setTotalItems(data?.totalItems as number);
 
-    if (data?.status === "success") {
-      toast({ description: data.message });
+      if (data?.status === "success") {
+        toast({ description: data.message });
+      }
+    } catch (error) {
+      console.error("Failed to add product to cart:", error);
+    } finally {
+      setLoading(false); // Set loading state to false after operation
     }
   };
 
@@ -67,8 +76,13 @@ function ProductCard({
         <p className="line-clamp-2">{description}</p>
         <div className="flex mt-12 justify-between items-end overflow-hidden">
           <h3 className="price">IDR {formatNumber(price)}</h3>
-          <Button variant="default" size="sm" onClick={addProductToCart}>
-            Add To Cart
+          <Button
+            variant="default"
+            size="sm"
+            onClick={addProductToCart}
+            disabled={loading} // Disable button when loading
+          >
+            {loading ? "Adding..." : "Add To Cart"} {/* Show loading text */}
           </Button>
         </div>
       </CardContent>

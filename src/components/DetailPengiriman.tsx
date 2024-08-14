@@ -1,9 +1,6 @@
 import useAppContext from "@/hooks/useAppContext";
-import WorkerBuilder from "@/worker/workerBuilder";
-import getDetailPengirimanWorker from "@/worker/getDetailPengirimanWorker";
 import { useEffect, useState, type ReactElement } from "react";
-import { BASE_URL } from "@/constanst";
-import { toast } from "./ui/use-toast";
+import { getUserDetailAction } from "@/actions/getUserDetailAction";
 
 export default function DetailPengiriman(): ReactElement {
   const { user } = useAppContext();
@@ -11,32 +8,11 @@ export default function DetailPengiriman(): ReactElement {
   const [address, setAddress] = useState("");
 
   const getPrevUserDetail = async () => {
-    try {
-      const worker = WorkerBuilder(getDetailPengirimanWorker);
+    const response = await getUserDetailAction();
 
-      worker.postMessage({ BASE_URL });
-
-      worker.onmessage = (event) => {
-        const { success, result: response, error } = event.data;
-        if (success) {
-          if (response.detailPengiriman) {
-            setAddress(response.detailPengiriman.alamatLengkap);
-            setNoHandphone(response.detailPengiriman.noHandphone);
-          }
-        } else {
-          console.error("Failed to get detail pengiriman:", error);
-        }
-      };
-
-      worker.onerror = (error) => {
-        console.error("Worker error:", error.message);
-      };
-    } catch (error) {
-      console.error("Failed to fetch previous user details:", error);
-      toast({
-        description: "Failed to fetch previous user details.",
-        variant: "destructive",
-      });
+    if (response.status === "success" && response.detailPengiriman) {
+      setAddress(response.detailPengiriman.alamatLengkap);
+      setNoHandphone(response.detailPengiriman.noHandphone);
     }
   };
 

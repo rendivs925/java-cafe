@@ -1,12 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.output.globalObject = "self";
-    }
-    return config;
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },

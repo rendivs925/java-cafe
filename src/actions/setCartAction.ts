@@ -2,6 +2,7 @@
 import { connectToDatabase } from "@/lib/dbConnect";
 import Cart, { ICart } from "@/models/Cart";
 import { ClientSession } from "mongoose";
+import { revalidateTag } from "next/cache";
 
 export async function setCartAction(data: ICart) {
   const session: ClientSession = await connectToDatabase();
@@ -35,8 +36,12 @@ export async function setCartAction(data: ICart) {
 
     await session.commitTransaction();
 
+    revalidateTag("/");
+
     return { status: "success", message: "Cart updated successfully" };
   } catch (error) {
+    console.log(error);
+
     await session.abortTransaction();
     return { status: "error", message: "Internal Server Error" };
   } finally {

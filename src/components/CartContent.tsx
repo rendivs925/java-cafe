@@ -1,63 +1,57 @@
 "use client";
-import { useEffect, useState, type ReactElement } from "react";
+import { startTransition, useOptimistic, type ReactElement } from "react";
 import CartProductsList from "./CartProductsList";
 import OrderSummary from "./OrderSummary";
 import { ICart } from "@/models/Cart";
-import WorkerBuilder from "@/worker/workerBuilder";
-import getUserCartWorker from "@/worker/getUserCartWorker";
-import { BASE_URL } from "@/constanst";
+import useAppContext from "@/hooks/useAppContext";
+import { setCartAction } from "@/actions/setCartAction";
 
-export default function CartContent(): ReactElement {
-  const [optimisticCart, setOptimisticCart] = useState<ICart>({
-    userId: "",
-    products: [],
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export interface CartContentProps {
+  cart: ICart;
+}
 
-  useEffect(() => {
-    // Initialize worker and send the base URL
-    const worker = WorkerBuilder(getUserCartWorker);
-    worker.postMessage({ BASE_URL });
+export default function CartContent({ cart }: CartContentProps): ReactElement {
+  const [optimisticCart, setOptimisticCart] = useOptimistic(cart);
+  const { setTotalItems } = useAppContext();
 
-    worker.onmessage = (event) => {
-      const { success, result, error } = event.data;
-      if (success) {
-        console.log("Result:", result);
-        setOptimisticCart(result.cart);
-        setLoading(false); // Set loading to false when data is received
-      } else {
-        console.error("Failed to fetch products:", error);
-        setError(error || "Unknown error occurred");
-        setLoading(false); // Set loading to false even if there is an error
+  const deleteProductFromCart = async (productId: string) => {
+    setTotalItems((prev) => prev - 1);
+
+    // Optimistic update and side-effects should be handled in a separate function
+    startTransition(async () => {
+      try {
+        // Optimistically update cart state
+        setOptimisticCart((prev) => {
+          const updatedProducts = prev.products.filter(
+            (item) => item.productId !== productId
+          );
+
+          return {
+            userId: prev.userId,
+            products: updatedProducts,
+          };
+        });
+
+        // Perform server updates
+        const newCart = {
+          userId: optimisticCart.userId,
+          products: optimisticCart.products.filter(
+            (item) => item.productId !== productId
+          ),
+        };
+
+        await setCartAction(newCart);
+      } catch (error) {
+        console.error("Failed to delete product from cart", error);
       }
-    };
+    });
+  };
 
-    worker.onerror = (error) => {
-      console.error("Worker error:", error.message);
-      setError(error.message);
-      setLoading(false); // Set loading to false on worker error
-    };
-
-    // Cleanup worker on component unmount
-    return () => {
-      worker.terminate();
-    };
-  }, []);
-
-  // if (loading) {
-  //   return <div>Loading...</div>; // Show a loading state
-  // }
-  //
-  // if (error) {
-  //   return <div>Error: {error}</div>; // Show an error message
-  // }
-  //
-  // Render JSX if data is successfully fetched
   return (
     <div className="container mt-14 grid gap-navbar md:grid-cols-cart">
       <div className="w-full">
         <CartProductsList
+          deleteProductFromCart={deleteProductFromCart}
           setOptimisticCart={setOptimisticCart}
           optimisticCart={optimisticCart}
         />

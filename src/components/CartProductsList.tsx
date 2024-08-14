@@ -6,10 +6,12 @@ export default function CartProductsList({
   optimisticCart,
   className,
   setOptimisticCart,
+  deleteProductFromCart,
 }: {
   optimisticCart: ICart;
   setOptimisticCart: (action: ICart | ((pendingState: ICart) => ICart)) => void;
   className?: string;
+  deleteProductFromCart: (productId: string) => void;
 }) {
   const products = optimisticCart?.products;
 
@@ -27,7 +29,7 @@ export default function CartProductsList({
             productId={productId}
             price={price}
             imgUrl={imgUrl}
-            userId={optimisticCart.userId}
+            deleteProductFromCart={deleteProductFromCart}
           />
         ))
       ) : (
