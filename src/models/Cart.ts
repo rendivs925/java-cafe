@@ -8,6 +8,7 @@ export interface ICartProduct {
   price: number;
   imgUrl: string;
   weight: number;
+  profit: number;
 }
 
 // Define the TypeScript interface for the cart document
@@ -27,6 +28,7 @@ const CartSchema: Schema<ICart> = new Schema(
         title: { type: String, required: true },
         stock: { type: Number, required: true },
         price: { type: Number, required: true },
+        profit: { type: Number, required: true },
         weight: { type: Number, required: true },
         imgUrl: { type: String, required: true },
       },

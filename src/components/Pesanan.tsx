@@ -10,6 +10,7 @@ import { createOrderAction } from "@/actions/createOrderAction";
 import { ICart, ICartProduct } from "@/models/Cart";
 import { getMyOrderAction } from "@/actions/getMyOrderAction";
 import { UseFormReturn } from "react-hook-form";
+import { nanoid } from "nanoid";
 
 interface PesananProps {
   cart: ICart;
@@ -27,18 +28,20 @@ interface PesananProps {
 
 const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
   ({ cart, form }, ref) => {
-    const { formatToRupiah } = useAppContext();
+    const { formatToRupiah, user, detailPengiriman } = useAppContext();
     const [subHarga, setSubHarga] = useState(0);
     const { layanan } = form.watch();
     const ongkir = useDeferredValue(layanan);
+    const totalHarga = subHarga + Number(ongkir);
 
     const products = cart.products;
     const orderDetails = [
       { label: "Total item", value: products.length },
       { label: "Ongkir", value: Number(ongkir) },
       { label: "Total harga item", value: subHarga },
-      { label: "Total harga", value: subHarga + Number(ongkir) },
+      { label: "Total harga", value: totalHarga },
     ];
+    const orderId = nanoid();
 
     const cartProductsReducer = (
       accumulator: number,
@@ -56,12 +59,12 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
     }, [products]);
 
     useEffect(() => {
-      const midtransScriptUrl = process.env.MIDTRANS_URL as string;
+      const midtransScriptUrl = process.env.NEXT_PUBLIC_MIDTRANS_URL as string;
 
       let scriptTag = document.createElement("script");
       scriptTag.src = midtransScriptUrl;
 
-      const myMidtransClientKey = process.env.CLIENT_KEY as string;
+      const myMidtransClientKey = process.env.NEXT_PUBLIC_CLIENT_KEY as string;
       scriptTag.setAttribute("data-client-key", myMidtransClientKey);
 
       document.body.appendChild(scriptTag);
@@ -73,11 +76,11 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
 
     const handlePayment = async () => {
       const payload = {
-        email: "hardleberg@gmail.com",
-        firstName: "Rendi vir",
-        grossAmount: 120000,
-        orderId: "128821190100000",
-        phone: 6285733300369,
+        email: user.email,
+        firstName: user.username,
+        grossAmount: totalHarga,
+        orderId,
+        phone: Number(detailPengiriman.noHandphone),
       };
 
       if (ref && "current" in ref) {
@@ -92,20 +95,19 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         window.snap.pay(paymentResponse.token as string, {
           onSuccess: async (result) => {
             const createOrderResponse = await createOrderAction({
+              orderId,
               userId: cart.userId,
-              address: "Jalan Merdeka No 10",
-              phone: 123456789011,
-              subtotal: 120000,
-              payment: 150000,
-              shippingCost: 10000,
-              products: [
-                {
-                  productId: "66a72b9823bd0268c0920735",
-                  qty: 1,
-                  totalPrice: 150000,
-                  profit: 200000,
-                },
-              ],
+              address: detailPengiriman.alamatLengkap,
+              phone: Number(detailPengiriman.noHandphone),
+              subtotal: subHarga,
+              payment: totalHarga,
+              shippingCost: Number(ongkir),
+              products: cart.products.map((product) => ({
+                productId: product.productId,
+                qty: product.qty as number,
+                totalPrice: product.price * (product as { qty: number }).qty,
+                profit: product.profit * (product as { qty: number }).qty,
+              })),
             });
             console.log("Create Order Response: ", createOrderResponse);
           },

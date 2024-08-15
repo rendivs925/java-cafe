@@ -35,6 +35,7 @@ const ProductsList: React.FC<ProductsListProps> = ({ products }) => {
         stock={product.stock}
         description={product.description}
         imgUrl={product.imgUrl}
+        profit={product.profit}
         productId={product._id.toString() as string}
       />
     </CarouselItem>

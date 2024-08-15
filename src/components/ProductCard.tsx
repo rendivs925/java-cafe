@@ -23,8 +23,13 @@ function ProductCard({
   productId,
   stock,
   description,
+  profit,
   weight,
-}: Product & { productId: string; weight: number }): ReactElement {
+}: Product & {
+  productId: string;
+  weight: number;
+  profit: number;
+}): ReactElement {
   const { user, setTotalItems, formatNumber } = useAppContext();
   const [loading, setLoading] = useState(false);
 
@@ -36,6 +41,7 @@ function ProductCard({
         products: [
           {
             productId,
+            profit,
             title,
             imgUrl,
             price,
