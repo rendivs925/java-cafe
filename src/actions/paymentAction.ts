@@ -1,7 +1,8 @@
 "use server";
+import { BASE_URL } from "@/constanst";
 import midtransClient from "midtrans-client";
 
-interface paymentActionProps {
+interface PaymentActionProps {
   orderId: string | number;
   grossAmount: number;
   firstName: string;
@@ -19,12 +20,12 @@ export async function paymentAction({
   email,
   firstName,
   phone,
-}: paymentActionProps): Promise<{
+}: PaymentActionProps): Promise<{
   status: string;
   message: string;
   token?: string;
   dataPayment?: {
-    midtransResponse: string;
+    midtransResponse: any;
   };
 }> {
   try {
@@ -35,14 +36,17 @@ export async function paymentAction({
     });
 
     const parameter = {
-      transaction_details: { order_id: orderId, gross_amount: grossAmount },
+      transaction_details: {
+        order_id: orderId,
+        gross_amount: grossAmount,
+      },
       customer_details: {
         first_name: firstName,
         email,
         phone,
       },
       callback: {
-        finish: `${process.env.DOMAIN}`,
+        finish: `${BASE_URL}/confirmation`,
       },
       enabled_payments: [
         "mandiri_clicpay",

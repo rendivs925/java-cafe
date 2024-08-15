@@ -1,4 +1,9 @@
-import React, { useDeferredValue, useEffect, useState } from "react";
+import React, {
+  useDeferredValue,
+  useEffect,
+  useState,
+  ForwardedRef,
+} from "react";
 import CardContainer from "./CardContainer";
 import { Button } from "./ui/button";
 import { CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
@@ -11,6 +16,7 @@ import { ICart, ICartProduct } from "@/models/Cart";
 import { getMyOrderAction } from "@/actions/getMyOrderAction";
 import { UseFormReturn } from "react-hook-form";
 import { nanoid } from "nanoid";
+import { toast } from "./ui/use-toast";
 
 interface PesananProps {
   cart: ICart;
@@ -27,7 +33,7 @@ interface PesananProps {
 }
 
 const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
-  ({ cart, form }, ref) => {
+  ({ cart, form }, ref: ForwardedRef<HTMLFormElement>) => {
     const { formatToRupiah, user, detailPengiriman } = useAppContext();
     const [subHarga, setSubHarga] = useState(0);
     const { layanan } = form.watch();
@@ -83,11 +89,10 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         phone: Number(detailPengiriman.noHandphone),
       };
 
-      if (ref && "current" in ref) {
+      if (ref && "current" in ref && ref.current) {
         ref.current?.requestSubmit();
       }
 
-      // Uncomment these lines if you need to perform the actual actions
       const paymentResponse = await paymentAction(payload);
       console.log("Payment response: ", paymentResponse);
 
@@ -102,6 +107,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
               subtotal: subHarga,
               payment: totalHarga,
               shippingCost: Number(ongkir),
+              paymentStatus: result.transaction_status,
               products: cart.products.map((product) => ({
                 productId: product.productId,
                 qty: product.qty as number,
@@ -111,11 +117,37 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
             });
             console.log("Create Order Response: ", createOrderResponse);
           },
+          onPending: async (result) => {
+            const createOrderResponse = await createOrderAction({
+              orderId,
+              userId: cart.userId,
+              address: detailPengiriman.alamatLengkap,
+              phone: Number(detailPengiriman.noHandphone),
+              subtotal: subHarga,
+              payment: totalHarga,
+              shippingCost: Number(ongkir),
+              paymentStatus: result.transaction_status,
+              products: cart.products.map((product) => ({
+                productId: product.productId,
+                qty: product.qty as number,
+                totalPrice: product.price * (product as { qty: number }).qty,
+                profit: product.profit * (product as { qty: number }).qty,
+              })),
+            });
+            console.log("Create Order Response: ", createOrderResponse);
+          },
+          onError: (error) => {
+            toast({ description: error.message });
+          },
+          onClose: () => {
+            toast({ description: "Segera lakukan pembayaran." });
+          },
         });
       } else {
         console.error("Snap.js is not loaded or pay function is unavailable.");
       }
 
+      // Uncomment these lines if you need to perform the actual actions
       // const orderStatusResponse = await getOrderStatusAction({ orderId: payload.orderId });
       // console.log("Order Status:", orderStatusResponse);
 
