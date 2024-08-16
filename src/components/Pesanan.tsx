@@ -17,6 +17,7 @@ import { getMyOrderAction } from "@/actions/getMyOrderAction";
 import { UseFormReturn } from "react-hook-form";
 import { nanoid } from "nanoid";
 import { toast } from "./ui/use-toast";
+import { BASE_URL } from "@/constanst";
 
 interface PesananProps {
   cart: ICart;
@@ -34,7 +35,8 @@ interface PesananProps {
 
 const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
   ({ cart, form }, ref: ForwardedRef<HTMLFormElement>) => {
-    const { formatToRupiah, user, detailPengiriman } = useAppContext();
+    const { formatToRupiah, pushRoute, user, detailPengiriman } =
+      useAppContext();
     const [subHarga, setSubHarga] = useState(0);
     const { layanan } = form.watch();
     const ongkir = useDeferredValue(layanan);
@@ -100,7 +102,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         window.snap.pay(paymentResponse.token as string, {
           onSuccess: async (result) => {
             const createOrderResponse = await createOrderAction({
-              orderId,
+              orderId: result.order_id,
               userId: cart.userId,
               address: detailPengiriman.alamatLengkap,
               phone: Number(detailPengiriman.noHandphone),
@@ -116,6 +118,9 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
               })),
             });
             console.log("Create Order Response: ", createOrderResponse);
+            pushRoute(
+              `${BASE_URL}/confirmation?orderId=${orderId}&status=${createOrderResponse.status}&transaction_status=${result.transaction_status}`
+            );
           },
           onPending: async (result) => {
             const createOrderResponse = await createOrderAction({

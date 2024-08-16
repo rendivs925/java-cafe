@@ -1,18 +1,34 @@
 import { type ReactElement } from "react";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function ConfirmationPage(): ReactElement {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-        <h1 className="text-2xl font-bold mb-4">Payment Successful!</h1>
-        <p className="mb-6">
-          Thank you for your purchase. Your order is being processed.
-        </p>
-        <Link href="/">
-          <a className="text-blue-500 hover:underline">Go back to Home</a>
-        </Link>
-      </div>
+    <div className="flex items-center justify-center min-h-screen bg-secondary">
+      <Card className="">
+        <CardHeader>
+          <CardTitle className="">Payment Successful!</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="m-0">
+            Thank you for your purchase. Your order is being processed.
+          </p>
+        </CardContent>
+        <CardFooter>
+          <Link
+            className="text-primary hover:after:hidden hover:underline"
+            href="/"
+          >
+            Go back to Home
+          </Link>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
