@@ -51,7 +51,7 @@ function ProductCard({
         ],
       });
 
-      setTotalItems(data?.totalItems as number);
+      setTotalItems((data?.totalItems as number) || 1);
 
       if (data?.status === "success") {
         toast({ description: data.message });

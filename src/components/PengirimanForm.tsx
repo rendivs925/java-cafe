@@ -69,15 +69,17 @@ const PengirimanForm = forwardRef<
     try {
       const result = await fetchCitiesAction({ province });
       if (result.status === "success" && result.response) {
-        const filteredCities = result.response.filter(
-          (city) => city.type.toLowerCase() !== "kota"
-        );
+        const cities = result.response;
 
         setKotaOptions(
-          filteredCities.map(
-            (city: { city_id: string; city_name: string }) => ({
+          cities.map(
+            (city: { city_id: string; type: string; city_name: string }) => ({
               value: city.city_id,
-              label: city.city_name,
+              label: `${
+                city.type.charAt(0).toUpperCase() + city.type.slice(1)
+              } - ${
+                city.city_name.charAt(0).toUpperCase() + city.city_name.slice(1)
+              }`,
             })
           )
         );

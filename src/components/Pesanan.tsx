@@ -18,6 +18,7 @@ import { UseFormReturn } from "react-hook-form";
 import { nanoid } from "nanoid";
 import { toast } from "./ui/use-toast";
 import { BASE_URL } from "@/constanst";
+import { deleteCartAction } from "@/actions/deleteCartAction";
 
 interface PesananProps {
   cart: ICart;
@@ -35,7 +36,7 @@ interface PesananProps {
 
 const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
   ({ cart, form }, ref: ForwardedRef<HTMLFormElement>) => {
-    const { formatToRupiah, pushRoute, user, detailPengiriman } =
+    const { formatToRupiah, pushRoute, setTotalItems, user, detailPengiriman } =
       useAppContext();
     const [subHarga, setSubHarga] = useState(0);
     const { layanan } = form.watch();
@@ -98,10 +99,13 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       const paymentResponse = await paymentAction(payload);
       console.log("Payment response: ", paymentResponse);
 
+      const token = paymentResponse.token as string;
+
       if (window.snap && typeof window.snap.pay === "function") {
-        window.snap.pay(paymentResponse.token as string, {
+        window.snap.pay(token, {
           onSuccess: async (result) => {
             const createOrderResponse = await createOrderAction({
+              token,
               orderId: result.order_id,
               userId: cart.userId,
               address: detailPengiriman.alamatLengkap,
@@ -117,13 +121,15 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
                 profit: product.profit * (product as { qty: number }).qty,
               })),
             });
+            setTotalItems(0);
             console.log("Create Order Response: ", createOrderResponse);
-            pushRoute(
-              `${BASE_URL}/confirmation?orderId=${orderId}&status=${createOrderResponse.status}&transaction_status=${result.transaction_status}`
-            );
+            await deleteCartAction();
           },
           onPending: async (result) => {
+            console.log(result);
+
             const createOrderResponse = await createOrderAction({
+              token,
               orderId,
               userId: cart.userId,
               address: detailPengiriman.alamatLengkap,
@@ -151,10 +157,6 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       } else {
         console.error("Snap.js is not loaded or pay function is unavailable.");
       }
-
-      // Uncomment these lines if you need to perform the actual actions
-      // const orderStatusResponse = await getOrderStatusAction({ orderId: payload.orderId });
-      // console.log("Order Status:", orderStatusResponse);
 
       // const myOrderResponse = await getMyOrderAction();
       // console.log("My order:", myOrderResponse?.order);

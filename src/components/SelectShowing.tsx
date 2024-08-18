@@ -11,21 +11,10 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 const selectShowingItems = [
-  {
-    value: 1,
-  },
-  {
-    value: 2,
-  },
-  {
-    value: 3,
-  },
-  {
-    value: 4,
-  },
-  {
-    value: 5,
-  },
+  { value: 5 },
+  { value: 10 },
+  { value: 20 },
+  { value: 30 },
 ];
 
 export default function SelectShowing(): ReactElement {
@@ -63,7 +52,7 @@ export default function SelectShowing(): ReactElement {
           <SelectContent>
             {selectShowingItems.map(({ value }, index) => (
               <SelectItem key={index} value={`${value}`}>
-                {value}
+                {value + " Items"}
               </SelectItem>
             ))}
           </SelectContent>

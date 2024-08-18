@@ -40,8 +40,6 @@ export async function calculateShippingAction(
 ): Promise<ShippingResponse> {
   const { origin, destination, weight, courier } = data;
 
-  console.log("weight:", weight);
-
   try {
     const response = await axios.post(
       "https://api.rajaongkir.com/starter/cost",
@@ -58,11 +56,6 @@ export async function calculateShippingAction(
         },
       }
     );
-
-    console.dir(response.data.rajaongkir, {
-      depth: null,
-      colors: true,
-    });
 
     return {
       status: "success",

@@ -2,7 +2,6 @@
 import Order, { IOrder } from "@/models/Order";
 
 export async function createOrderAction(data: IOrder) {
-  console.log(data);
   try {
     await Order.create(JSON.parse(JSON.stringify(data)));
 
