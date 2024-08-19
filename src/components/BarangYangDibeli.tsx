@@ -11,11 +11,11 @@ export default function BarangYangDibeli({
   cart,
 }: BarangYangDibeliProps): ReactElement {
   return (
-    <div className="mt-14">
+    <div className="mt-12">
       <Line />
       <h2 className="my-6">Barang Yang di Beli</h2>
       <Line />
-      <ul className="mt-14 flex flex-wrap gap-12 w-max">
+      <ul className="mt-12 flex flex-wrap gap-12 w-max">
         {cart.products.map(
           ({ productId, title, imgUrl, price, qty, stock }, index) => (
             <BarangYangDibeliCard

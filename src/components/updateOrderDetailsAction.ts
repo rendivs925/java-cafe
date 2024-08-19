@@ -23,30 +23,25 @@ export async function updateOrderDetailsAction({
     console.log(response);
 
     // Update the order with the provided fields
-    const updatedOrder = await Order.findOneAndUpdate(
+    const updateResult = await Order.updateOne(
       { orderId },
-      { $set: { paymentStatus: response.transaction_status } },
-      { new: true } // Return the updated document
-    ).lean();
+      { $set: { paymentStatus: response.transaction_status } }
+    );
 
-    if (!updatedOrder) {
-      console.log("Order not found or no fields to update.");
-
-      // No documents were updated
+    if (updateResult.modifiedCount === 0) {
       return {
         status: "error",
         message: "Order not found or no fields to update.",
       };
     }
 
-    console.log(updatedOrder);
+    console.log(updateResult);
 
     revalidateTag("/");
 
     return {
       status: "success",
       message: "Order details successfully updated.",
-      token: updatedOrder.token,
     };
   } catch (error) {
     console.log("Error:", error);

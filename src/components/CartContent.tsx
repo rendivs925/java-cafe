@@ -48,7 +48,7 @@ export default function CartContent({ cart }: CartContentProps): ReactElement {
   };
 
   return (
-    <div className="container mt-14 grid gap-navbar md:grid-cols-cart">
+    <div className="grid gap-navbar md:grid-cols-cart">
       <div className="w-full">
         <CartProductsList
           deleteProductFromCart={deleteProductFromCart}

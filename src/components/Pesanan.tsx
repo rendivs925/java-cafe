@@ -34,6 +34,15 @@ interface PesananProps {
   >;
 }
 
+export interface ISnap {
+  pay: (token: string, options: any) => void;
+}
+
+export interface ISnapResult {
+  order_id: string;
+  transaction_status: string;
+}
+
 const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
   ({ cart, form }, ref: ForwardedRef<HTMLFormElement>) => {
     const { formatToRupiah, pushRoute, setTotalItems, user, detailPengiriman } =
@@ -101,9 +110,14 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
 
       const token = paymentResponse.token as string;
 
-      if (window.snap && typeof window.snap.pay === "function") {
-        window.snap.pay(token, {
-          onSuccess: async (result) => {
+      if (
+        "snap" in window &&
+        window.snap &&
+        typeof (window.snap as ISnap).pay === "function" &&
+        (window.snap as ISnap).pay
+      ) {
+        (window.snap as ISnap).pay(token, {
+          onSuccess: async (result: ISnapResult) => {
             const createOrderResponse = await createOrderAction({
               token,
               orderId: result.order_id,
@@ -125,7 +139,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
             console.log("Create Order Response: ", createOrderResponse);
             await deleteCartAction();
           },
-          onPending: async (result) => {
+          onPending: async (result: ISnapResult) => {
             console.log(result);
 
             const createOrderResponse = await createOrderAction({
@@ -145,9 +159,15 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
                 profit: product.profit * (product as { qty: number }).qty,
               })),
             });
+
+            setTotalItems(0);
+
+            await deleteCartAction();
+
             console.log("Create Order Response: ", createOrderResponse);
+            pushRoute("/account/orders");
           },
-          onError: (error) => {
+          onError: (error: { message: string }) => {
             toast({ description: error.message });
           },
           onClose: () => {

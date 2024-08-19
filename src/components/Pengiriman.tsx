@@ -26,7 +26,7 @@ export default function Pengiriman(): ReactElement {
   const { form, handleFormAction, isPending } = usePengiriman();
 
   return (
-    <CardContainer className="max-w-[700px] mt-14 me-auto ms-auto bg-background">
+    <CardContainer className="max-w-[700px] mt-12 me-auto ms-auto bg-background">
       <CardHeader>
         <CardTitle>Detail alamat pengiriman</CardTitle>
       </CardHeader>

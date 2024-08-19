@@ -12,11 +12,12 @@ import PaginationControls from "@/components/PaginationControls";
 import BaseContainer from "@/components/BaseContainer";
 import BaseContent from "@/components/BaseContent";
 import { getUserOrdersAction } from "@/actions/getUserOrdersAction";
-import { MessageSquareText, RefreshCcw } from "lucide-react";
+import { MessageSquareText, RefreshCcw, ShoppingBag } from "lucide-react";
 import BaseHeader from "@/components/BaseHeader";
 import SelectShowing from "@/components/SelectShowing";
 import { getOrderStatusAction } from "@/actions/getOrderStatusAction";
 import SyncOrderStatusButton from "@/components/SyncOrderStatusButton";
+import PayPendingOrderButton from "@/components/PayPendingOrderButton";
 
 export default async function Orders({
   searchParams,
@@ -39,11 +40,12 @@ export default async function Orders({
       <BaseHeader title="Pesanan Anda" className="flex justify-between">
         <SelectShowing />
       </BaseHeader>
-      <BaseContent>
+      <BaseContent className="bg-background p-6 rounded-lg">
         <Table className="overflow-y-hidden">
           <TableHeader>
             <TableRow>
               <TableHead>Order ID</TableHead>
+              <TableHead className="text-center">Detail</TableHead>
               <TableHead>Bill</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Status</TableHead>
@@ -72,23 +74,28 @@ export default async function Orders({
               }) => (
                 <TableRow key={orderId}>
                   <TableCell className="">{orderId}</TableCell>
+                  <TableCell className="text-center">
+                    <Button size="icon" variant="ghost">
+                      <ShoppingBag size={24} />
+                    </Button>
+                  </TableCell>
                   <TableCell>{payment}</TableCell>
                   <TableCellFormattedDate createdAt={createdAt} />
                   <TableCell>{paymentStatus}</TableCell>
                   <TableCell>{orderStatus}</TableCell>
                   <TableCell>{shippingCost}</TableCell>
                   <TableCell className="text-center">{resi || "-"}</TableCell>
-                  <TableCell className="text-right">
-                    <SyncOrderStatusButton orderId={orderId} />
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="bg-transparent"
-                    >
-                      <MessageSquareText
-                        size={24}
-                        className="text-foreground text-lg"
-                      />
+                  <TableCell className="text-right flex items-center justify-end">
+                    <PayPendingOrderButton
+                      disabled={paymentStatus === "settlement"}
+                      orderId={orderId}
+                    />
+                    <SyncOrderStatusButton
+                      orderId={orderId}
+                      disabled={paymentStatus === "settlement"}
+                    />
+                    <Button size="sm" variant="ghost">
+                      <MessageSquareText />
                     </Button>
                   </TableCell>
                 </TableRow>

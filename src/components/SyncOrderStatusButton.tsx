@@ -3,41 +3,25 @@ import { type ReactElement } from "react";
 import { Button } from "./ui/button";
 import { RefreshCcw } from "lucide-react";
 import { updateOrderDetailsAction } from "./updateOrderDetailsAction";
+import { toast } from "./ui/use-toast";
 
 export interface SyncOrderStatusButtonProps {
   orderId: string;
+  disabled: boolean;
 }
 
 export default function SyncOrderStatusButton({
   orderId,
+  disabled,
 }: SyncOrderStatusButtonProps): ReactElement {
   const handleSyncOrder = async () => {
-    const orderStatusResponse = await updateOrderDetailsAction({
-      orderId,
-    });
-
-    console.log(orderStatusResponse);
-
-    if (!orderStatusResponse.token) return;
-
-    window.snap.pay(orderStatusResponse.token, {
-      onSuccess: function (result) {
-        console.log("success");
-        console.log(result);
-      },
-      onPending: function (result) {
-        console.log("pending");
-        console.log(result);
-      },
-      onError: function (result) {
-        console.log("error");
-        console.log(result);
-      },
-      onClose: function () {
-        console.log("customer closed the popup without finishing the payment");
-      },
-    });
-    console.log("Order Status:", orderStatusResponse);
+    try {
+      await updateOrderDetailsAction({ orderId });
+    } catch (error) {
+      toast({
+        description: `An error occurred while syncing the order: ${error}`,
+      });
+    }
   };
 
   return (
@@ -45,6 +29,7 @@ export default function SyncOrderStatusButton({
       size="sm"
       variant="ghost"
       className="bg-transparent"
+      disabled={disabled}
       onClick={handleSyncOrder}
     >
       <RefreshCcw

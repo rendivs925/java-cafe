@@ -16,7 +16,7 @@ export default function CartProductsList({
   const products = optimisticCart?.products;
 
   return (
-    <ul className={`flex flex-col gap-12 ${className}`}>
+    <ul className={`flex flex-col gap-6 ${className}`}>
       {products?.length !== 0 ? (
         products?.map(({ title, productId, stock, price, imgUrl, qty }) => (
           <CartProductCard
