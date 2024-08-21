@@ -32,7 +32,12 @@ export default function OrderSummaryButton({
       {loading ? (
         <LoadingButton className="w-fit">Processing...</LoadingButton>
       ) : (
-        <Button size="default" variant="default" onClick={handleCheckout}>
+        <Button
+          size="default"
+          disabled={isDisabled}
+          variant="default"
+          onClick={handleCheckout}
+        >
           Checkout
         </Button>
       )}

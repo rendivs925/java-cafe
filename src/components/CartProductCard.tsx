@@ -79,7 +79,7 @@ function CartProductCard({
           />
         </div>
         <div className="detail space-y-1.5">
-          <CardTitle className="title">{title}</CardTitle>
+          <h3 className="title mt-0 text-xl">{title}</h3>
           <p className="stock">Stok : {stock}</p>
         </div>
         <CartProductPrice price={price} qty={qty} />

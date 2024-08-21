@@ -1,9 +1,10 @@
 "use client";
 import { CartProduct } from "@/types";
 import { type ReactElement } from "react";
-import { Card, CardTitle } from "./ui/card";
+import { Card } from "./ui/card";
 import Image from "next/image";
 import useAppContext from "@/hooks/useAppContext";
+import { formatToRupiah } from "@/lib/formatToRupiah";
 
 export default function BarangYangDibeliCard({
   title,
@@ -16,24 +17,29 @@ export default function BarangYangDibeliCard({
   const { formatNumber } = useAppContext();
 
   return (
-    <li>
-      <Card className="bg-transparent overflow-visible shadow-none">
-        <div className="rounded-lg h-[180px] overflow-hidden mb-4">
+    <li className="p-6 bg-white rounded-lg shadow">
+      <Card className="flex items-center space-x-4 bg-transparent shadow-none">
+        <div className="relative w-[60px] h-[60px] rounded-lg overflow-hidden">
           <Image
             src={imgUrl}
-            width={180}
-            height={180}
+            layout="fill"
+            objectFit="cover"
             loading="eager"
             alt={title}
-            objectFit="cover"
             className="rounded-lg"
           />
         </div>
-        <div className="space-y-1.5">
-          <CardTitle className="">{title}</CardTitle>
-          <p>QTY : {qty}</p>
+        <div className="flex-1 flex flex-col justify-between">
+          <div>
+            <h4 className="text-lg font-bold text-gray-800 mb-1">
+              {title} (x{qty})
+            </h4>
+            {/* <p className="text-sm text-gray-600 mt-0">x{qty}</p> */}
+          </div>
+          <p className="text-sm font-normal text-primary mt-0">
+            {formatToRupiah(String(price * qty))}
+          </p>
         </div>
-        <h4 className="font-medium mt-4">IDR {formatNumber(price * qty)}</h4>
       </Card>
     </li>
   );

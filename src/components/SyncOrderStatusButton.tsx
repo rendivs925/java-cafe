@@ -17,9 +17,14 @@ export default function SyncOrderStatusButton({
   const handleSyncOrder = async () => {
     try {
       await updateOrderDetailsAction({ orderId });
+      toast({
+        description: "Order synced successfully.",
+      });
     } catch (error) {
       toast({
-        description: `An error occurred while syncing the order: ${error}`,
+        description: `Failed to sync order: ${
+          (error as { message: string }).message || error
+        }`,
       });
     }
   };

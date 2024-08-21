@@ -9,15 +9,31 @@ import {
 import TableCellFormattedDate from "@/components/TableCellFormattedDate";
 import { Button } from "@/components/ui/button";
 import PaginationControls from "@/components/PaginationControls";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import BaseContainer from "@/components/BaseContainer";
 import BaseContent from "@/components/BaseContent";
 import { getUserOrdersAction } from "@/actions/getUserOrdersAction";
 import { MessageSquareText, RefreshCcw, ShoppingBag } from "lucide-react";
 import BaseHeader from "@/components/BaseHeader";
 import SelectShowing from "@/components/SelectShowing";
-import { getOrderStatusAction } from "@/actions/getOrderStatusAction";
 import SyncOrderStatusButton from "@/components/SyncOrderStatusButton";
 import PayPendingOrderButton from "@/components/PayPendingOrderButton";
+import { formatToRupiah } from "@/lib/formatToRupiah";
+import {
+  getPaymentStatusClass,
+  getStatusClass,
+} from "@/lib/getPaymentStatusClass";
+import { getShipmentStatusClass } from "@/lib/getShipmentStatusClass";
 
 export default async function Orders({
   searchParams,
@@ -75,15 +91,71 @@ export default async function Orders({
                 <TableRow key={orderId}>
                   <TableCell className="">{orderId}</TableCell>
                   <TableCell className="text-center">
-                    <Button size="icon" variant="ghost">
-                      <ShoppingBag size={24} />
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <span className="text-green-500">
+                          <ShoppingBag size={24} />
+                        </span>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle className="flex justify-between items-center">
+                            Detail Pesanan{" "}
+                            <AlertDialogAction className="w-min p-0 h-min hover:bg-transparent bg-transparent text-muted-foreground">
+                              X
+                            </AlertDialogAction>
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            <ul className="space-y-2">
+                              {products.map((product) => (
+                                <li
+                                  key={product.productId}
+                                  className="flex items-center justify-between py-2 bg-background rounded-lg"
+                                >
+                                  <div className="flex items-center">
+                                    <img
+                                      src={product.imgUrl}
+                                      alt={product.title}
+                                      className="w-12 h-12 rounded-lg mr-4"
+                                    />
+                                    <span className="font-medium">
+                                      {product.title}
+                                    </span>
+                                  </div>
+                                  <span className="text-sm font-semibold text-secondary-foreground">
+                                    x{product.qty}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
-                  <TableCell>{payment}</TableCell>
+                  <TableCell>{formatToRupiah(String(payment))}</TableCell>
                   <TableCellFormattedDate createdAt={createdAt} />
-                  <TableCell>{paymentStatus}</TableCell>
-                  <TableCell>{orderStatus}</TableCell>
-                  <TableCell>{shippingCost}</TableCell>
+                  <TableCell>
+                    <p
+                      className={`${getPaymentStatusClass(
+                        paymentStatus as "settlement" | "pending" | "expired"
+                      )} m-0 text-center`}
+                    >
+                      {paymentStatus}
+                    </p>
+                  </TableCell>
+                  <TableCell>
+                    {
+                      <p
+                        className={`${getShipmentStatusClass(
+                          orderStatus as "processing" | "shipped" | "delivered"
+                        )} m-0 text-center`}
+                      >
+                        {orderStatus}
+                      </p>
+                    }
+                  </TableCell>
+                  <TableCell>{formatToRupiah(String(shippingCost))}</TableCell>
                   <TableCell className="text-center">{resi || "-"}</TableCell>
                   <TableCell className="text-right flex items-center justify-end">
                     <PayPendingOrderButton

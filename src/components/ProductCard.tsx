@@ -14,6 +14,7 @@ import useAppContext from "@/hooks/useAppContext";
 import { addProductToCartAction } from "@/actions/addProductToCartAction";
 import { Product } from "@/types";
 import { toast } from "./ui/use-toast";
+import LoadingButton from "./LoadingButton";
 
 function ProductCard({
   title,
@@ -82,14 +83,13 @@ function ProductCard({
         <p className="line-clamp-2">{description}</p>
         <div className="flex mt-12 justify-between items-end overflow-hidden">
           <h3 className="price">IDR {formatNumber(price)}</h3>
-          <Button
-            variant="default"
-            size="sm"
-            onClick={addProductToCart}
-            disabled={loading} // Disable button when loading
-          >
-            {loading ? "Adding..." : "Add To Cart"} {/* Show loading text */}
-          </Button>
+          {loading ? (
+            <LoadingButton className="w-fit">Adding...</LoadingButton>
+          ) : (
+            <Button variant="default" size="sm" onClick={addProductToCart}>
+              Add to Cart
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

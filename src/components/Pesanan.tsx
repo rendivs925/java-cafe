@@ -10,14 +10,11 @@ import { CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import Line from "./Line";
 import useAppContext from "@/hooks/useAppContext";
 import { paymentAction } from "@/actions/paymentAction";
-import { getOrderStatusAction } from "@/actions/getOrderStatusAction";
 import { createOrderAction } from "@/actions/createOrderAction";
 import { ICart, ICartProduct } from "@/models/Cart";
-import { getMyOrderAction } from "@/actions/getMyOrderAction";
 import { UseFormReturn } from "react-hook-form";
 import { nanoid } from "nanoid";
 import { toast } from "./ui/use-toast";
-import { BASE_URL } from "@/constanst";
 import { deleteCartAction } from "@/actions/deleteCartAction";
 
 interface PesananProps {
@@ -129,6 +126,8 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
               shippingCost: Number(ongkir),
               paymentStatus: result.transaction_status,
               products: cart.products.map((product) => ({
+                imgUrl: product.imgUrl,
+                title: product.title,
                 productId: product.productId,
                 qty: product.qty as number,
                 totalPrice: product.price * (product as { qty: number }).qty,
@@ -153,6 +152,8 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
               shippingCost: Number(ongkir),
               paymentStatus: result.transaction_status,
               products: cart.products.map((product) => ({
+                imgUrl: product.imgUrl,
+                title: product.title,
                 productId: product.productId,
                 qty: product.qty as number,
                 totalPrice: product.price * (product as { qty: number }).qty,
@@ -177,9 +178,6 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       } else {
         console.error("Snap.js is not loaded or pay function is unavailable.");
       }
-
-      // const myOrderResponse = await getMyOrderAction();
-      // console.log("My order:", myOrderResponse?.order);
     };
 
     return (

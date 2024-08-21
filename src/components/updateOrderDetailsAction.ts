@@ -25,8 +25,10 @@ export async function updateOrderDetailsAction({
     // Update the order with the provided fields
     const updateResult = await Order.updateOne(
       { orderId },
-      { $set: { paymentStatus: response.transaction_status } }
+      { paymentStatus: response.transaction_status }
     );
+
+    console.log("UpdatedResult:", updateResult);
 
     if (updateResult.modifiedCount === 0) {
       return {
