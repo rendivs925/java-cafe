@@ -11,12 +11,19 @@ export const PengirimanSchema = z.object({
   kurir: z.string({
     required_error: "Kurir is required.",
   }),
-  layanan: z
-    .string()
-    .min(1, "Please select a service.")
-    .refine((value) => value !== "0", {
-      message: "Please select a valid service.",
-    }),
+  layanan: z.object({
+    name: z
+      .string()
+      .min(1, "Please select a service.")
+      .refine((value) => value !== "0", {
+        message: "Please select a valid service.",
+      }),
+    cost: z
+      .number({
+        required_error: "Cost is required.",
+      })
+      .min(1, "Cost must be a positive number."),
+  }),
 });
 
 export type PengirimanType = z.infer<typeof PengirimanSchema>;

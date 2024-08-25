@@ -23,7 +23,10 @@ interface PesananProps {
     {
       kota: string;
       kurir: string;
-      layanan: string;
+      layanan: {
+        name: string;
+        cost: number;
+      };
       provinsi: string;
     },
     any,
@@ -46,7 +49,21 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       useAppContext();
     const [subHarga, setSubHarga] = useState(0);
     const { layanan } = form.watch();
-    const ongkir = useDeferredValue(layanan);
+    // Check if layanan is valid JSON before parsing
+    let parsedLayanan = {
+      cost: 0,
+      name: "",
+    };
+
+    try {
+      if (layanan) {
+        parsedLayanan = JSON.parse(layanan as unknown as string);
+      }
+    } catch (e) {
+      parsedLayanan = layanan;
+    }
+
+    const ongkir = useDeferredValue(parsedLayanan?.cost || 0);
     const totalHarga = subHarga + Number(ongkir);
 
     const products = cart.products;
@@ -118,10 +135,15 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
             const createOrderResponse = await createOrderAction({
               token,
               orderId: result.order_id,
-              userId: cart.userId,
+              user: {
+                userId: user._id,
+                username: user.username,
+                email: user.email,
+              },
               address: detailPengiriman.alamatLengkap,
               phone: Number(detailPengiriman.noHandphone),
               subtotal: subHarga,
+              layanan: parsedLayanan,
               payment: totalHarga,
               shippingCost: Number(ongkir),
               paymentStatus: result.transaction_status,
@@ -144,7 +166,12 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
             const createOrderResponse = await createOrderAction({
               token,
               orderId,
-              userId: cart.userId,
+              user: {
+                userId: user._id,
+                username: user.username,
+                email: user.email,
+              },
+              layanan: parsedLayanan,
               address: detailPengiriman.alamatLengkap,
               phone: Number(detailPengiriman.noHandphone),
               subtotal: subHarga,
@@ -192,7 +219,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
               <label
                 key={index}
                 className={`grid grid-cols-detail sm:grid-cols-sm-detail ${
-                  ongkir === "" && detail.label === "Ongkir" && "hidden"
+                  ongkir === 0 && detail.label === "Ongkir" && "hidden"
                 }`}
               >
                 <span className="text-muted-foreground">{detail.label}</span>
@@ -209,7 +236,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         <Line />
         <CardFooter className="pt-6 px-0">
           <Button
-            disabled={ongkir === "" ? true : false}
+            disabled={ongkir === 0}
             size="default"
             onClick={handlePayment}
           >

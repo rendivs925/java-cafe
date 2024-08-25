@@ -10,16 +10,26 @@ interface IOrderProduct {
   profit: number;
 }
 
+interface IUser {
+  userId: string;
+  username: string;
+  email: string;
+}
+
 // Define the TypeScript interface for the order document
 export interface IOrder {
   token: string;
   orderId: string;
-  userId: string;
+  user: IUser;
   address: string;
   phone: number;
   subtotal: number;
   payment: number;
   shippingCost: number;
+  layanan: {
+    name: string;
+    cost: number;
+  };
   paymentStatus?: string;
   orderStatus?: string;
   resi?: string;
@@ -30,9 +40,17 @@ export interface IOrder {
 const OrderSchema: Schema<IOrder> = new Schema(
   {
     token: { type: String, required: true },
-    userId: { type: String, required: true },
+    user: {
+      userId: { type: String, required: true },
+      username: { type: String, required: true },
+      email: { type: String, required: true },
+    },
     orderId: { type: String, required: true },
     address: { type: String, required: true },
+    layanan: {
+      name: { type: String, required: true },
+      cost: { type: Number, required: true },
+    },
     phone: { type: Number, required: true },
     subtotal: { type: Number, required: true },
     payment: { type: Number, required: true },

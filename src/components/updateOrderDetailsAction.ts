@@ -1,6 +1,8 @@
 "use server";
+import { connectToDatabase } from "@/lib/dbConnect";
 import Order from "@/models/Order";
 import midtransClient from "midtrans-client";
+import { ClientSession } from "mongoose";
 import { revalidateTag } from "next/cache";
 
 interface UpdateOrderDetailsActionProps {
@@ -10,6 +12,9 @@ interface UpdateOrderDetailsActionProps {
 export async function updateOrderDetailsAction({
   orderId,
 }: UpdateOrderDetailsActionProps) {
+  const session: ClientSession = await connectToDatabase();
+  session.startTransaction();
+
   try {
     const snap = new midtransClient.Snap({
       isProduction: false,
@@ -25,21 +30,23 @@ export async function updateOrderDetailsAction({
     // Update the order with the provided fields
     const updateResult = await Order.updateOne(
       { orderId },
-      { paymentStatus: response.transaction_status }
+      { $set: { paymentStatus: response.transaction_status } }
     );
 
     console.log("UpdatedResult:", updateResult);
 
     if (updateResult.modifiedCount === 0) {
+      await session.abortTransaction();
+
       return {
         status: "error",
         message: "Order not found or no fields to update.",
       };
     }
 
-    console.log(updateResult);
-
     revalidateTag("/");
+
+    await session.commitTransaction();
 
     return {
       status: "success",
@@ -47,6 +54,8 @@ export async function updateOrderDetailsAction({
     };
   } catch (error) {
     console.log("Error:", error);
+
+    await session.abortTransaction();
 
     return {
       status: "error",

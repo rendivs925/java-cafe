@@ -57,6 +57,11 @@ export async function calculateShippingAction(
       }
     );
 
+    console.dir(response.data.rajaongkir.results, {
+      depth: null,
+      colors: true,
+    });
+
     return {
       status: "success",
       response: response.data.rajaongkir.results,

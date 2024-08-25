@@ -11,7 +11,12 @@ import { ICart, ICartProduct } from "@/models/Cart";
 
 // Define a type alias for option objects
 export type Option = {
-  value: string;
+  value:
+    | {
+        name: string;
+        cost: number;
+      }
+    | string;
   label: string;
 };
 
@@ -20,7 +25,15 @@ const PengirimanForm = forwardRef<
   {
     cart: ICart;
     form: UseFormReturn<
-      { kota: string; kurir: string; layanan: string; provinsi: string },
+      {
+        kota: string;
+        kurir: string;
+        layanan: {
+          name: string;
+          cost: number;
+        };
+        provinsi: string;
+      },
       any,
       undefined
     >;
@@ -102,7 +115,13 @@ const PengirimanForm = forwardRef<
       if (result.status === "success" && result.response) {
         setLayananOptions(
           result.response[0]?.costs.map((costDetail) => ({
-            value: costDetail.cost[0].value.toString(),
+            value: JSON.stringify({
+              cost: costDetail.cost[0].value,
+              name: `${
+                (result as unknown as { response: [{ code: string }] })
+                  ?.response[0]?.code
+              } - ${costDetail.description}`,
+            }),
             label: `${costDetail.service} - ${
               costDetail.description
             } - ${costDetail.cost[0]?.value.toLocaleString("id-ID", {
@@ -120,34 +139,27 @@ const PengirimanForm = forwardRef<
   };
 
   useEffect(() => {
-    loadProvinces();
-  }, []);
-
-  const cartProductsReducer = (
-    accumulator: number,
-    currentValue: ICartProduct
-  ): number => {
-    return currentValue.weight + accumulator;
-  };
-
-  useEffect(() => {
     if (cart?.products) {
-      setTotalWeight(cart.products.reduce(cartProductsReducer, 0));
+      setTotalWeight(
+        cart.products.reduce((acc, product) => acc + product.weight, 0)
+      );
     }
-  }, []);
+  }, [cart]);
 
   useEffect(() => {
     if (provinsi) {
       loadCities(provinsi);
       form.setValue("kota", "");
       form.setValue("kurir", "");
-      form.setValue("layanan", "");
+      form.setValue("layanan", { name: "", cost: 0 }); // Correctly reset the value
+    } else {
+      loadProvinces();
     }
   }, [provinsi]);
 
   useEffect(() => {
     if (kota && kurir) {
-      form.setValue("layanan", "");
+      form.setValue("layanan", { name: "", cost: 0 });
       loadLayananOptions(kurir, kota);
     }
   }, [kota, kurir]);
@@ -165,7 +177,7 @@ const PengirimanForm = forwardRef<
               e.preventDefault();
               const formData = form.watch();
               console.log("Data:", formData);
-              console.log("weight:", totalWeight);
+              console.log("Weight:", totalWeight);
 
               const response = await calculateShippingAction({
                 courier: formData.kurir,

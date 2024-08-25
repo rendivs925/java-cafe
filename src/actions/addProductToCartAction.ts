@@ -51,7 +51,7 @@ export async function addProductToCartAction(body: ICart) {
 
       await Cart.updateOne(
         { userId: body.userId },
-        { products: updatedProducts },
+        { $set: { products: updatedProducts } },
         { session }
       );
 

@@ -14,11 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Control } from "react-hook-form";
-
-export interface Option {
-  value: string;
-  label: string;
-}
+import { Option } from "./PengirimanForm";
 
 interface SelectFormFieldProps {
   control: Control<any>;
@@ -29,6 +25,7 @@ interface SelectFormFieldProps {
 
 const SelectFormField = forwardRef<HTMLSelectElement, SelectFormFieldProps>(
   ({ control, name, label, options }, ref) => {
+    const isLayanan = name === "layanan";
     return (
       <FormField
         control={control}
@@ -39,23 +36,33 @@ const SelectFormField = forwardRef<HTMLSelectElement, SelectFormFieldProps>(
               <FormLabel>{label}</FormLabel>
               <Select
                 {...field}
-                defaultValue={field.value}
+                // @ts-ignore
+                ref={ref} // Ignore the type error for ref prop
+                defaultValue={JSON.stringify(field.value)}
                 onValueChange={field.onChange}
               >
                 <FormControl className="bg-background">
                   <SelectTrigger>
-                    <SelectValue placeholder={`Pilih ${label.toLowerCase()}`} />
+                    <SelectValue
+                      placeholder={`Pilih ${
+                        isLayanan ? "layanan" : label.toLowerCase()
+                      }`}
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {options.map((option) => (
-                    <SelectItem
-                      key={option.value} // Use unique value as key
-                      value={option.value}
-                    >
-                      {option.label}
-                    </SelectItem>
-                  ))}
+                  {options.map((option) => {
+                    console.log(option);
+
+                    return (
+                      <SelectItem
+                        key={`${option.value}`} // Ensure unique key
+                        value={`${option.value}`}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
               <FormMessage />

@@ -11,30 +11,36 @@ export interface INewOrder extends IOrder {
 export async function getUserOrdersAction(page: number, limit: number) {
   try {
     const verifiedToken = await getVerifiedToken();
-    const userId = verifiedToken?._id;
+    if (!verifiedToken) {
+      throw new Error("User not authenticated");
+    }
+
+    const userId = verifiedToken._id;
     await connectToDatabase();
 
     const skip = (page - 1) * limit;
 
-    const orders: INewOrder[] = await Order.find({ userId })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean();
-    const totalItemsLength: number = await Order.find({
-      userId,
-    }).countDocuments();
+    // Use Promise.all to get both the orders and the total count in parallel
+    const [orders, totalItemsLength] = await Promise.all([
+      Order.find({ "user.userId": userId })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean<INewOrder[]>(),
+      Order.countDocuments({ "user.userId": userId }),
+    ]);
 
     return {
       status: "success",
-      message: "Products fetched successfully.",
+      message: "Orders fetched successfully.",
       items: orders,
       totalItemsLength,
     };
   } catch (error) {
+    console.error("Error fetching orders:", error);
     return {
       status: "error",
-      message: "Error fetching products.",
+      message: "Error fetching orders.",
       items: [],
       totalItemsLength: 0,
     };

@@ -15,13 +15,14 @@ export interface KonfirmasiProps {
 
 export default function Konfirmasi({ cart }: KonfirmasiProps): ReactElement {
   const formRef = useRef<HTMLFormElement>(null);
+
+  // Initialize the form with default values, ensuring `layanan` is a string
   const form = useForm<PengirimanType>({
     resolver: zodResolver(PengirimanSchema),
     defaultValues: {
       provinsi: "",
       kota: "",
       kurir: "",
-      layanan: "",
     },
   });
 
