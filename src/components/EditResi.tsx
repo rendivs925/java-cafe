@@ -69,7 +69,7 @@ export default function EditResi({ orderId }: { orderId: string }) {
           </div>
         </form>
         <DialogFooter>
-          <Button onClick={submitForm} disabled={loading}>
+          <Button onClick={submitForm} disabled={loading} className="w-full">
             {loading ? "Menyimpan..." : "Simpan Resi"}
           </Button>
         </DialogFooter>
