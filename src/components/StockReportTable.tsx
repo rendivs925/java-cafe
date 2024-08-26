@@ -8,6 +8,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useAppContext from "@/hooks/useAppContext";
+import { ProductType } from "./ProductsList";
+import Image from "next/image";
+import TableCellFormattedDate from "./TableCellFormattedDate";
+import TableCellFormattedNumber from "./TableCellFormattedNumber";
+import PaginationControls from "./PaginationControls";
+import { MdOutlineEdit } from "react-icons/md";
+import { Button } from "./ui/button";
+import DeleteProductButton from "./DeleteProductButton";
 
 const products = [
   {
@@ -61,7 +69,17 @@ const products = [
   },
 ];
 
-export default function StockReportTable() {
+export default function StockReportTable({
+  items,
+  totalItemsLength,
+  page,
+  per_page,
+}: {
+  items: ProductType[];
+  totalItemsLength: number;
+  page: string | string[];
+  per_page: string | string[];
+}) {
   const { formatNumber } = useAppContext();
   function formatDate(date: Date): string {
     return date.toLocaleDateString("en-US", {
@@ -70,6 +88,10 @@ export default function StockReportTable() {
       year: "numeric",
     });
   }
+
+  // mocked, skipped and limited in the real app
+  const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
+  const totalPages = Math.ceil(totalItemsLength / Number(per_page));
 
   const getStockStatus = (QTY: number): string => {
     if (QTY === 0) return "Out of Stock";
@@ -80,31 +102,73 @@ export default function StockReportTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>No</TableHead>
           <TableHead>Item</TableHead>
           <TableHead>Product ID</TableHead>
+          <TableHead>Category</TableHead>
           <TableHead>Date Added</TableHead>
           <TableHead>Price</TableHead>
+          <TableHead>Weight</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="text-right">QTY</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {products.map(({ item, dateAdded, price, productID, QTY }, index) => (
-          <TableRow key={productID}>
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>{item}</TableCell>
-            <TableCell>{productID}</TableCell>
-            <TableCell>{formatDate(dateAdded)}</TableCell>
-            <TableCell>{formatNumber(price)}</TableCell>
-            <TableCell
-              className={QTY !== 0 ? "text-green-500" : "text-red-500"}
-            >
-              {getStockStatus(QTY)}
-            </TableCell>
-            <TableCell className="text-right">{QTY}</TableCell>
-          </TableRow>
-        ))}
+        {items?.map(
+          (
+            {
+              title,
+              createdAt,
+              category,
+              price,
+              description,
+              _id,
+              stock,
+              weight,
+              imgUrl,
+            },
+            index
+          ) => (
+            <TableRow key={_id.toString()}>
+              <TableCell className="flex items-center gap-4">
+                <Image
+                  src={imgUrl}
+                  width={40}
+                  height={40}
+                  alt={title}
+                  objectFit="cover"
+                  className="aspect-square"
+                />
+                {title}
+              </TableCell>
+              <TableCell>{_id.toString()}</TableCell>
+              <TableCell>{category}</TableCell>
+              <TableCellFormattedDate createdAt={createdAt} />
+              <TableCellFormattedNumber price={price} />
+              <TableCell>{weight}g</TableCell>
+              <TableCell
+                className={stock !== 0 ? "text-green-500" : "text-red-500"}
+              >
+                {getStockStatus(stock)}
+              </TableCell>
+              <TableCell className="text-right">{stock}</TableCell>
+            </TableRow>
+          )
+        )}
+        <TableRow>
+          <TableCell
+            className="bg-background text-muted-foreground pb-0"
+            colSpan={5}
+          >
+            Total Items : {totalItemsLength}
+          </TableCell>
+          <TableCell className="bg-background pb-0" colSpan={5}>
+            <PaginationControls
+              hasNextPage={Number(page) < totalPages}
+              hasPrevPage={start > 0}
+              totalItemsLength={totalItemsLength}
+            />
+          </TableCell>
+        </TableRow>
       </TableBody>
     </Table>
   );

@@ -1,13 +1,20 @@
 import React from "react";
 import DashboardSummaryItemsList from "./DashboardSummaryItemsList";
+import { getDashboardSummaryAction } from "@/actions/getDashboardSummaryAction";
 
-const DashboardSummary = () => {
+const DashboardSummary = async () => {
+  const result = await getDashboardSummaryAction();
+
+  if (result.status !== "success" || !result.data) {
+    return <div>Error loading dashboard summary</div>;
+  }
+
   return (
     <DashboardSummaryItemsList
-      totalEarnings={10000000}
-      totalOrders={2000}
-      totalSales={20000000}
-      totalVisitors={30000}
+      totalProfit={result.data.totalProfit as number}
+      totalPesanan={result.data.totalPesanan as number}
+      totalPendapatan={result.data.totalPendapatan as number}
+      totalPelanggan={result.data.totalPelanggan as number}
     />
   );
 };

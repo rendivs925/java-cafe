@@ -1,46 +1,45 @@
 "use client";
 import { type ReactElement } from "react";
-import useAppContext from "@/hooks/useAppContext";
-import { GrFormView, GrAnalytics } from "react-icons/gr";
+import { GrAnalytics } from "react-icons/gr";
 import { IoCart } from "react-icons/io5";
 import { TbReportMoney } from "react-icons/tb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FaRegUser } from "react-icons/fa";
+import { formatToRupiah } from "@/lib/formatToRupiah";
 
 export interface DashboardSummaryItemsListProps {
-  totalEarnings: number;
-  totalOrders: number;
-  totalSales: number;
-  totalVisitors: number;
+  totalProfit: number;
+  totalPesanan: number;
+  totalPendapatan: number;
+  totalPelanggan: number;
 }
 
 export default function DashboardSummaryItemsList({
-  totalSales,
-  totalEarnings,
-  totalOrders,
-  totalVisitors,
+  totalPendapatan,
+  totalProfit,
+  totalPesanan,
+  totalPelanggan,
 }: DashboardSummaryItemsListProps): ReactElement {
-  const { formatNumber } = useAppContext();
-
   const summaryData = [
     {
-      label: "Total Sales",
-      value: "IDR " + formatNumber(totalSales),
-      icon: <TbReportMoney fontSize="24" />,
+      label: "Total Pendapatan",
+      value: formatToRupiah(totalPendapatan),
+      icon: <TbReportMoney />,
     },
     {
-      label: "Total Earnings",
-      value: "IDR " + formatNumber(totalEarnings),
-      icon: <GrAnalytics fontSize="24" />,
+      label: "Total Profit",
+      value: formatToRupiah(totalProfit),
+      icon: <GrAnalytics />,
     },
     {
-      label: "Total Orders",
-      value: formatNumber(totalOrders),
-      icon: <IoCart fontSize="24" />,
+      label: "Total Pesanan",
+      value: totalPesanan,
+      icon: <IoCart />,
     },
     {
-      label: "Total Visitors",
-      value: formatNumber(totalVisitors),
-      icon: <GrFormView fontSize="24" />,
+      label: "Total Pelanggan",
+      value: totalPelanggan,
+      icon: <FaRegUser />,
     },
   ];
 
@@ -52,7 +51,7 @@ export default function DashboardSummaryItemsList({
             <Card>
               <CardHeader>
                 <CardTitle className="mt-0 flex gap-4 items-center">
-                  <span className="bg-secondary p-3 rounded-lg">
+                  <span className="bg-secondary text-2xl p-3 rounded-lg">
                     {item.icon}
                   </span>
                   {item.label}
