@@ -25,11 +25,11 @@ export default function StockReport({
 }: StockReportProps): ReactElement {
   return (
     <Card>
-      <CardHeader className="flex-row justify-between">
+      <CardHeader className="flex-row justify-between items-start">
         <span>
-          <CardTitle className="my-0">Stock Report</CardTitle>
+          <CardTitle className="my-0">Inventory Report</CardTitle>
           <CardDescription className="mt-1.5">
-            Overview items in the stock
+            Summary of current stock and item availability
           </CardDescription>
         </span>
         <SelectShowing />

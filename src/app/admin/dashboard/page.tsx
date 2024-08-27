@@ -11,6 +11,9 @@ import SearchBar from "@/components/SearchBar";
 import DashboardGreater from "@/components/DashboardGreater";
 import { Metadata } from "next";
 import { getProductsAction } from "@/actions/getProductsAction";
+import { getDashboardSummaryAction } from "@/actions/getDashboardSummaryAction"; // Ensure this import is correct
+import { getRecentOrdersAction } from "@/actions/getRecentOrdersAction";
+import { INewOrder } from "@/actions/getAllOrdersAction";
 
 export const metadata: Metadata = {
   title: "Admin | Dashboard",
@@ -23,10 +26,16 @@ const DashboardPage = async ({
 }) => {
   const page = searchParams["page"] ?? "1";
   const per_page = searchParams["per_page"] ?? "5";
-  const { items, totalItemsLength } = await getProductsAction(
-    Number(page),
-    Number(per_page)
-  );
+
+  // Fetch data concurrently
+  const [dashboardSummaryItems, productData, recentOrders] = await Promise.all([
+    getDashboardSummaryAction(),
+    getProductsAction(Number(page), Number(per_page)),
+    getRecentOrdersAction(),
+  ]);
+
+  const { items, totalItemsLength } = productData;
+  const { orders } = recentOrders;
 
   return (
     <DashboardContainer className="w-full min-h-svh py-12 px-10 overflow-y-auto">
@@ -35,7 +44,7 @@ const DashboardPage = async ({
         <SearchBar />
       </DashboardHeader>
       <DashboardContent className="grid grid-cols-6 gap-6">
-        <DashboardSummary />
+        <DashboardSummary result={dashboardSummaryItems} />
         <section className="flex flex-col gap-6 col-span-4">
           <StockReport
             page={page}
@@ -47,7 +56,7 @@ const DashboardPage = async ({
         <section className="flex flex-col col-span-2 gap-6">
           {/* <TotalSales /> */}
           {/* <ProductSales /> */}
-          <RecentOrders />
+          <RecentOrders orders={orders as INewOrder[]} />
         </section>
       </DashboardContent>
     </DashboardContainer>

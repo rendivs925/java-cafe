@@ -1,10 +1,28 @@
 import React from "react";
 import DashboardSummaryItemsList from "./DashboardSummaryItemsList";
-import { getDashboardSummaryAction } from "@/actions/getDashboardSummaryAction";
 
-const DashboardSummary = async () => {
-  const result = await getDashboardSummaryAction();
+export interface IDashboardSummaryItemsSuccess {
+  status: string;
+  data: {
+    totalPesanan: any;
+    totalProfit: any;
+    totalPendapatan: any;
+    totalPelanggan: number;
+  };
+  message?: undefined;
+}
 
+export interface IDashboardSummaryItemsError {
+  status: string;
+  message: string;
+  data?: undefined;
+}
+
+const DashboardSummary = async ({
+  result,
+}: {
+  result: IDashboardSummaryItemsSuccess | IDashboardSummaryItemsError;
+}) => {
   if (result.status !== "success" || !result.data) {
     return <div>Error loading dashboard summary</div>;
   }

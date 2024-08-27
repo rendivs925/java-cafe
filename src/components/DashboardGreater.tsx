@@ -9,7 +9,11 @@ const DashboardGreater = () => {
 
   const userNickname = user.username.split(" ")[0];
 
-  return isClient && <DashboardTitle>Welcome {userNickname} !!</DashboardTitle>;
+  return isClient ? (
+    <DashboardTitle>Welcome {userNickname} 🥳👋</DashboardTitle>
+  ) : (
+    <DashboardTitle>Hi 🥳👋</DashboardTitle>
+  );
 };
 
 export default DashboardGreater;

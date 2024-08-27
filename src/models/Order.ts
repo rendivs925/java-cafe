@@ -1,7 +1,7 @@
 import mongoose, { Model, Schema } from "mongoose";
 
 // Define the TypeScript interface for the product within the order
-interface IOrderProduct {
+export interface IOrderProduct {
   imgUrl: string;
   title: string;
   productId: string;

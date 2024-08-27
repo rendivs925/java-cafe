@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { RiDashboardFill } from "react-icons/ri";
+import { RiArticleLine, RiDashboardFill } from "react-icons/ri";
 import { PiCoffeeFill } from "react-icons/pi";
 import { IoCart } from "react-icons/io5";
 import { TbReportMoney } from "react-icons/tb";
@@ -29,14 +29,9 @@ const links = [
     icon: <IoCart />,
   },
   {
-    href: "/admin/sales",
-    label: "Sales",
-    icon: <TbReportMoney />,
-  },
-  {
-    href: "/admin/reports",
-    label: "Reports",
-    icon: <GrAnalytics />,
+    href: "/admin/blogs",
+    label: "Blogs",
+    icon: <RiArticleLine />,
   },
   {
     href: "/admin/users",
@@ -92,12 +87,12 @@ const Sidebar = () => {
           Cafe
         </h1>
         <div
-          className="flex flex-col items-center justify-between h-8 w-10 space-y-1.5 cursor-pointer"
+          className="flex flex-col items-center justify-between h-7 w-9 space-y-1.5 cursor-pointer"
           onClick={toggleSidebar}
         >
-          <span className="h-[4px] w-full bg-foreground rounded-lg transition-all duration-500"></span>
-          <span className="h-[4px] w-full bg-foreground rounded-lg transition-all duration-500"></span>
-          <span className="h-[4px] w-full bg-foreground rounded-lg transition-all duration-500"></span>
+          <span className="h-[3.8px] w-full bg-foreground rounded-lg transition-all duration-500"></span>
+          <span className="h-[3.8px] w-full bg-foreground rounded-lg transition-all duration-500"></span>
+          <span className="h-[3.8px] w-full bg-foreground rounded-lg transition-all duration-500"></span>
         </div>
       </div>
       <ul className="space-y-4">

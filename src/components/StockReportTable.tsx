@@ -16,6 +16,7 @@ import PaginationControls from "./PaginationControls";
 import { MdOutlineEdit } from "react-icons/md";
 import { Button } from "./ui/button";
 import DeleteProductButton from "./DeleteProductButton";
+import { formatToRupiah } from "@/lib/formatToRupiah";
 
 const products = [
   {
@@ -80,15 +81,6 @@ export default function StockReportTable({
   page: string | string[];
   per_page: string | string[];
 }) {
-  const { formatNumber } = useAppContext();
-  function formatDate(date: Date): string {
-    return date.toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  }
-
   // mocked, skipped and limited in the real app
   const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
   const totalPages = Math.ceil(totalItemsLength / Number(per_page));
@@ -102,12 +94,12 @@ export default function StockReportTable({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Item</TableHead>
-          <TableHead>Product ID</TableHead>
+          <TableHead>Product Item</TableHead>
           <TableHead>Category</TableHead>
+          <TableHead>Weight</TableHead>
           <TableHead>Date Added</TableHead>
           <TableHead>Price</TableHead>
-          <TableHead>Weight</TableHead>
+          <TableHead>Profit</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="text-right">QTY</TableHead>
         </TableRow>
@@ -117,13 +109,13 @@ export default function StockReportTable({
           (
             {
               title,
+              weight,
               createdAt,
               category,
+              profit,
               price,
-              description,
               _id,
               stock,
-              weight,
               imgUrl,
             },
             index
@@ -140,11 +132,11 @@ export default function StockReportTable({
                 />
                 {title}
               </TableCell>
-              <TableCell>{_id.toString()}</TableCell>
               <TableCell>{category}</TableCell>
+              <TableCell>{weight}</TableCell>
               <TableCellFormattedDate createdAt={createdAt} />
               <TableCellFormattedNumber price={price} />
-              <TableCell>{weight}g</TableCell>
+              <TableCell>{formatToRupiah(profit)}</TableCell>
               <TableCell
                 className={stock !== 0 ? "text-green-500" : "text-red-500"}
               >

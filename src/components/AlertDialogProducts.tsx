@@ -7,16 +7,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { formatToRupiah } from "@/lib/formatToRupiah";
+import { IOrderProduct } from "@/models/Order";
 import { ShoppingBag } from "lucide-react";
 import Image from "next/image";
+import { IoMdClose } from "react-icons/io";
 
 interface AlertDialogProductsProps {
-  products: {
-    productId: string;
-    imgUrl: string;
-    title: string;
-    qty: number;
-  }[];
+  products: IOrderProduct[];
 }
 
 export default function AlertDialogProducts({
@@ -34,7 +32,7 @@ export default function AlertDialogProducts({
           <AlertDialogTitle className="flex justify-between items-center">
             Detail Produk
             <AlertDialogAction className="w-min p-0 h-min hover:bg-transparent bg-transparent text-muted-foreground">
-              X
+              <IoMdClose />
             </AlertDialogAction>
           </AlertDialogTitle>
           <AlertDialogDescription>
@@ -48,11 +46,19 @@ export default function AlertDialogProducts({
                     <Image
                       src={product.imgUrl}
                       alt={product.title}
-                      width={48}
-                      height={48}
-                      className="w-12 h-12 rounded-lg mr-4"
+                      width={64}
+                      height={64}
+                      objectFit="cover"
+                      className="aspect-square rounded-lg mr-4"
                     />
-                    <span className="font-medium">{product.title}</span>
+                    <div className="flex flex-col gap-1.5">
+                      <span className="font-medium text-primary">
+                        {product.title}
+                      </span>
+                      <span className="font-normal text-sm">
+                        {formatToRupiah(product.totalPrice)}
+                      </span>
+                    </div>
                   </div>
                   <span className="text-sm font-semibold text-secondary-foreground">
                     x{product.qty}
