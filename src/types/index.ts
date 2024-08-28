@@ -84,7 +84,7 @@ interface Product {
 }
 
 interface Blog {
-  id: number;
+  id: number | string;
   title: string;
   description: string;
   imgUrl: string;

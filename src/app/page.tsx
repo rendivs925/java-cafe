@@ -18,14 +18,18 @@ export const metadata: Metadata = {
   keywords: ["coffee shop", "java cafe", "coffee", "cafe"],
 };
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   return (
     <>
       <Hero />
       <div className="flex flex-col gap-[80px] lg:gap-[100px]">
         <About />
         <Products />
-        <Blog />
+        <Blog searchParams={searchParams} />
         <Contact />
       </div>
       <Footer />

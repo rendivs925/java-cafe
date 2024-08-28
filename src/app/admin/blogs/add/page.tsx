@@ -25,6 +25,12 @@ import { FormField as IFormField } from "@/components/AddProductForm";
 import { createBlogAction } from "@/actions/createBlogAction";
 import { handleUpload } from "@/lib/storage";
 import ReactQuill from "react-quill";
+import useAppContext from "@/hooks/useAppContext";
+import { AddBlogFormSchema } from "@/schemas/AddBlogFormSchema";
+
+export interface IBlogWithPreviewImage extends Omit<IBlog, "prevImgUrl"> {
+  previewImage: File;
+}
 
 // Import ReactQuill dynamically with no server-side rendering
 const QuillEditorComponent = dynamic(
@@ -32,53 +38,63 @@ const QuillEditorComponent = dynamic(
   { ssr: false }
 );
 
-const FormSchema = z.object({
-  blogTitle: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
-  }),
-  author: z.string().min(2, {
-    message: "Author name must be at least 2 characters.",
-  }),
-  content: z.string().min(1, {
-    message: "Content cannot be empty.",
-  }),
-  tags: z
-    .array(z.string())
-    .nonempty({ message: "At least one tag is required." }),
-});
-
 export interface AddBlogPageProps {}
-
-const formFields: IFormField[] = [
-  {
-    name: "blogTitle",
-    id: "blogTitle",
-    placeholder: "Enter blog title",
-    label: "Title",
-  },
-  {
-    name: "author",
-    id: "author",
-    placeholder: "Enter author name",
-    label: "Author",
-  },
-];
 
 export default function AddBlogPage(props: AddBlogPageProps): ReactElement {
   const [content, setContent] = useState<string>("");
   const [isClient, setIsClient] = useState(false); // State to check if client-side
+  const { user } = useAppContext();
   const reactQuillRef = useRef<ReactQuill>(null);
-  const formMethods = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
+  const formMethods = useForm<z.infer<typeof AddBlogFormSchema>>({
+    resolver: zodResolver(AddBlogFormSchema),
     defaultValues: {
       blogTitle: "",
-      author: "",
       content: "",
       tags: [],
+      description: "",
     },
   });
 
+  const formData = formMethods.watch();
+
   const { handleSubmit, control, setValue, formState } = formMethods;
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const formFields: IFormField[] = [
+    {
+      name: "blogTitle",
+      id: "blogTitle",
+      placeholder: "Enter blog title",
+      label: "Title",
+    },
+    {
+      name: "description",
+      id: "description",
+      placeholder: "Enter blog description",
+      label: "Description",
+    },
+    {
+      name: "previewImage",
+      id: "previewImage",
+      placeholder: "Enter preview image",
+      label: "Preview Image",
+      type: "file",
+      onChange: handleImageChange,
+    },
+  ];
 
   useEffect(() => {
     setIsClient(true); // Update state to indicate client-side rendering
@@ -86,6 +102,7 @@ export default function AddBlogPage(props: AddBlogPageProps): ReactElement {
 
   const handleEditorChange = (newContent: string) => {
     setContent(newContent);
+
     setValue("content", newContent);
   };
 
@@ -117,24 +134,55 @@ export default function AddBlogPage(props: AddBlogPageProps): ReactElement {
     };
   }, [isClient]);
 
-  const handleSubmitForm = async (data: z.infer<typeof FormSchema>) => {
+  const handleSubmitForm = async () => {
     // Convert content to Markdown
     const turndownService = new TurndownService();
     const markdownContent = turndownService.turndown(content);
 
-    const payload: IBlog = {
-      author: data.author,
-      isPublished: true,
-      title: data.blogTitle,
-      tags: data.tags,
+    const formDataPayload = new FormData();
+
+    // Append author object properties as JSON
+    formDataPayload.append(
+      "author",
+      JSON.stringify({
+        authorId: user._id,
+        imgUrl: user.imgUrl,
+        username: user.username,
+      })
+    );
+
+    // Append other basic properties
+    formDataPayload.append("content", markdownContent);
+    formDataPayload.append("isPublished", "true"); // Use "true" as a string
+    formDataPayload.append("title", formData.blogTitle);
+    formDataPayload.append("description", formData.description);
+
+    // Append tags array as JSON
+    formDataPayload.append("tags", JSON.stringify(formData.tags));
+
+    // Append preview image file directly
+    if (formData.previewImage) {
+      formDataPayload.append("previewImage", formData.previewImage);
+    }
+
+    const payload: IBlogWithPreviewImage = {
+      author: {
+        authorId: user._id,
+        imgUrl: user.imgUrl,
+        username: user.username,
+      },
+      description: formData.description,
       content: markdownContent,
+      isPublished: true,
+      previewImage: formData.previewImage,
+      tags: formData.tags,
+      title: formData.blogTitle,
     };
 
-    // Log all values
-    console.log("Form submitted with values:", payload);
+    console.log(formDataPayload);
 
     try {
-      await createBlogAction(payload);
+      await createBlogAction(formDataPayload);
       // Handle successful submission (e.g., show a success message)
     } catch (error) {
       console.error("Error creating blog:", error);
@@ -143,65 +191,64 @@ export default function AddBlogPage(props: AddBlogPageProps): ReactElement {
   };
 
   return (
-    <DashboardContainer>
-      <DashboardHeader className="max-w-[80ch] mx-auto">
-        <DashboardTitle>Add New Blog</DashboardTitle>
-      </DashboardHeader>
-      <DashboardContent className="space-y-12 bg-transparent min-h-96 max-w-[80ch] mx-auto">
-        <FormProvider {...formMethods}>
-          <form
-            onSubmit={handleSubmit(handleSubmitForm)}
-            className="w-full space-y-6"
-          >
-            <div className="grid grid-cols-2 gap-6">
-              {formFields.map((field) => (
-                <InputFormField
-                  key={field.id}
-                  control={control}
-                  name={field.name}
-                  id={field.id}
-                  placeholder={field.placeholder}
-                  label={field.label}
-                  errors={formState.errors}
-                  type="text"
-                />
-              ))}
+    <div className="flex gap-10 justify-center">
+      <DashboardContainer className="!pr-0">
+        <DashboardHeader className="max-w-[80ch] mx-auto">
+          <DashboardTitle>Add New Blog</DashboardTitle>
+        </DashboardHeader>
+        <DashboardContent className="space-y-12 bg-transparent min-h-96 max-w-[80ch] mx-auto">
+          <FormProvider {...formMethods}>
+            <form action={handleSubmitForm} className="w-full space-y-6">
+              <div className="grid grid-cols-2 gap-6">
+                {formFields.map((field) => (
+                  <InputFormField
+                    key={field.id}
+                    control={control}
+                    name={field.name}
+                    id={field.id}
+                    onChange={field.onChange}
+                    placeholder={field.placeholder}
+                    label={field.label}
+                    errors={formState.errors}
+                    type={field.type}
+                  />
+                ))}
+
+                <div className="space-y-1.5">
+                  <FormLabel>Tags</FormLabel>
+                  <TagInput control={control} />
+                  <FormMessage>{formState.errors.tags?.message}</FormMessage>
+                </div>
+              </div>
 
               <div className="space-y-1.5">
-                <FormLabel>Tags</FormLabel>
-                <TagInput control={control} />
-                <FormMessage>{formState.errors.tags?.message}</FormMessage>
+                <FormLabel>Content</FormLabel>
+                {isClient && (
+                  <QuillEditorComponent
+                    forwardedRef={reactQuillRef}
+                    imageHandler={imageHandler}
+                    value={content}
+                    onChange={handleEditorChange}
+                    placeholder="Write your blog content here..."
+                  />
+                )}
+                <FormMessage>{formState.errors.content?.message}</FormMessage>
               </div>
-            </div>
 
-            <div className="space-y-1.5">
-              <FormLabel>Content</FormLabel>
-              {isClient && (
-                <QuillEditorComponent
-                  forwardedRef={reactQuillRef}
-                  imageHandler={imageHandler}
-                  value={content}
-                  onChange={handleEditorChange}
-                  placeholder="Write your blog content here..."
-                />
-              )}
-              <FormMessage>{formState.errors.content?.message}</FormMessage>
-            </div>
-
-            <div className="space-x-3">
-              <Button type="submit">Publish now</Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="bg-transparent"
-              >
-                Save draft
-              </Button>
-            </div>
-          </form>
-        </FormProvider>
-        {content}
-      </DashboardContent>
-    </DashboardContainer>
+              <div className="space-x-3">
+                <Button type="submit">Publish now</Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="bg-transparent"
+                >
+                  Save draft
+                </Button>
+              </div>
+            </form>
+          </FormProvider>
+        </DashboardContent>
+      </DashboardContainer>
+    </div>
   );
 }

@@ -46,6 +46,7 @@ const QuillEditorComponent: React.FC<QuillEditorProps> = ({
         ["code-block"],
         ["clean"],
       ],
+      syntax: true,
       handlers: {
         image: imageHandler,
       },
