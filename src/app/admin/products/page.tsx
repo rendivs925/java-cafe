@@ -5,7 +5,7 @@ import DashboardTitle from "@/components/DashboardTitle";
 import DashboardContent from "@/components/DashboardContent";
 import ProductsTable from "@/components/ProductsTable";
 import SelectShowing from "@/components/SelectShowing";
-import AddProductButton from "@/components/AddProductButton";
+import AddButton from "@/components/AddButton";
 
 export default function Products({
   searchParams,
@@ -19,7 +19,7 @@ export default function Products({
           <DashboardTitle>Products</DashboardTitle>
           <div className="flex gap-6">
             <SelectShowing />
-            <AddProductButton />
+            <AddButton label="Add New Product" route="/admin/products/add" />
           </div>
         </DashboardHeader>
         <DashboardContent className="bg-background p-6 rounded-lg">

@@ -1,6 +1,6 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
-import { getFile, uploadFile } from "@/lib/storage";
+import { handleUpload } from "@/lib/storage";
 import Product from "@/models/Product";
 import {
   AddProductType,
@@ -8,14 +8,6 @@ import {
   newAddProductType,
 } from "@/schemas/AddProductSchema";
 import { revalidateTag } from "next/cache";
-
-const handleUpload = async (file: File) => {
-  const folder = "products/";
-  const imagePath = await uploadFile(file, folder);
-  const imageUrl = await getFile(imagePath);
-
-  return imageUrl;
-};
 
 export async function addProductAction(formData: FormData) {
   try {
@@ -43,7 +35,7 @@ export async function addProductAction(formData: FormData) {
       };
     }
 
-    const imgUrl = await handleUpload(data.productImage as File);
+    const imgUrl = await handleUpload(data.productImage as File, "products");
 
     // Extracting data from formData and casting to appropriate types
     const { productImage, ...payload } = parseResult.data;

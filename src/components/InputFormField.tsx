@@ -44,7 +44,7 @@ function InputFormField({
         const isProfileImage = field.name === "profileImage";
 
         return (
-          <FormItem>
+          <FormItem className={`${field.name === "blogTitle" && "col-span-2"}`}>
             {!isProfileImage ? (
               <Label htmlFor={id}>{label}</Label>
             ) : (

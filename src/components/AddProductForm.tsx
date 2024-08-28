@@ -8,10 +8,11 @@ import { Form } from "./ui/form";
 import CardContainer from "./CardContainer";
 import { CardContent } from "./ui/card";
 import ImagePreview from "./ImagePreview";
-import SelectFormField, { Option } from "./SelectFormField";
+import SelectFormField from "./SelectFormField";
 import { addProductAction } from "@/actions/addProductAction";
+import { Option } from "./PengirimanForm";
 
-interface FormField {
+export interface FormField {
   name: string;
   id: string;
   placeholder: string;

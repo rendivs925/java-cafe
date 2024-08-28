@@ -3,9 +3,9 @@ import DashboardContainer from "@/components/DashboardContainer";
 import DashboardHeader from "@/components/DashboardHeader";
 import DashboardTitle from "@/components/DashboardTitle";
 import DashboardContent from "@/components/DashboardContent";
-import ProductsTable from "@/components/ProductsTable";
 import SelectShowing from "@/components/SelectShowing";
-import AddProductButton from "@/components/AddProductButton";
+import AddButton from "@/components/AddButton";
+import BlogsTable from "@/components/BlogsTable";
 
 export default function BlogsPage({
   searchParams,
@@ -19,11 +19,11 @@ export default function BlogsPage({
           <DashboardTitle>Blogs</DashboardTitle>
           <div className="flex gap-6">
             <SelectShowing />
-            <AddProductButton />
+            <AddButton label="Add New Blog" route="/admin/blogs/add" />
           </div>
         </DashboardHeader>
         <DashboardContent className="bg-background p-6 rounded-lg">
-          <ProductsTable searchParams={searchParams} />
+          <BlogsTable searchParams={searchParams} />
         </DashboardContent>
       </DashboardContainer>
     </Suspense>

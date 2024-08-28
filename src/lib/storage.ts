@@ -22,6 +22,13 @@ export const uploadFile = async (file: File, folder: string) => {
   }
 };
 
+export const handleUpload = async (file: File, folder = "products") => {
+  const imagePath = await uploadFile(file, `${folder}/`);
+  const imageUrl = await getFile(imagePath);
+
+  return imageUrl;
+};
+
 export async function deleteFile(filePath: string) {
   try {
     // Create a reference to the file to delete
