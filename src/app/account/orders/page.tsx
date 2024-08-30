@@ -43,7 +43,7 @@ export default async function Orders({
       <BaseHeader title="Pesanan Anda" className="flex justify-between">
         <SelectShowing />
       </BaseHeader>
-      <BaseContent className="bg-background p-6 rounded-lg">
+      <BaseContent className="shadow bg-secondary p-6 rounded-lg">
         <Table className="overflow-y-hidden">
           <TableHeader>
             <TableRow>
@@ -117,12 +117,12 @@ export default async function Orders({
             )}
             <TableRow>
               <TableCell
-                className="bg-background text-muted-foreground pb-0"
+                className="bg-secondary text-muted-foreground pb-0"
                 colSpan={5}
               >
                 Total Items : {totalItemsLength}
               </TableCell>
-              <TableCell className="bg-background pb-0" colSpan={5}>
+              <TableCell className="bg-secondary pb-0" colSpan={5}>
                 <PaginationControls
                   hasNextPage={Number(page) < totalPages}
                   hasPrevPage={start > 0}

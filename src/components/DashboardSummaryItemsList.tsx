@@ -47,18 +47,18 @@ export default function DashboardSummaryItemsList({
     <>
       <ul className="col-span-full grid grid-cols-responsive gap-6">
         {summaryData.map((item, index) => (
-          <li key={index} className="text-left w-full bg-background rounded-lg">
-            <Card>
+          <li key={index} className="text-left w-full bg-secondary rounded-lg">
+            <Card className="bg-secondary shadow">
               <CardHeader>
-                <CardTitle className="mt-0 flex gap-4 items-center">
-                  <span className="bg-secondary text-2xl p-3 rounded-lg">
+                <CardTitle className="text-xl text-muted-foreground mt-0 flex gap-4 items-center">
+                  <span className="bg-background text-xl p-3 rounded-lg">
                     {item.icon}
                   </span>
                   {item.label}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <h4 className="m-0 text-muted-foreground">{item.value}</h4>
+                <h4 className="m-0 text-primary text-xl">{item.value}</h4>
               </CardContent>
             </Card>
           </li>

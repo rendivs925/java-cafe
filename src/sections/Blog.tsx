@@ -27,7 +27,7 @@ export default async function Blog({
           title="Our Blog Posts"
           description="Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries"
         />
-        <BlogsList items={items} />
+        <BlogsList items={JSON.parse(JSON.stringify(items))} />
       </div>
     </section>
   );

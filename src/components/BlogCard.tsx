@@ -16,18 +16,18 @@ function BlogCard({ title, description, imgUrl, id }: Blog): ReactElement {
     <Card className="bg-transparent space-y-6 shadow-none rounded-lg overflow-hidden">
       <CardHeader
         onClick={handleClick}
-        className="relative cursor-pointer aspect-video rounded-lg"
+        className="relative shadow overflow-hidden cursor-pointer aspect-video rounded-lg"
       >
         <Image
           src={imgUrl}
-          className="rounded-lg hover:scale-110 transition-all duration-500"
+          className="rounded-lg hover:scale-125 transition-all duration-300"
           alt="Blog"
           objectFit="cover"
           loading="eager"
           layout="fill"
         />
       </CardHeader>
-      <CardContent className="pb-6 px-0">
+      <CardContent className="prose pb-6 px-0">
         <CardTitle
           onClick={handleClick}
           className="cursor-pointer transition-all duration-500 hover:underline"

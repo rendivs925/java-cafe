@@ -69,7 +69,7 @@
   }
 
   body {
-    @apply bg-secondary overflow-x-hidden text-foreground;
+    @apply bg-background overflow-x-hidden text-foreground;
   }
 
   h1 {
@@ -94,14 +94,6 @@
 
   a {
     @apply font-medium relative text-foreground transition text-lg;
-  }
-
-  a::after {
-    @apply absolute content-[''] h-[2px] w-0 left-0 -bottom-2 bg-foreground transition-all duration-300;
-  }
-
-  a:hover::after {
-    @apply w-full;
   }
 
   blockquote {

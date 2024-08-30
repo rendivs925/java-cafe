@@ -15,6 +15,8 @@ import { addProductToCartAction } from "@/actions/addProductToCartAction";
 import { Product } from "@/types";
 import { toast } from "./ui/use-toast";
 import LoadingButton from "./LoadingButton";
+import { formatToRupiah } from "@/lib/formatToRupiah";
+import Link from "next/link";
 
 function ProductCard({
   title,
@@ -65,31 +67,23 @@ function ProductCard({
   };
 
   return (
-    <Card className="flex flex-col w-full rounded-lg overflow-hidden shadow">
-      <CardHeader className="relative aspect-square overflow-hidden">
+    <Card className="flex flex-col w-full overflow-hidden bg-transparent shadow-none">
+      <CardHeader className="relative rounded-lg shadow aspect-square bg-transparent overflow-hidden">
         <Image
           src={imgUrl}
           loading="eager"
           alt="Product"
+          className="aspect-square rounded-lg"
           layout="fill"
           objectFit="cover"
         />
       </CardHeader>
-      <CardContent className="bg-background p-6">
-        <CardDescription className="mt-0 mb-4 bg-secondary py-1 px-5 font-normal rounded-lg text-sm w-min text-secondary-foreground">
-          {category}
-        </CardDescription>
+      <CardContent className="prose bg-transparent p-0 pt-6">
         <CardTitle className="mt-0">{title}</CardTitle>
         <p className="line-clamp-2">{description}</p>
-        <div className="flex mt-12 justify-between items-end overflow-hidden">
-          <h3 className="price">IDR {formatNumber(price)}</h3>
-          {loading ? (
-            <LoadingButton className="w-fit">Adding...</LoadingButton>
-          ) : (
-            <Button variant="default" size="sm" onClick={addProductToCart}>
-              Add to Cart
-            </Button>
-          )}
+        <div className="flex items-baseline justify-between overflow-hidden">
+          <h3 className="price">{formatToRupiah(price)}</h3>
+          <Link href={`/products/${productId}`}>Details</Link>
         </div>
       </CardContent>
     </Card>

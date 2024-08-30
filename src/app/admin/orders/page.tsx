@@ -40,7 +40,7 @@ export default async function Orders({
         <DashboardTitle>Orders</DashboardTitle>
         <SelectShowing />
       </DashboardHeader>
-      <DashboardContent className="bg-background p-6 rounded-lg">
+      <DashboardContent className="bg-secondary shadow p-6 rounded-lg">
         <Table className="overflow-y-hidden">
           <TableHeader>
             <TableRow>
@@ -99,12 +99,12 @@ export default async function Orders({
             )}
             <TableRow>
               <TableCell
-                className="bg-background text-muted-foreground pb-0"
+                className="bg-transparent text-muted-foreground pb-0"
                 colSpan={5}
               >
                 Total Items : {totalItemsLength}
               </TableCell>
-              <TableCell className="bg-background pb-0" colSpan={5}>
+              <TableCell className="bg-transparent pb-0" colSpan={5}>
                 <PaginationControls
                   hasNextPage={Number(page) < totalPages}
                   hasPrevPage={start > 0}

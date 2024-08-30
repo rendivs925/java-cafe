@@ -21,12 +21,12 @@ const navbarLinks: NavbarLink[] = [
     label: "About",
   },
   {
-    href: "/#products",
+    href: "/products",
     label: "Products",
   },
   {
-    href: "/#blog",
-    label: "Blog",
+    href: "/blogs",
+    label: "Blogs",
   },
   {
     href: "/#contact",

@@ -32,7 +32,7 @@ const SelectFormField = forwardRef<HTMLSelectElement, SelectFormFieldProps>(
         name={name}
         render={({ field }) => {
           return (
-            <FormItem className="bg-background box-border px-0 w-full">
+            <FormItem className="bg-transparent box-border px-0 w-full">
               <FormLabel>{label}</FormLabel>
               <Select
                 {...field}
@@ -41,7 +41,7 @@ const SelectFormField = forwardRef<HTMLSelectElement, SelectFormFieldProps>(
                 defaultValue={JSON.stringify(field.value)}
                 onValueChange={field.onChange}
               >
-                <FormControl className="bg-background">
+                <FormControl className="bg-secondary">
                   <SelectTrigger>
                     <SelectValue
                       placeholder={`Pilih ${

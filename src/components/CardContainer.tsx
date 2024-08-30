@@ -8,7 +8,7 @@ interface CardContainerProps {
 
 const CardContainer = ({ children, className = "" }: CardContainerProps) => {
   return (
-    <Card className={`bg-background box-border rounded-lg shadow ${className}`}>
+    <Card className={`bg-secondary box-border rounded-lg shadow ${className}`}>
       {children}
     </Card>
   );

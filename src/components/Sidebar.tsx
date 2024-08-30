@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { RxHamburgerMenu } from "react-icons/rx";
 import { RiArticleLine, RiDashboardFill } from "react-icons/ri";
 import { PiCoffeeFill } from "react-icons/pi";
 import { IoCart } from "react-icons/io5";
@@ -69,7 +70,7 @@ const Sidebar = () => {
   const pathname = usePathname();
   return (
     <aside
-      className={`h-screen py-12 bg-background w-full text-white px-6 sticky min-h-svh top-0 transition-all duration-700 bottom-0 ${
+      className={`h-screen py-12 shadow bg-background w-full text-white px-6 sticky min-h-svh top-0 transition-all duration-300 bottom-0 ${
         !isExpanded ? "max-w-32" : "max-w-[300px]"
       }`}
     >
@@ -79,21 +80,21 @@ const Sidebar = () => {
         }`}
       >
         <h1
-          className={`mb-0 p-0 transition-all duration-500 ${
-            isExpanded && isVisible ? "block opacity-100" : "opacity-0"
+          className={`mb-0 p-0 transition-all duration-500 delay-200 ${
+            isExpanded && isVisible
+              ? "block opacity-100 w-auto"
+              : "w-0 opacity-0"
           }`}
           style={{ display: isExpanded ? "block" : "none" }}
         >
           Cafe
         </h1>
-        <div
-          className="flex flex-col items-center justify-between h-7 w-9 space-y-1.5 cursor-pointer"
+        <span
+          className="h-7 text-4xl w-9 cursor-pointer"
           onClick={toggleSidebar}
         >
-          <span className="h-[3.8px] w-full bg-foreground rounded-lg transition-all duration-500"></span>
-          <span className="h-[3.8px] w-full bg-foreground rounded-lg transition-all duration-500"></span>
-          <span className="h-[3.8px] w-full bg-foreground rounded-lg transition-all duration-500"></span>
-        </div>
+          <RxHamburgerMenu />
+        </span>
       </div>
       <ul className="space-y-4">
         {links.map(({ href, label, icon }, index) => (

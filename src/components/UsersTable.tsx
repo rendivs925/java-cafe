@@ -74,12 +74,12 @@ export default async function UsersTable({
         )}
         <TableRow>
           <TableCell
-            className="bg-background text-muted-foreground pb-0"
+            className="bg-transparent text-muted-foreground pb-0"
             colSpan={5}
           >
             Total Items : {totalItemsLength}
           </TableCell>
-          <TableCell className="bg-background pb-0" colSpan={5}>
+          <TableCell className="bg-transparent pb-0" colSpan={5}>
             <PaginationControls
               hasNextPage={Number(page) < totalPages}
               hasPrevPage={start > 0}

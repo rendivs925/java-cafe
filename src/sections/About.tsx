@@ -17,19 +17,20 @@ export default function About(props: AboutProps): ReactElement {
             className="rounded-lg"
           />
         </div>
-        <div>
+        <div className="max-w-[80ch]">
           <h2>About Us</h2>
           <p className="text-spacing">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab
             provident earum obcaecati! Itaque excepturi, doloribus qui fugit
             voluptates neque dignissimos debitis, omnis laudantium cupiditate
-            modi vero, corporis similique repellendus natus!
+            modi vero, corporis similique repellendus natus! veritatis, corrupti
           </p>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima
             reprehenderit, illum deserunt ut non possimus dolorum consectetur at
             veritatis, corrupti assumenda enim sunt, similique debitis modi
-            magni fuga totam culpa.
+            magni fuga totam culpa. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Minima reprehenderit, illum deserunt ut non
           </p>
         </div>
       </div>

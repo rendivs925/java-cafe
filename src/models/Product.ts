@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema, Document } from "mongoose";
+import mongoose, { Model, Schema } from "mongoose";
 
 // Define the TypeScript interface for the document
 export interface IReview {
