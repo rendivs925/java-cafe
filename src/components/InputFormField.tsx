@@ -95,7 +95,7 @@ function InputFormField({
                   accept="image/*"
                   onChange={(event) => {
                     field.onChange(
-                      event?.target?.files && event.target.files[0]
+                      event?.target?.files && event.target.files[0],
                     );
 
                     onChange(event);

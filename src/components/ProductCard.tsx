@@ -82,7 +82,7 @@ function ProductCard({
         <CardTitle className="mt-0">{title}</CardTitle>
         <p className="line-clamp-2">{description}</p>
         <div className="flex items-baseline justify-between overflow-hidden">
-          <h3 className="price">{formatToRupiah(price)}</h3>
+          <h4 className="price">{formatToRupiah(price)}</h4>
           <Link href={`/products/${productId}`}>Details</Link>
         </div>
       </CardContent>

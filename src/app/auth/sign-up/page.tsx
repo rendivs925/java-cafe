@@ -1,5 +1,5 @@
 "use client";
-import { type ReactElement } from "react";
+import { ReactElement, useTransition } from "react";
 import CardContainer from "@/components/CardContainer";
 import InputFormField from "@/components/InputFormField";
 import useSignUp from "@/hooks/useSignUp";
@@ -15,25 +15,23 @@ import {
 import Link from "next/link";
 import LoadingButton from "@/components/LoadingButton";
 import { addUserAction } from "@/actions/addUserAction";
+import { toast } from "@/components/ui/use-toast";
 
 export default function SignUp(): ReactElement {
-  const {
-    form,
-    formData,
-    handleImageChange,
-    setIsLoading,
-    isLoading,
-    imageFile,
-    imageSrc,
-  } = useSignUp();
-  const { email, password, username, role } = formData;
+  const { form, formData, handleImageChange, imageFile, imageSrc } =
+    useSignUp();
+  let [isLoading, startTransition] = useTransition();
+
+  const { formState } = form;
+  const isValid = formState.isValid;
+  const { username, email, password, role } = formData;
 
   const formFields = [
     {
       name: "profileImage",
-      id: "productImage",
-      placeholder: "Enter profile image",
-      label: "Profile image",
+      id: "profileImage",
+      placeholder: "Choose a profile image",
+      label: "Profile Image",
       type: "file",
       onChange: handleImageChange,
     },
@@ -52,38 +50,56 @@ export default function SignUp(): ReactElement {
     {
       name: "password",
       id: "password",
-      placeholder: "Masukkan password anda",
+      placeholder: "Enter your password",
       label: "Password",
       type: "password",
     },
   ];
 
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      if (imageFile) {
+        formData.append("profileImage", imageFile as File);
+      }
+      formData.append("username", username);
+      formData.append("email", email);
+      formData.append("role", role);
+      formData.append("password", password);
+
+      const response = await addUserAction(formData);
+
+      if (response.status !== "success") {
+        toast({
+          description: response.message,
+        });
+        return;
+      }
+
+      toast({
+        description: "Sign Up successfully.",
+      });
+    } catch (error) {
+      toast({
+        description:
+          "An unexpected error occurred during sign-up. Please try again.",
+      });
+    }
+  };
+
   return (
     <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
       <CardHeader>
         <CardTitle>Sign Up</CardTitle>
-        <CardDescription>Let&apos;s register your account..</CardDescription>
+        <CardDescription>Let&apos;s register your account.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form
-            action={async () => {
-              try {
-                setIsLoading(true);
-                const formData = new FormData();
-                formData.append("profileImage", imageFile as File);
-                formData.append("username", username);
-                formData.append("email", email);
-                formData.append("role", role);
-                formData.append("password", password);
-
-                const response = await addUserAction(formData);
-
-                console.log(response.message);
-              } catch (error) {
-              } finally {
-                setIsLoading(false);
-              }
+            action={() => {
+              startTransition(() => {
+                handleSubmit();
+              });
             }}
             className="space-y-5"
           >
@@ -98,13 +114,18 @@ export default function SignUp(): ReactElement {
                 errors={form.formState.errors}
                 type={field.type}
                 onChange={field.onChange}
-                imageSrc={imageSrc as string}
+                imageSrc={field.name === "profileImage" ? imageSrc : undefined}
               />
             ))}
             {isLoading ? (
-              <LoadingButton>Mengirim...</LoadingButton>
+              <LoadingButton>Submitting...</LoadingButton>
             ) : (
-              <Button type="submit" size="default" className="w-full">
+              <Button
+                disabled={!isValid}
+                type="submit"
+                size="default"
+                className="w-full"
+              >
                 Sign Up Now
               </Button>
             )}
@@ -113,7 +134,7 @@ export default function SignUp(): ReactElement {
       </CardContent>
       <CardFooter>
         <CardDescription className="mt-0">
-          Already have an account ?{" "}
+          Already have an account?{" "}
           <Link href="/auth/login" className="text-sm text-foreground/85">
             Login
           </Link>

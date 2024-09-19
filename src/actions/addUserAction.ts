@@ -10,38 +10,55 @@ import {
 } from "@/schemas/AddUserSchema";
 import { revalidatePath } from "next/cache";
 
-const handleUpload = async (file: File) => {
-  const folder = "products/";
-  const imagePath = await uploadFile(file, folder);
-  const imageUrl = await getFile(imagePath);
-
-  return imageUrl;
+const uploadProfileImage = async (file: File): Promise<string> => {
+  const folderPath = "products/";
+  const imagePath = await uploadFile(file, folderPath);
+  return getFile(imagePath);
 };
 
-async function checkForExistingUser(username: string, email: string) {
-  const existingUser = await User.findOne({
+const findExistingUser = async (username: string, email: string) => {
+  const user = await User.findOne({
     $or: [{ username }, { email }],
   }).lean();
-  if (existingUser) {
-    const { path, message } =
-      existingUser.username === username
-        ? {
-            path: "username",
-            message: `Akun dengan username ${username} sudah ada di database.`,
-          }
-        : {
-            path: "email",
-            message: `Akun dengan email ${email} sudah ada di database.`,
-          };
-    return { path, message, status: "error" };
-  }
-}
+
+  if (!user) return null;
+
+  return {
+    path: user.username === username ? "username" : "email",
+    message: `An account with this ${user.username === username ? "username" : "email"} already exists in the database. Please choose a different one.`,
+    status: "error",
+  };
+};
+
+const determineUserRole = (
+  email: string,
+  password: string,
+  requestedRole: "user" | "admin",
+): "user" | "admin" => {
+  const isAdminCredentials =
+    email === process.env.ADMIN_EMAIL &&
+    password === process.env.ADMIN_PASSWORD;
+  return isAdminCredentials || requestedRole === "admin" ? "admin" : "user";
+};
+
+const createNewUser = async (
+  userData: NewAddUserType,
+  hashedPassword: string,
+  role: "user" | "admin",
+) => {
+  const newUser = new User({
+    ...userData,
+    password: hashedPassword,
+    role,
+  });
+  await newUser.save();
+};
 
 export async function addUserAction(formData: FormData) {
   try {
     await connectToDatabase();
 
-    const data: AddUserType = {
+    const userData: AddUserType = {
       profileImage: formData.get("profileImage") as string,
       email: formData.get("email") as string,
       password: formData.get("password") as string,
@@ -49,66 +66,53 @@ export async function addUserAction(formData: FormData) {
       role: formData.get("role") as "user" | "admin",
     };
 
-    // Validate the data against the schema
-    const parseResult = addUserSchema.safeParse(data);
-    if (!parseResult.success) {
+    const validationResult = addUserSchema.safeParse(userData);
+    if (!validationResult.success) {
       return {
         status: "error",
-        message: parseResult.error.errors.map((err) => err.message).join(", "),
-        errors: parseResult.error.errors,
+        message: `Validation failed. Please correct them and try again.`,
+        errors: validationResult.error.errors,
       };
     }
 
-    const imgUrl = await handleUpload(data.profileImage as File);
-
-    // Extracting data from formData and casting to appropriate types
-    const { profileImage, ...payload } = parseResult.data;
-
-    (payload as NewAddUserType).imgUrl = imgUrl;
-
-    const existingUser = await checkForExistingUser(
-      payload.username,
-      payload.email
+    const existingUserError = await findExistingUser(
+      validationResult.data.username,
+      validationResult.data.email,
     );
+    if (existingUserError) return existingUserError;
 
-    if (existingUser) return existingUser;
+    const profileImageUrl = await uploadProfileImage(
+      validationResult.data.profileImage as File,
+    );
+    const newUserData: NewAddUserType = {
+      ...validationResult.data,
+      imgUrl: profileImageUrl,
+    };
 
-    const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+    const role = determineUserRole(
+      newUserData.email,
+      newUserData.password,
+      newUserData.role,
+    );
+    const hashedPassword = await bcrypt.hash(newUserData.password, 10);
 
-    // Determine the role based on credentials
-    let role =
-      payload.email === ADMIN_EMAIL && payload.password === ADMIN_PASSWORD
-        ? "admin"
-        : "user";
-    role = payload.role === "admin" ? "admin" : "user";
+    await createNewUser(newUserData, hashedPassword, role);
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(payload.password, 10);
-
-    // Create a new user
-    const newUser = new User({
-      username: payload.username,
-      email: payload.email,
-      password: hashedPassword,
-      role,
-      imgUrl,
-    });
-
-    // Save the user to the database
-    await newUser.save();
     revalidatePath("/admin/users/add");
     revalidatePath("/admin/users");
 
     return {
       status: "success",
-      message: "User added successfully.",
+      message:
+        "User successfully added to the database. You can now manage this user in the admin panel.",
     };
   } catch (error) {
+    console.error("Error adding user:", error);
     return {
       status: "error",
       message:
-        (error as { message: string }).message || "Internal server error.",
+        (error as { message: string }).message ||
+        "An internal server error occurred. Please try again later.",
     };
   }
 }

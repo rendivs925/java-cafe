@@ -6,8 +6,9 @@ import { addUserSchema } from "@/schemas/AddUserSchema";
 
 export default function useSignUp() {
   const [isLoading, setIsLoading] = useState(false);
-  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
+
   const form = useForm<z.infer<typeof addUserSchema>>({
     resolver: zodResolver(addUserSchema),
     defaultValues: {
@@ -15,27 +16,26 @@ export default function useSignUp() {
       email: "",
       password: "",
       role: "user",
-      profileImage: undefined,
+      profileImage: null,
     },
+    mode: "onChange",
   });
 
-  const formData = form.watch();
+  const { watch, ...formMethods } = form;
+  const formData = watch();
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event?.target?.files && event.target.files[0]) {
-      const file = event.target.files[0];
+    const file = event.target.files?.[0];
+    if (file) {
       setImageFile(file);
       const reader = new FileReader();
-      reader.onload = () => {
-        setImageSrc(reader.result);
-      };
+      reader.onload = () => setImageSrc(reader.result);
       reader.readAsDataURL(file);
     }
   };
 
   return {
-    form,
-    addUserSchema,
+    form: formMethods,
     formData,
     imageFile,
     imageSrc,

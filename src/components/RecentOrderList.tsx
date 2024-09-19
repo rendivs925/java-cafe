@@ -31,8 +31,6 @@ export default function RecentOrderList({
     return `${days} day${days > 1 ? "s" : ""} ago`;
   }
 
-  console.dir(orders, { colors: true, depth: null });
-
   return (
     <>
       <div>

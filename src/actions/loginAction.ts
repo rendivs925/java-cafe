@@ -2,7 +2,7 @@
 import bcrypt from "bcrypt";
 import { connectToDatabase } from "@/lib/dbConnect";
 import User from "@/models/User";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { baseUserSchema, BaseUserType } from "@/schemas/UserSchema";
 import { COOKIE_NAME } from "@/constanst";
@@ -24,9 +24,9 @@ export async function loginAction(formData: FormData) {
     const parseResult = baseUserSchema.safeParse(data);
     if (!parseResult.success) {
       return {
-        message: "Invalid input",
-        errors: parseResult.error.errors,
         status: "error",
+        message: "Invalid input. Please check your email and password.",
+        errors: parseResult.error.errors,
       };
     }
 
@@ -38,9 +38,9 @@ export async function loginAction(formData: FormData) {
 
     if (!user) {
       return {
-        message: "Akun tidak bisa ditemukan.",
-        path: "email",
         status: "error",
+        message: "Account not found. Please check the email you provided.",
+        path: "email",
       };
     }
 
@@ -49,7 +49,7 @@ export async function loginAction(formData: FormData) {
     if (!isValidPassword) {
       return {
         status: "error",
-        message: "Password anda salah.",
+        message: "Incorrect password. Please try again.",
         path: "password",
       };
     }
@@ -67,6 +67,7 @@ export async function loginAction(formData: FormData) {
       .setExpirationTime(`${MAX_AGE}s`)
       .sign(new TextEncoder().encode(getJwtSecretKey()));
 
+    // Set the authentication cookie
     cookies().set({
       name: COOKIE_NAME,
       value: token,
@@ -84,8 +85,8 @@ export async function loginAction(formData: FormData) {
 
     return {
       status: "success",
+      message: "Login successful. Welcome back!",
       totalItems: cartResponse.cart.products.length,
-      message: "Authenticated!",
       user: {
         _id: user._id.toString(),
         username: user.username,
@@ -97,9 +98,10 @@ export async function loginAction(formData: FormData) {
   } catch (error) {
     return {
       status: "error",
-      totalItems: 0,
       message:
-        (error as { message: string }).message || "Internal server error.",
+        (error as { message: string }).message ||
+        "An unexpected error occurred. Please try again later.",
+      totalItems: 0,
     };
   }
 }
