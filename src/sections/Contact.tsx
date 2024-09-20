@@ -1,6 +1,6 @@
 import { type ReactElement } from "react";
 import dynamic from "next/dynamic";
-import { contactUs, workingHours } from "@/constanst";
+import { contactUs, followUs, workingHours } from "@/constanst";
 import Title from "@/components/Title";
 
 const Map = dynamic(() => import("@/components/Map"), {
@@ -47,11 +47,17 @@ const ContactInfo = () => (
 const FollowUs = () => (
   <div>
     <h4>Follow Us</h4>
-    <ul className="custom-list">
-      {contactUs.map(({ title, value }, index) => (
-        <li key={index} className="list-style space-y-1.5">
-          <p className="text-muted-foreground sm-text mt-0">{title}</p>
-          <p className="custom-p">{value}</p>
+    <ul className="flex space-x-4">
+      {followUs.map(({ platform, icon: Icon, link }, index) => (
+        <li key={index} className="list-none">
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-2xl text-muted-foreground transition-colors duration-300 ease-in-out hover:text-primary"
+          >
+            <Icon name={platform} />
+          </a>
         </li>
       ))}
     </ul>

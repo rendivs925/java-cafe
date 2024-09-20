@@ -1,5 +1,5 @@
 "use client";
-import { ReactElement, useTransition } from "react";
+import { useTransition } from "react";
 import CardContainer from "@/components/CardContainer";
 import InputFormField from "@/components/InputFormField";
 import useSignUp from "@/hooks/useSignUp";
@@ -17,7 +17,7 @@ import LoadingButton from "@/components/LoadingButton";
 import { addUserAction } from "@/actions/addUserAction";
 import { toast } from "@/components/ui/use-toast";
 
-export default function SignUp(): ReactElement {
+export default function SignUp() {
   const { form, formData, handleImageChange, imageFile, imageSrc } =
     useSignUp();
   let [isLoading, startTransition] = useTransition();
@@ -114,7 +114,11 @@ export default function SignUp(): ReactElement {
                 errors={form.formState.errors}
                 type={field.type}
                 onChange={field.onChange}
-                imageSrc={field.name === "profileImage" ? imageSrc : undefined}
+                imageSrc={
+                  field.name === "profileImage"
+                    ? (imageSrc as string)
+                    : undefined
+                }
               />
             ))}
             {isLoading ? (

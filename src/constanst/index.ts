@@ -1,4 +1,5 @@
 import { Blog, Contact, NavbarLink, WorkingHour } from "@/types";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa"; // Import icons
 
 const COOKIE_NAME = "user-token";
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -88,6 +89,29 @@ const contactUs: Contact[] = [
   },
 ];
 
+const followUs = [
+  {
+    platform: "Facebook",
+    icon: FaFacebook, // Use imported icon
+    link: "https://www.facebook.com",
+  },
+  {
+    platform: "Twitter",
+    icon: FaTwitter, // Use imported icon
+    link: "https://www.twitter.com",
+  },
+  {
+    platform: "Instagram",
+    icon: FaInstagram, // Use imported icon
+    link: "https://www.instagram.com",
+  },
+  {
+    platform: "LinkedIn",
+    icon: FaLinkedin, // Use imported icon
+    link: "https://www.linkedin.com",
+  },
+];
+
 export {
   navbarLinks,
   MAX_FILE_SIZE,
@@ -97,4 +121,5 @@ export {
   contactUs,
   blogs,
   BASE_URL,
+  followUs, // Export followUs
 };
