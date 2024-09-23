@@ -14,6 +14,7 @@ export default function ImagePreview({
   return (
     <ProductCard
       category={category || "espresso"}
+      readonly={true}
       description={
         description ||
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis ut, fugit perferendis"

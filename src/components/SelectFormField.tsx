@@ -52,11 +52,9 @@ const SelectFormField = forwardRef<HTMLSelectElement, SelectFormFieldProps>(
                 </FormControl>
                 <SelectContent>
                   {options.map((option) => {
-                    console.log(option);
-
                     return (
                       <SelectItem
-                        key={`${option.value}`} // Ensure unique key
+                        key={`${option.value}`} 
                         value={`${option.value}`}
                       >
                         {option.label}
@@ -71,7 +69,7 @@ const SelectFormField = forwardRef<HTMLSelectElement, SelectFormFieldProps>(
         }}
       />
     );
-  }
+  },
 );
 
 SelectFormField.displayName = "SelectFormField";

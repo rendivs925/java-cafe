@@ -14,7 +14,7 @@ export default function RecentOrderList({
   function getTimeOrderedString(date: Date): string {
     const now = new Date();
     const diffInSeconds = Math.floor(
-      (now.getTime() - new Date(date).getTime()) / 1000
+      (now.getTime() - new Date(date).getTime()) / 1000,
     );
 
     if (diffInSeconds < 60) return "just now";
@@ -35,32 +35,38 @@ export default function RecentOrderList({
     <>
       <div>
         <ul className="space-y-4 mt-2">
-          {orders?.map((order, index) =>
-            order.products.map((product) => (
-              <li key={index} className="flex justify-between items-center">
-                <div className="flex gap-4 items-center">
-                  <Image
-                    className="aspect-square"
-                    objectFit="cover"
-                    src={product.imgUrl}
-                    alt={product.title}
-                    width={64}
-                    height={64}
-                  />
-                  <div className="space-y-1 justify-self-start">
-                    <h5 className="my-0 py-0 text-lg font-medium text-foreground">
-                      {product.title}
-                    </h5>
-                    <CardDescription className="my-0">
-                      {`${getTimeOrderedString(order.createdAt)}`}
-                    </CardDescription>
+          {orders?.length ? (
+            orders?.map((order, index) =>
+              order.products.map((product) => (
+                <li key={index} className="flex justify-between items-center">
+                  <div className="flex gap-4 items-center">
+                    <Image
+                      className="aspect-square"
+                      objectFit="cover"
+                      src={product.imgUrl}
+                      alt={product.title}
+                      width={64}
+                      height={64}
+                    />
+                    <div className="space-y-1 justify-self-start">
+                      <h5 className="my-0 py-0 text-lg font-medium text-foreground">
+                        {product.title}
+                      </h5>
+                      <CardDescription className="my-0">
+                        {`${getTimeOrderedString(order.createdAt)}`}
+                      </CardDescription>
+                    </div>
                   </div>
-                </div>
-                <p className="mt-0 text-foreground font-medium">
-                  {formatToRupiah(product.totalPrice)}
-                </p>
-              </li>
-            ))
+                  <p className="mt-0 text-foreground font-medium">
+                    {formatToRupiah(product.totalPrice)}
+                  </p>
+                </li>
+              )),
+            )
+          ) : (
+            <CardDescription className="my-0">
+              Recent order is empty.
+            </CardDescription>
           )}
         </ul>
       </div>

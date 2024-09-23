@@ -28,14 +28,12 @@ const ProductsList: React.FC<ProductsListProps> = ({ products }) => {
   const renderSlide = (product: ProductType) => (
     <CarouselItem className="pl-12 md:basis-1/2 lg:basis-1/3" key={product._id}>
       <ProductCard
-        weight={product.weight}
         title={product.title}
         price={product.price}
         category={product.category}
         stock={product.stock}
         description={product.description}
         imgUrl={product.imgUrl}
-        profit={product.profit}
         productId={product._id.toString() as string}
       />
     </CarouselItem>

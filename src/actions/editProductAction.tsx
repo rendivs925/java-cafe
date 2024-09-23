@@ -9,7 +9,7 @@ import {
 } from "@/schemas/AddProductSchema";
 import { revalidateTag } from "next/cache";
 
-export async function addProductAction(formData: FormData) {
+export async function editProductAction(formData: FormData, productId: string) {
   try {
     await connectToDatabase();
 
@@ -22,7 +22,7 @@ export async function addProductAction(formData: FormData) {
       description: formData.get("description") as string,
       category: formData.get("category") as string,
       stock: Number(formData.get("stock")),
-      productImage: formData.get("productImage") as string,
+      productImage: formData.get("productImage") as File | null,
     };
 
     // Validate the data against the schema
@@ -30,36 +30,37 @@ export async function addProductAction(formData: FormData) {
     if (!parseResult.success) {
       return {
         status: "error",
-        message: "Failed to add product.",
+        message: "Failed to edit product.",
         errors: parseResult.error.errors,
       };
     }
 
-    // Check for duplicate product by title
-    const existingProduct = await Product.findOne({ title: data.title });
-    if (existingProduct) {
+    // Find the product by ID
+    const existingProduct = await Product.findById(productId);
+    if (!existingProduct) {
       return {
         status: "error",
-        message: "Product with this title already exists.",
+        message: "Product not found.",
       };
     }
 
-    const imgUrl = await handleUpload(data.productImage as File, "products");
+    // Handle image upload if a new image is provided
+    let imgUrl = existingProduct.imgUrl;
+    if (data.productImage) {
+      imgUrl = await handleUpload(data.productImage as File, "products");
+    }
 
-    // Extracting data from formData and casting to appropriate types
+    // Update the product with the new data
     const { productImage, ...payload } = parseResult.data;
-
     (payload as newAddProductType).imgUrl = imgUrl;
 
-    // Add the product to the database
-    const newProduct = new Product(payload);
-    await newProduct.save();
+    await Product.findByIdAndUpdate(productId, payload, { new: true });
 
     revalidateTag("/admin/products");
 
     return {
       status: "success",
-      message: "Product added successfully.",
+      message: "Product updated successfully.",
     };
   } catch (error) {
     return {

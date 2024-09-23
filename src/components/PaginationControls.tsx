@@ -26,7 +26,7 @@ export default function PaginationControls({
   const pathname = usePathname();
 
   const page = searchParams.get("page") ?? "1";
-  const per_page = searchParams.get("per_page") ?? "1";
+  const per_page = searchParams.get("per_page") ?? "5";
 
   return (
     <Suspense>
@@ -37,7 +37,7 @@ export default function PaginationControls({
               onClick={() => {
                 hasPrevPage &&
                   moveRoute(
-                    `${pathname}?page=${Number(page) - 1}&per_page=${per_page}`
+                    `${pathname}?page=${Number(page) - 1}&per_page=${per_page}`,
                   );
               }}
               className="hover:bg-transparent cursor-pointer"
@@ -52,7 +52,7 @@ export default function PaginationControls({
               onClick={() => {
                 hasNextPage &&
                   moveRoute(
-                    `${pathname}?page=${Number(page) + 1}&per_page=${per_page}`
+                    `${pathname}?page=${Number(page) + 1}&per_page=${per_page}`,
                   );
               }}
             />

@@ -11,16 +11,16 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 const selectShowingItems = [
-  { value: 5 },
-  { value: 10 },
-  { value: 20 },
-  { value: 30 },
+  { value: "5" },
+  { value: "10" },
+  { value: "20" },
+  { value: "30" },
 ];
 
 export default function SelectShowing(): ReactElement {
   const [totalItemsPerPage, setTotalItemsPerPage] = useLocalStorage(
     "totalItemsPerPage",
-    "1"
+    "5",
   );
   const pathname = usePathname();
   const router = useRouter();
@@ -47,7 +47,7 @@ export default function SelectShowing(): ReactElement {
           onValueChange={handleSelectOnchange}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="1" />
+            <SelectValue placeholder="5" />
           </SelectTrigger>
           <SelectContent>
             {selectShowingItems.map(({ value }, index) => (

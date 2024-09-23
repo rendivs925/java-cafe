@@ -8,6 +8,8 @@ export interface IReview {
 }
 
 export interface IProduct {
+  _id?: string;
+  createdAt?: Date;
   category: string;
   description: string;
   imgUrl: string;
@@ -22,12 +24,12 @@ export interface IProduct {
 }
 
 // Create the Mongoose schema for reviews
-const ReviewSchema: Schema<IReview> = new Schema({
-  userId: { type: Schema.Types.ObjectId, required: false },
-  rating: { type: Number, required: false },
-  comment: { type: String, required: false },
-});
-
+// const ReviewSchema: Schema<IReview> = new Schema({
+//   userId: { type: Schema.Types.ObjectId, required: false },
+//   rating: { type: Number, required: false },
+//   comment: { type: String, required: false },
+// });
+//
 // Create the Mongoose schema for products
 const ProductSchema: Schema<IProduct> = new Schema(
   {
@@ -39,11 +41,13 @@ const ProductSchema: Schema<IProduct> = new Schema(
     profit: { type: Number, required: true },
     stock: { type: Number, required: true },
     title: { type: String, required: true, unique: true },
+    _id: { type: String, required: false, unique: true },
+    createdAt: { type: Date, required: false },
     weight: { type: Number, required: true },
     // rating: { type: Number, required: false },
     // reviews: [ReviewSchema],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Create and export the Mongoose model

@@ -1,18 +1,19 @@
 "use client";
 
-import { type ReactElement } from "react";
+import { type ReactElement, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import LoadingButton from "./LoadingButton";
 import InputFormField from "./InputFormField";
 import { toast } from "@/components/ui/use-toast";
-import useAddProduct from "@/hooks/useAddProduct";
+import useEditProduct from "@/hooks/useEditProduct";
 import { Form } from "./ui/form";
 import CardContainer from "./CardContainer";
 import { CardContent } from "./ui/card";
 import ImagePreview from "./ImagePreview";
 import SelectFormField from "./SelectFormField";
-import { addProductAction } from "@/actions/addProductAction";
+import { editProductAction } from "@/actions/editProductAction";
 import { Option } from "./PengirimanForm";
+import { newAddProductType } from "@/schemas/AddProductSchema";
 
 export interface FormField {
   name: string;
@@ -25,17 +26,27 @@ export interface FormField {
   options?: Option[];
 }
 
-export default function AddProductForm(): ReactElement {
+interface EditProductFormProps {
+  product: newAddProductType;
+}
+
+export default function EditProductForm({
+  product,
+}: EditProductFormProps): ReactElement {
   const {
     form,
     handleCancel,
     formData,
     handleImageChange,
-    imageSrc,
+    imageFile,
     isLoading,
     startTransition,
-    imageFile,
-  } = useAddProduct();
+  } = useEditProduct({ product });
+
+  const [currentImage, setCurrentImage] = useState<string | ArrayBuffer | null>(
+    product.imgUrl || null,
+  );
+
   const { title, capital, weight, category, description, price, stock } =
     formData;
 
@@ -99,7 +110,16 @@ export default function AddProductForm(): ReactElement {
       placeholder: "Enter product image",
       label: "Product Image",
       type: "file",
-      onChange: handleImageChange,
+      onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+        handleImageChange(event);
+        if (event.target.files && event.target.files[0]) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            setCurrentImage(reader.result);
+          };
+          reader.readAsDataURL(event.target.files[0]);
+        }
+      },
     },
   ];
 
@@ -113,9 +133,11 @@ export default function AddProductForm(): ReactElement {
       formData.append("description", description);
       formData.append("category", category);
       formData.append("stock", String(stock));
-      formData.append("productImage", imageFile as File);
+      if (imageFile) {
+        formData.append("productImage", imageFile as File);
+      }
 
-      const response = await addProductAction(formData);
+      const response = await editProductAction(formData, product._id as string);
       if (
         response.status === "error" &&
         "errors" in response &&
@@ -139,7 +161,7 @@ export default function AddProductForm(): ReactElement {
       toast({ description: response.message });
     } catch (err) {
       toast({
-        description: "An error occurred while adding the product.",
+        description: "An error occurred while updating the product.",
         variant: "destructive",
       });
     }
@@ -192,10 +214,10 @@ export default function AddProductForm(): ReactElement {
                   Cancel
                 </Button>
                 {isLoading ? (
-                  <LoadingButton>Adding...</LoadingButton>
+                  <LoadingButton>Updating...</LoadingButton>
                 ) : (
                   <Button type="submit" size="default" className="w-full">
-                    Add Product
+                    Update Product
                   </Button>
                 )}
               </div>
@@ -204,11 +226,13 @@ export default function AddProductForm(): ReactElement {
         </CardContent>
       </CardContainer>
       <ImagePreview
-        imgUrl={imageSrc as string}
+        imgUrl={
+          currentImage ? (currentImage as string) : (product.imgUrl as string)
+        }
         key={title}
         category={category}
         description={description}
-        productId={title}
+        productId={product._id as string}
         price={price}
         stock={stock}
         title={title}

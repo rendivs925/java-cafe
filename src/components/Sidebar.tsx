@@ -4,9 +4,6 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { RiArticleLine, RiDashboardFill } from "react-icons/ri";
 import { PiCoffeeFill } from "react-icons/pi";
 import { IoCart } from "react-icons/io5";
-import { TbReportMoney } from "react-icons/tb";
-import { GrAnalytics } from "react-icons/gr";
-import { IoMdSettings } from "react-icons/io";
 import { BiSolidLogOut } from "react-icons/bi";
 import { FaRegUser } from "react-icons/fa";
 import Link from "next/link";
@@ -39,11 +36,6 @@ const links = [
     label: "Users",
     icon: <FaRegUser />,
   },
-  {
-    href: "/admin/settings",
-    label: "Settings",
-    icon: <IoMdSettings />,
-  },
 ];
 
 const Sidebar = () => {
@@ -61,9 +53,9 @@ const Sidebar = () => {
     } else {
       const timer = setTimeout(() => {
         setIsVisible(false);
-      }, 500); // Delay hiding to allow opacity transition
+      }, 500);
 
-      return () => clearTimeout(timer); // Cleanup the timer
+      return () => clearTimeout(timer);
     }
   }, [isExpanded]);
 

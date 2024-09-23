@@ -1,5 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 
+type SearchParams = { [key: string]: string | string[] | undefined };
+
 interface ChartData {
   product: string;
   name: string;
@@ -57,7 +59,7 @@ interface AppContextType {
           username: string;
           noHandphone: string;
           alamatLengkap: string;
-        })
+        }),
   ) => void;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
   setUser: (value: User | ((val: User) => User)) => void;
@@ -120,4 +122,5 @@ export type {
   CartProduct,
   Operation,
   User,
+  SearchParams,
 };

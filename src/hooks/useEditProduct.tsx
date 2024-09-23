@@ -4,30 +4,41 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useAppContext from "./useAppContext";
-import { useState } from "react";
-import { addProductSchema } from "@/schemas/AddProductSchema";
+import { useState, useEffect } from "react";
+import { addProductSchema, AddProductType } from "@/schemas/AddProductSchema";
 
-export default function useAddProduct() {
+interface UseEditProductProps {
+  product: AddProductType;
+}
+
+export default function useEditProduct({ product }: UseEditProductProps) {
   const { pushRoute: moveRoute } = useAppContext();
-  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
-  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const [isLoading, startTransition] = useTransition();
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(
+    product?.productImage || null,
+  );
+
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      price: 0,
-      category: "",
-      stock: 0,
-      capital: 0,
-      weight: 0,
+      title: product.title || "",
+      description: product.description || "",
+      price: product.price || 0,
+      category: product.category || "",
+      stock: product.stock || 0,
+      capital: product.capital || 0,
+      weight: product.weight || 0,
       productImage: undefined,
     },
     mode: "onChange",
   });
 
   const formData = form.watch();
+
+  useEffect(() => {
+    setImageSrc(product?.productImage || "https://via.placeholder.com/400");
+  }, [product]);
 
   const handleCancel = () => {
     form.reset();

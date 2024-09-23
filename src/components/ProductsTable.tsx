@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import EditProductButton from "@/components/EditProductButton";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import { MdOutlineEdit } from "react-icons/md";
@@ -14,27 +15,25 @@ import TableCellFormattedDate from "./TableCellFormattedDate";
 import TableCellFormattedNumber from "./TableCellFormattedNumber";
 import PaginationControls from "./PaginationControls";
 import DeleteProductButton from "./DeleteProductButton";
+import type { SearchParams } from "@/types"; // Importing types
+import { newAddProductType } from "@/schemas/AddProductSchema";
+
+function getStockStatus(stock: number): string {
+  return stock === 0 ? "Out of Stock" : "In Stock";
+}
 
 export default async function ProductsTable({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: SearchParams;
 }) {
-  const page = searchParams["page"] ?? "1";
-  const per_page = searchParams["per_page"] ?? "5";
-  const { items, totalItemsLength } = await getProductsAction(
-    Number(page),
-    Number(per_page)
-  );
+  const page = Number(searchParams["page"] ?? "1");
+  const perPage = Number(searchParams["per_page"] ?? "5");
 
-  // mocked, skipped and limited in the real app
-  const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
-  const totalPages = Math.ceil(totalItemsLength / Number(per_page));
+  const { items, totalItemsLength } = await getProductsAction(page, perPage);
 
-  const getStockStatus = (stock: number): string => {
-    if (stock === 0) return "Out of Stock";
-    return "In Stock";
-  };
+  const totalPages = Math.ceil(totalItemsLength / perPage);
+  const start = (page - 1) * perPage;
 
   return (
     <Table className="overflow-y-hidden">
@@ -42,7 +41,6 @@ export default async function ProductsTable({
         <TableRow>
           <TableHead>No</TableHead>
           <TableHead>Item</TableHead>
-          <TableHead>Description</TableHead>
           <TableHead>Product ID</TableHead>
           <TableHead>Date Added</TableHead>
           <TableHead>Price</TableHead>
@@ -53,66 +51,24 @@ export default async function ProductsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {items?.map(
-          (
-            {
-              title,
-              createdAt,
-              category,
-              price,
-              description,
-              _id,
-              stock,
-              imgUrl,
-            },
-            index
-          ) => (
-            <TableRow key={_id.toString()}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell className="flex items-center gap-4">
-                <Image
-                  src={imgUrl}
-                  width={40}
-                  height={40}
-                  alt={title}
-                  objectFit="cover"
-                  className="aspect-square"
-                />
-                {title}
-              </TableCell>
-              <TableCell className="max-w-[40ch]">{description}</TableCell>
-              <TableCell>{_id.toString()}</TableCell>
-              <TableCellFormattedDate createdAt={createdAt} />
-              <TableCellFormattedNumber price={price} />
-              <TableCell>{category}</TableCell>
-              <TableCell
-                className={stock !== 0 ? "text-green-500" : "text-red-500"}
-              >
-                {getStockStatus(stock)}
-              </TableCell>
-              <TableCell>{stock}</TableCell>
-              <TableCell className="text-right">
-                <Button size="sm" variant="ghost" className="bg-transparent">
-                  <MdOutlineEdit className="text-foreground text-lg" />
-                </Button>
-                <DeleteProductButton
-                  filePath={imgUrl}
-                  productId={_id.toString()}
-                />
-              </TableCell>
-            </TableRow>
-          )
-        )}
+        {items?.map((product: newAddProductType, index: number) => (
+          <ProductRow
+            key={product._id}
+            product={product}
+            index={index}
+            startIndex={start}
+          />
+        ))}
         <TableRow>
           <TableCell
             className="bg-transparent text-muted-foreground pb-0"
             colSpan={5}
           >
-            Total Items : {totalItemsLength}
+            Total Items: {totalItemsLength}
           </TableCell>
           <TableCell className="bg-secondary pb-0" colSpan={5}>
             <PaginationControls
-              hasNextPage={Number(page) < totalPages}
+              hasNextPage={page < totalPages}
               hasPrevPage={start > 0}
               totalItemsLength={totalItemsLength}
             />
@@ -120,5 +76,44 @@ export default async function ProductsTable({
         </TableRow>
       </TableBody>
     </Table>
+  );
+}
+
+type ProductRowProps = {
+  product: newAddProductType;
+  index: number;
+  startIndex: number;
+};
+
+function ProductRow({ product, index, startIndex }: ProductRowProps) {
+  const { _id, title, createdAt, category, price, stock, imgUrl } = product;
+
+  return (
+    <TableRow key={_id}>
+      <TableCell>{startIndex + index + 1}</TableCell>
+      <TableCell className="flex items-center gap-4">
+        <Image
+          src={imgUrl}
+          width={40}
+          height={40}
+          alt={title}
+          objectFit="cover"
+          className="aspect-square"
+        />
+        {title}
+      </TableCell>
+      <TableCell>{_id}</TableCell>
+      <TableCellFormattedDate createdAt={createdAt as Date} />
+      <TableCellFormattedNumber price={price} />
+      <TableCell>{category}</TableCell>
+      <TableCell className={stock !== 0 ? "text-green-500" : "text-red-500"}>
+        {getStockStatus(stock)}
+      </TableCell>
+      <TableCell>{stock}</TableCell>
+      <TableCell className="text-right">
+        <EditProductButton productId={_id as string} />
+        <DeleteProductButton filePath={imgUrl} productId={_id as string} />
+      </TableCell>
+    </TableRow>
   );
 }
