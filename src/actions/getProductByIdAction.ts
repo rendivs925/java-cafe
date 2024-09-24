@@ -3,7 +3,7 @@ import { ProductType } from "@/components/ProductsList";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Product from "@/models/Product";
 
-export default async function getProductByIdAction(id: string) {
+export async function getProductByIdAction(id: string) {
   try {
     await connectToDatabase();
 

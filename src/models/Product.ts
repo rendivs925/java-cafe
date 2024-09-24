@@ -8,7 +8,6 @@ export interface IReview {
 }
 
 export interface IProduct {
-  _id?: string;
   createdAt?: Date;
   category: string;
   description: string;
@@ -41,7 +40,6 @@ const ProductSchema: Schema<IProduct> = new Schema(
     profit: { type: Number, required: true },
     stock: { type: Number, required: true },
     title: { type: String, required: true, unique: true },
-    _id: { type: String, required: false, unique: true },
     createdAt: { type: Date, required: false },
     weight: { type: Number, required: true },
     // rating: { type: Number, required: false },

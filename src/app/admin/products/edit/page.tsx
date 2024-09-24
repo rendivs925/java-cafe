@@ -4,7 +4,7 @@ import DashboardContent from "@/components/DashboardContent";
 import DashboardHeader from "@/components/DashboardHeader";
 import DashboardTitle from "@/components/DashboardTitle";
 import { SearchParams } from "@/types";
-import getProductByIdAction from "@/actions/getProductByIdAction";
+import { getProductByIdAction } from "@/actions/getProductByIdAction";
 import { AddProductType } from "@/schemas/AddProductSchema";
 
 export default async function EditProductPage({

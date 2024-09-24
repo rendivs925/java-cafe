@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import EditProductButton from "@/components/EditProductButton";
+import ViewProductDetailButton from "@/components/ViewProductDetailButton";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import { MdOutlineEdit } from "react-icons/md";
@@ -111,6 +112,7 @@ function ProductRow({ product, index, startIndex }: ProductRowProps) {
       </TableCell>
       <TableCell>{stock}</TableCell>
       <TableCell className="text-right">
+        <ViewProductDetailButton productId={_id as string} />
         <EditProductButton productId={_id as string} />
         <DeleteProductButton filePath={imgUrl} productId={_id as string} />
       </TableCell>
