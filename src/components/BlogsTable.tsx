@@ -6,8 +6,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "./ui/button";
-import { MdOutlineEdit } from "react-icons/md";
+import EditButton from "@/components/EditButton";
+import ViewDetailButton from "@/components/ViewDetailButton";
+import DeleteButton from "./DeleteButton";
+import deleteBlogAction from "@/actions/deleteBlogAction";
 import TableCellFormattedDate from "./TableCellFormattedDate";
 import PaginationControls from "./PaginationControls";
 import { getBlogsAction } from "@/actions/getBlogsAction";
@@ -21,7 +23,7 @@ export default async function BlogsTable({
   const per_page = searchParams["per_page"] ?? "5";
   const { items, totalItemsLength } = await getBlogsAction(
     Number(page),
-    Number(per_page)
+    Number(per_page),
   );
 
   // mocked, skipped and limited in the real app
@@ -44,7 +46,10 @@ export default async function BlogsTable({
       </TableHeader>
       <TableBody>
         {items?.map(
-          ({ title, createdAt, _id, author, isPublished, tags }, index) => (
+          (
+            { title, prevImgUrl, createdAt, _id, author, isPublished, tags },
+            index,
+          ) => (
             <TableRow key={_id?.toString()} className="w-full">
               <TableCell>{index + 1}</TableCell>
               <TableCell>{title}</TableCell>
@@ -54,12 +59,16 @@ export default async function BlogsTable({
               <TableCell>{`${isPublished}`}</TableCell>
               <TableCellFormattedDate createdAt={createdAt as Date} />
               <TableCell className="text-right">
-                <Button size="sm" variant="ghost" className="bg-transparent">
-                  <MdOutlineEdit className="text-foreground text-lg" />
-                </Button>
+                <ViewDetailButton path={`/blogs/${_id}`} />
+                <EditButton path={`blogId=${_id}`} />
+                <DeleteButton
+                  filePath={prevImgUrl}
+                  action={deleteBlogAction}
+                  itemId={_id as string}
+                />
               </TableCell>
             </TableRow>
-          )
+          ),
         )}
         <TableRow>
           <TableCell

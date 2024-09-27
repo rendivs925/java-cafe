@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useRef, useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L, { Map as LeafletMap, LatLngExpression } from "leaflet";
@@ -24,6 +23,18 @@ const Map: React.FC = () => {
       new MaptilerLayer({
         apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY!,
       }).addTo(map.current);
+
+      // Set up a custom marker icon
+      const customIcon = L.icon({
+        iconUrl: "/images/location.png", // Replace with the path to your custom icon
+        iconSize: [25, 41], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor
+      });
+
+      // Add a marker to the map
+      const marker = L.marker(center, { icon: customIcon }).addTo(map.current);
+      marker.bindPopup("Java Cafe").openPopup();
     }
 
     // Cleanup on unmount

@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactElement, useEffect, useState } from "react";
+import { type ReactElement, useState } from "react";
 import { Button } from "./ui/button";
 import LoadingButton from "./LoadingButton";
 import InputFormField from "./InputFormField";
@@ -44,7 +44,7 @@ export default function EditProductForm({
   } = useEditProduct({ product });
 
   const [currentImage, setCurrentImage] = useState<string | ArrayBuffer | null>(
-    product.imgUrl || null,
+    product?.imgUrl || null,
   );
 
   const { title, capital, weight, category, description, price, stock } =
@@ -137,7 +137,10 @@ export default function EditProductForm({
         formData.append("productImage", imageFile as File);
       }
 
-      const response = await editProductAction(formData, product._id as string);
+      const response = await editProductAction(
+        formData,
+        product?._id as string,
+      );
       if (
         response.status === "error" &&
         "errors" in response &&
@@ -227,12 +230,12 @@ export default function EditProductForm({
       </CardContainer>
       <ImagePreview
         imgUrl={
-          currentImage ? (currentImage as string) : (product.imgUrl as string)
+          currentImage ? (currentImage as string) : (product?.imgUrl as string)
         }
         key={title}
         category={category}
         description={description}
-        productId={product._id as string}
+        productId={product?._id as string}
         price={price}
         stock={stock}
         title={title}

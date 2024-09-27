@@ -4,16 +4,14 @@ import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
 import { MdOutlineEdit } from "react-icons/md";
 
-export interface EditProductButtonProps {
-  productId: string | number;
+export interface EditButtonProps {
+  path: string;
 }
 
-export default function EditProductButton({
-  productId,
-}: EditProductButtonProps): ReactElement {
+export default function EditButton({ path }: EditButtonProps): ReactElement {
   const { pushRoute } = useAppContext();
   const handleEditProduct = async () => {
-    pushRoute(`/admin/products/edit?productId=${productId}`);
+    pushRoute(`/admin/products/edit?${path}`);
   };
 
   return (

@@ -6,16 +6,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import EditProductButton from "@/components/EditProductButton";
-import ViewProductDetailButton from "@/components/ViewProductDetailButton";
-import { Button } from "./ui/button";
+import deleteProductAction from "@/actions/deleteProductAction";
+import EditButton from "@/components/EditButton";
+import ViewDetailButton from "@/components/ViewDetailButton";
+import DeleteButton from "./DeleteButton";
 import Image from "next/image";
-import { MdOutlineEdit } from "react-icons/md";
 import { getProductsAction } from "@/actions/getProductsAction";
 import TableCellFormattedDate from "./TableCellFormattedDate";
 import TableCellFormattedNumber from "./TableCellFormattedNumber";
 import PaginationControls from "./PaginationControls";
-import DeleteProductButton from "./DeleteProductButton";
 import type { SearchParams } from "@/types"; // Importing types
 import { newAddProductType } from "@/schemas/AddProductSchema";
 
@@ -112,9 +111,13 @@ function ProductRow({ product, index, startIndex }: ProductRowProps) {
       </TableCell>
       <TableCell>{stock}</TableCell>
       <TableCell className="text-right">
-        <ViewProductDetailButton productId={_id as string} />
-        <EditProductButton productId={_id as string} />
-        <DeleteProductButton filePath={imgUrl} productId={_id as string} />
+        <ViewDetailButton path={`/products/${_id}`} />
+        <EditButton path={`productId=${_id}`} />
+        <DeleteButton
+          filePath={imgUrl}
+          action={deleteProductAction}
+          itemId={_id as string}
+        />
       </TableCell>
     </TableRow>
   );

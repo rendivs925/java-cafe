@@ -2,32 +2,33 @@
 
 import { connectToDatabase } from "@/lib/dbConnect";
 import { deleteFile } from "@/lib/storage";
-import Product from "@/models/Product";
+import Blog from "@/models/Blog";
 import { revalidatePath } from "next/cache";
 
-export default async function deleteProductAction(
-  itemId: number | string,
+export default async function deleteBlogAction(
+  blogId: number | string,
   filePath: string,
 ) {
   try {
     await connectToDatabase();
-    const response = await Product.deleteOne({
-      _id: itemId,
+
+    const response = await Blog.deleteOne({
+      _id: blogId,
     });
 
     if (response.deletedCount === 0)
       return {
-        message: "Product not found.",
+        message: "Blog post not found.",
         status: "error",
       };
 
-    revalidatePath("/admin/products");
+    revalidatePath("/admin/blogs");
 
     await deleteFile(filePath);
 
     return {
       status: "success",
-      message: "Product deleted successfully.",
+      message: "Blog post deleted successfully.",
     };
   } catch (error) {
     return { status: "error", message: "Internal server error." };

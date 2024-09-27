@@ -21,6 +21,7 @@ import { formatToRupiah } from "@/lib/formatToRupiah";
 import { getPaymentStatusClass } from "@/lib/getPaymentStatusClass";
 import { getShipmentStatusClass } from "@/lib/getShipmentStatusClass";
 import AlertDialogProducts from "@/components/AlertDialogProducts";
+import { OrderStatus, PaymentStatus } from "@/types";
 
 export default async function Orders({
   searchParams,
@@ -31,7 +32,7 @@ export default async function Orders({
   const per_page = searchParams["per_page"] ?? "5";
   const { items, totalItemsLength } = await getUserOrdersAction(
     Number(page),
-    Number(per_page)
+    Number(per_page),
   );
 
   // mocked, skipped and limited in the real app
@@ -80,7 +81,7 @@ export default async function Orders({
                   <TableCell>
                     <p
                       className={`${getPaymentStatusClass(
-                        paymentStatus as "settlement" | "pending" | "expire"
+                        paymentStatus as PaymentStatus,
                       )} m-0 text-center`}
                     >
                       {paymentStatus}
@@ -90,7 +91,7 @@ export default async function Orders({
                     {
                       <p
                         className={`${getShipmentStatusClass(
-                          orderStatus as "processing" | "delivered"
+                          orderStatus as OrderStatus,
                         )} m-0 text-center`}
                       >
                         {orderStatus}
@@ -113,7 +114,7 @@ export default async function Orders({
                     </Button>
                   </TableCell>
                 </TableRow>
-              )
+              ),
             )}
             <TableRow>
               <TableCell

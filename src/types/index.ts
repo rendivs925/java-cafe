@@ -1,6 +1,8 @@
 import React, { Dispatch, SetStateAction } from "react";
 
 type SearchParams = { [key: string]: string | string[] | undefined };
+type PaymentStatus = "settlement" | "pending" | "expire";
+type OrderStatus = "processing" | "delivered";
 
 interface ChartData {
   product: string;
@@ -123,4 +125,6 @@ export type {
   Operation,
   User,
   SearchParams,
+  PaymentStatus,
+  OrderStatus,
 };

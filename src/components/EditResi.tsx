@@ -15,7 +15,13 @@ import { Label } from "@/components/ui/label";
 import { useRef, useState } from "react";
 import { toast } from "./ui/use-toast";
 
-export default function EditResi({ orderId }: { orderId: string }) {
+export default function EditResi({
+  orderId,
+  disabled,
+}: {
+  orderId: string;
+  disabled: boolean;
+}) {
   const formRef = useRef<HTMLFormElement>(null);
   const [loading, setLoading] = useState(false);
 
@@ -47,7 +53,9 @@ export default function EditResi({ orderId }: { orderId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit Resi</Button>
+        <Button disabled={disabled} variant="outline">
+          Edit Resi
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

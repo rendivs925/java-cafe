@@ -6,11 +6,12 @@ import DashboardContent from "@/components/DashboardContent";
 import SelectShowing from "@/components/SelectShowing";
 import AddButton from "@/components/AddButton";
 import BlogsTable from "@/components/BlogsTable";
+import { SearchParams } from "@/types";
 
 export default function BlogsPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: SearchParams;
 }): ReactElement {
   return (
     <Suspense>

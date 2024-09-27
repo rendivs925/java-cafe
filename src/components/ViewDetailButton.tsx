@@ -4,21 +4,22 @@ import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
 import { GrView } from "react-icons/gr";
 
-export interface ViewProductDetailButton {
-  productId: string | number;
+export interface ViewDetailButtonProps {
+  path: string;
 }
 
-export default function ViewProductDetailButton({
-  productId,
-}: ViewProductDetailButton): ReactElement {
+export default function ViewDetailButton({
+  path,
+}: ViewDetailButtonProps): ReactElement {
   const { pushRoute } = useAppContext();
-  const handleViewProduct = async () => {
-    pushRoute(`/products/${productId}`);
+
+  const handleView = async () => {
+    pushRoute(path);
   };
 
   return (
     <Button
-      onClick={handleViewProduct}
+      onClick={handleView}
       size="sm"
       variant="ghost"
       className="bg-transparent"
