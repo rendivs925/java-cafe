@@ -165,7 +165,7 @@ export default function AddBlogPage(props: AddBlogPageProps): ReactElement {
 
       handleResponse(response as Response);
     } catch (error) {
-      console.error("Error creating blog:", error);
+      console.error("Error creating blog.");
     }
   };
 
