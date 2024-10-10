@@ -7,13 +7,13 @@ import {
   type ReactElement,
 } from "react";
 import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css"; // Import Quill styles
+import "react-quill/dist/quill.snow.css";
 import DashboardContainer from "@/components/DashboardContainer";
 import DashboardContent from "@/components/DashboardContent";
 import DashboardHeader from "@/components/DashboardHeader";
 import DashboardTitle from "@/components/DashboardTitle";
 import { Button } from "@/components/ui/button";
-import TurndownService from "turndown"; // Import TurndownService
+import TurndownService from "turndown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
@@ -26,29 +26,29 @@ import { createBlogAction } from "@/actions/createBlogAction";
 import { handleUpload } from "@/lib/storage";
 import ReactQuill from "react-quill";
 import useAppContext from "@/hooks/useAppContext";
-import { AddBlogFormSchema } from "@/schemas/AddBlogFormSchema";
+import { BlogFormSchema } from "@/schemas/BlogFormSchema";
+import { handleResponse, Response } from "@/lib/handleResponse";
 
 export interface IBlogWithPreviewImage extends Omit<IBlog, "prevImgUrl"> {
   previewImage: File;
 }
 
-// Import ReactQuill dynamically with no server-side rendering
 const QuillEditorComponent = dynamic(
   () => import("@/components/QuillEditorComponent"),
-  { ssr: false }
+  { ssr: false },
 );
 
 export interface AddBlogPageProps {}
 
 export default function AddBlogPage(props: AddBlogPageProps): ReactElement {
   const [content, setContent] = useState<string>("");
-  const [isClient, setIsClient] = useState(false); // State to check if client-side
+  const [isClient, setIsClient] = useState(false);
   const { user } = useAppContext();
   const reactQuillRef = useRef<ReactQuill>(null);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
-  const formMethods = useForm<z.infer<typeof AddBlogFormSchema>>({
-    resolver: zodResolver(AddBlogFormSchema),
+  const formMethods = useForm<z.infer<typeof BlogFormSchema>>({
+    resolver: zodResolver(BlogFormSchema),
     defaultValues: {
       blogTitle: "",
       content: "",
@@ -97,7 +97,7 @@ export default function AddBlogPage(props: AddBlogPageProps): ReactElement {
   ];
 
   useEffect(() => {
-    setIsClient(true); // Update state to indicate client-side rendering
+    setIsClient(true);
   }, []);
 
   const handleEditorChange = (newContent: string) => {
@@ -107,7 +107,7 @@ export default function AddBlogPage(props: AddBlogPageProps): ReactElement {
   };
 
   const imageHandler = useCallback(() => {
-    if (!isClient) return; // Prevent execution on server-side
+    if (!isClient) return;
 
     const input = document.createElement("input");
     input.setAttribute("type", "file");
@@ -135,58 +135,37 @@ export default function AddBlogPage(props: AddBlogPageProps): ReactElement {
   }, [isClient]);
 
   const handleSubmitForm = async () => {
-    // Convert content to Markdown
     const turndownService = new TurndownService();
     const markdownContent = turndownService.turndown(content);
 
     const formDataPayload = new FormData();
 
-    // Append author object properties as JSON
     formDataPayload.append(
       "author",
       JSON.stringify({
         authorId: user._id,
         imgUrl: user.imgUrl,
         username: user.username,
-      })
+      }),
     );
 
-    // Append other basic properties
     formDataPayload.append("content", markdownContent);
-    formDataPayload.append("isPublished", "true"); // Use "true" as a string
+    formDataPayload.append("isPublished", "true");
     formDataPayload.append("title", formData.blogTitle);
     formDataPayload.append("description", formData.description);
 
-    // Append tags array as JSON
     formDataPayload.append("tags", JSON.stringify(formData.tags));
 
-    // Append preview image file directly
     if (formData.previewImage) {
       formDataPayload.append("previewImage", formData.previewImage);
     }
 
-    const payload: IBlogWithPreviewImage = {
-      author: {
-        authorId: user._id,
-        imgUrl: user.imgUrl,
-        username: user.username,
-      },
-      description: formData.description,
-      content: markdownContent,
-      isPublished: true,
-      previewImage: formData.previewImage,
-      tags: formData.tags,
-      title: formData.blogTitle,
-    };
-
-    console.log(formDataPayload);
-
     try {
-      await createBlogAction(formDataPayload);
-      // Handle successful submission (e.g., show a success message)
+      const response = await createBlogAction(formDataPayload);
+
+      handleResponse(response as Response);
     } catch (error) {
       console.error("Error creating blog:", error);
-      // Handle errors (e.g., show an error message)
     }
   };
 

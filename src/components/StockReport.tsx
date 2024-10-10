@@ -24,7 +24,7 @@ export default function StockReport({
   per_page,
 }: StockReportProps): ReactElement {
   return (
-    <Card className="bg-secondary shadow">
+    <Card className="bg-background shadow">
       <CardHeader className="flex-row justify-between items-start">
         <span>
           <CardTitle className="my-0">Inventory Report</CardTitle>

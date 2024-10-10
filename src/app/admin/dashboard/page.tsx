@@ -1,7 +1,5 @@
 import DashboardSummary from "@/components/DashboardSummary";
 import React from "react";
-import TotalSales from "@/components/TotalSales";
-import ProductSales from "@/components/ProductSales";
 import RecentOrders from "@/components/ProductDelivery";
 import StockReport from "@/components/StockReport";
 import DashboardContainer from "@/components/DashboardContainer";

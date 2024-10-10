@@ -23,7 +23,7 @@ export default async function UsersTable({
   const per_page = searchParams["per_page"] ?? "1";
   const { items, totalItemsLength } = await getUsersAction(
     Number(page),
-    Number(per_page)
+    Number(per_page),
   );
 
   // mocked, skipped and limited in the real app
@@ -70,16 +70,16 @@ export default async function UsersTable({
                 <DeleteUserButton filePath="" itemId={_id.toString()} />
               </TableCell>
             </TableRow>
-          )
+          ),
         )}
         <TableRow>
           <TableCell
-            className="bg-transparent text-muted-foreground pb-0"
+            className="bg-background text-muted-foreground pb-0"
             colSpan={5}
           >
             Total Items : {totalItemsLength}
           </TableCell>
-          <TableCell className="bg-transparent pb-0" colSpan={5}>
+          <TableCell className="bg-background pb-0" colSpan={5}>
             <PaginationControls
               hasNextPage={Number(page) < totalPages}
               hasPrevPage={start > 0}

@@ -60,11 +60,11 @@ export default async function BlogsTable({
               <TableCellFormattedDate createdAt={createdAt as Date} />
               <TableCell className="text-right">
                 <ViewDetailButton path={`/blogs/${_id}`} />
-                <EditButton path={`blogId=${_id}`} />
+                <EditButton endpoint="blogs" path={`blogId=${_id}`} />
                 <DeleteButton
                   filePath={prevImgUrl}
                   action={deleteBlogAction}
-                  itemId={_id as string}
+                  itemId={_id?.toString() as string}
                 />
               </TableCell>
             </TableRow>
@@ -72,12 +72,12 @@ export default async function BlogsTable({
         )}
         <TableRow>
           <TableCell
-            className="bg-transparent text-muted-foreground pb-0"
+            className="bg-background text-muted-foreground pb-0"
             colSpan={5}
           >
             Total Items : {totalItemsLength}
           </TableCell>
-          <TableCell className="bg-secondary pb-0" colSpan={5}>
+          <TableCell className="bg-background pb-0" colSpan={5}>
             <PaginationControls
               hasNextPage={Number(page) < totalPages}
               hasPrevPage={start > 0}

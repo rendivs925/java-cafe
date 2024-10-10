@@ -1,13 +1,13 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
-import Blog from "@/models/Blog"; // Import Blog model
+import { serializeDocument } from "@/lib/utils";
+import Blog from "@/models/Blog";
 
 export async function getBlogByIdAction(id: string) {
   try {
     await connectToDatabase();
 
-    // Fetch the blog entry by ID
-    const blog = await Blog.findById(id).lean(); // Use `.lean()` to get a plain JavaScript object
+    const blog = await Blog.findById(id).lean();
 
     if (!blog) {
       return {
@@ -20,7 +20,7 @@ export async function getBlogByIdAction(id: string) {
 
     return {
       status: "success",
-      data: blog,
+      data: serializeDocument(blog),
     };
   } catch (error) {
     console.error(error);

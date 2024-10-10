@@ -1,7 +1,7 @@
 import { ACCEPTED_IMAGE_MIME_TYPES, MAX_FILE_SIZE } from "@/constanst";
 import { z } from "zod";
 
-export const AddBlogFormSchema = z.object({
+export const BlogFormSchema = z.object({
   blogTitle: z.string().min(2, {
     message: "Title must be at least 2 characters.",
   }),
@@ -19,7 +19,7 @@ export const AddBlogFormSchema = z.object({
     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
     .refine(
       (file) => ACCEPTED_IMAGE_MIME_TYPES.includes(file?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
+      "Only .jpg, .jpeg, .png and .webp formats are supported.",
     ),
 });
 
@@ -45,4 +45,4 @@ export const BlogSchema = z.object({
 export type BlogType = z.infer<typeof BlogSchema>;
 
 // Define TypeScript type based on the base schema
-export type AddBlogFormType = z.infer<typeof AddBlogFormSchema>;
+export type BlogFormType = z.infer<typeof BlogFormSchema>;

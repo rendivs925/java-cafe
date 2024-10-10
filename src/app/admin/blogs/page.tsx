@@ -23,7 +23,7 @@ export default function BlogsPage({
             <AddButton label="Add New Blog" route="/admin/blogs/add" />
           </div>
         </DashboardHeader>
-        <DashboardContent className="bg-secondary shadow p-6 rounded-lg">
+        <DashboardContent className="bg-background shadow p-6 rounded-lg">
           <BlogsTable searchParams={searchParams} />
         </DashboardContent>
       </DashboardContainer>

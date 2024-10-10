@@ -5,26 +5,25 @@ import { handleUpload } from "@/lib/storage";
 import Blog, { IBlog } from "@/models/Blog";
 import { BlogSchema } from "@/schemas/BlogFormSchema";
 
-export async function createBlogAction(formData: FormData) {
+export async function updateBlogAction(formData: FormData) {
   try {
-    // Connect to the database
     await connectToDatabase();
 
-    // Extract and validate FormData
+    const blogId = formData.get("_id");
     const authorString = formData.get("author") as string | null;
     const content = formData.get("content") as string | null;
     const description = formData.get("description") as string;
     const isPublishedString = formData.get("isPublished") as string | null;
     const title = formData.get("title") as string | null;
     const tagsString = formData.get("tags") as string | null;
-    const previewImage = formData.get("previewImage") as File | null;
+    const previewImage = formData.get("previewImage") as File;
 
-    if (!authorString || !content || !title || !tagsString || !previewImage) {
+    if (!authorString || !content || !title || !tagsString) {
       throw new Error("Missing required fields.");
     }
 
     const author = JSON.parse(authorString);
-    const isPublished = isPublishedString === "true"; // Parse boolean from string
+    const isPublished = isPublishedString === "true";
     const tags = JSON.parse(tagsString);
 
     // Construct the data object
@@ -42,8 +41,22 @@ export async function createBlogAction(formData: FormData) {
       title,
     };
 
-    // Upload the image and get the URL
-    const prevImgUrl = await handleUpload(data.previewImage, "blogs");
+    console.log(blogId);
+
+    // Find the existing blog by ID
+    const existingBlog = await Blog.findById(blogId);
+    if (!existingBlog) {
+      return {
+        status: "error",
+        message: "Blog not found.",
+      };
+    }
+
+    // Handle image upload if a new image is provided
+    let prevImgUrl = existingBlog.prevImgUrl;
+    if (data.previewImage) {
+      prevImgUrl = await handleUpload(data.previewImage, "blogs");
+    }
 
     // Remove previewImage from the payload for validation
     const { previewImage: _, ...payload } = data;
@@ -62,14 +75,20 @@ export async function createBlogAction(formData: FormData) {
     // Add the preview image URL to the payload
     (payload as IBlog).prevImgUrl = prevImgUrl;
 
-    // Create a new blog entry
-    await Blog.create(payload);
+    console.log("Validated Payload:", payload);
+
+    // Update the existing blog entry
+    await Blog.findByIdAndUpdate(blogId, payload, { new: true });
+
+    console.log("Blog successfully updated.");
 
     return {
       status: "success",
-      message: "Blog successfully created.",
+      message: "Blog successfully updated.",
     };
   } catch (error) {
+    console.error("Error updating blog:", error);
+
     return {
       status: "error",
       message: (error as Error).message,

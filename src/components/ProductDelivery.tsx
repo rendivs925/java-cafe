@@ -17,7 +17,7 @@ export default function RecentOrders({
   orders,
 }: RecentOrdersProps): ReactElement {
   return (
-    <Card className="bg-secondary shadow">
+    <Card className="bg-background shadow">
       <CardHeader>
         <CardTitle className="mt-0">Recent Orders</CardTitle>
         <CardDescription>Recent orders for the last 7 days</CardDescription>

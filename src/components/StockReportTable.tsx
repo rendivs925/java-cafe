@@ -118,7 +118,7 @@ export default function StockReportTable({
               stock,
               imgUrl,
             },
-            index
+            index,
           ) => (
             <TableRow key={_id.toString()}>
               <TableCell className="flex items-center gap-4">
@@ -144,16 +144,16 @@ export default function StockReportTable({
               </TableCell>
               <TableCell className="text-right">{stock}</TableCell>
             </TableRow>
-          )
+          ),
         )}
         <TableRow>
           <TableCell
-            className="bg-transparent text-muted-foreground pb-0"
+            className="bg-background text-muted-foreground pb-0"
             colSpan={5}
           >
             Total Items : {totalItemsLength}
           </TableCell>
-          <TableCell className="bg-secondary pb-0" colSpan={5}>
+          <TableCell className="bg-background pb-0" colSpan={5}>
             <PaginationControls
               hasNextPage={Number(page) < totalPages}
               hasPrevPage={start > 0}

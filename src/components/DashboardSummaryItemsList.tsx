@@ -48,7 +48,7 @@ export default function DashboardSummaryItemsList({
       <ul className="col-span-full grid grid-cols-responsive gap-6">
         {summaryData.map((item, index) => (
           <li key={index} className="text-left w-full bg-secondary rounded-lg">
-            <Card className="bg-secondary shadow">
+            <Card className="bg-background shadow">
               <CardHeader>
                 <CardTitle className="text-xl text-muted-foreground mt-0 flex gap-4 items-center">
                   <span className="bg-background text-xl p-3 rounded-lg">

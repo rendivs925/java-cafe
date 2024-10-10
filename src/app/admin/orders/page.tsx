@@ -108,7 +108,7 @@ export default async function Orders({
         <DashboardTitle>Orders</DashboardTitle>
         <SelectShowing />
       </DashboardHeader>
-      <DashboardContent className="bg-secondary shadow p-6 rounded-lg">
+      <DashboardContent className="bg-background shadow p-6 rounded-lg">
         <Table className="overflow-y-hidden">
           <OrdersTableHeader />
           <TableBody>

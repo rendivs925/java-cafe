@@ -1,11 +1,11 @@
-import EditProductForm from "@/components/EditProductForm";
+import EditBlogForm from "@/components/EditBlogForm";
 import DashboardContainer from "@/components/DashboardContainer";
 import DashboardContent from "@/components/DashboardContent";
 import DashboardHeader from "@/components/DashboardHeader";
 import DashboardTitle from "@/components/DashboardTitle";
 import { SearchParams } from "@/types";
-import { getProductByIdAction } from "@/actions/getProductByIdAction";
-import { newAddProductType } from "@/schemas/AddProductSchema";
+import { getBlogByIdAction } from "@/actions/getBlogByIdAction";
+import { IBlog } from "@/models/Blog";
 
 export default async function EditBlogPage({
   searchParams,
@@ -13,16 +13,16 @@ export default async function EditBlogPage({
   searchParams: SearchParams;
 }) {
   const blogId = searchParams["blogId"] ?? "";
-  const response = await getProductByIdAction(blogId as string);
-  const product = response.item;
+  const response = await getBlogByIdAction(blogId as string);
+  const blog = response.data;
 
   return (
     <DashboardContainer>
-      <DashboardHeader className="container">
+      <DashboardHeader className="max-w-[80ch] mx-auto">
         <DashboardTitle>Edit Product</DashboardTitle>
       </DashboardHeader>
-      <DashboardContent className="container grid items-start grid-cols-addNewProduct gap-6">
-        <EditProductForm product={product as newAddProductType} />
+      <DashboardContent className="space-y-12 bg-transparent min-h-96 max-w-[80ch] mx-auto">
+        <EditBlogForm blog={blog as IBlog} />
       </DashboardContent>
     </DashboardContainer>
   );

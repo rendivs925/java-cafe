@@ -10,6 +10,7 @@ import {
 
 import BlogCard from "./BlogCard";
 import { IBlog } from "@/models/Blog";
+
 export interface BlogsListProps {
   items: IBlog[];
 }

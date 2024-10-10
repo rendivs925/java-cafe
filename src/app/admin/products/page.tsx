@@ -22,7 +22,7 @@ export default function Products({
             <AddButton label="Add New Product" route="/admin/products/add" />
           </div>
         </DashboardHeader>
-        <DashboardContent className="bg-secondary shadow p-6 rounded-lg">
+        <DashboardContent className="bg-background shadow p-6 rounded-lg">
           <ProductsTable searchParams={searchParams} />
         </DashboardContent>
       </DashboardContainer>

@@ -40,17 +40,19 @@ const TagInput: React.FC<TagInputProps> = ({ control }) => {
 
   const removeTag = (indexToRemove: number) => {
     field.onChange(
-      field.value.filter((_: unknown, index: number) => index !== indexToRemove)
+      field.value.filter(
+        (_: unknown, index: number) => index !== indexToRemove,
+      ),
     );
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 border rounded-md px-3 py-2 bg-background border-input ring-offset-background outline-none placeholder:text-muted-foreground file:text-sm file:font-medium file:border-0 min-h-10 focus-visible:ring-offset-2 text-sm file:bg-transparent focus-within:border-primary focus-within:ring-2 ring-primary">
+    <div className="flex flex-wrap items-center gap-2 border border-input rounded-md px-0 py-2 bg-secondary ring-offset-background outline-none placeholder:text-muted-foreground file:text-sm file:font-medium file:border-0 min-h-10 focus-visible:ring-offset-2 focus-visible:ring-2 focus-within:border focus-within:border-blue-500 text-sm file:bg-transparent">
       {field.value.map((tag: string, index: number) => (
         <Badge
           key={index}
-          variant="secondary"
-          className="flex items-center gap-1 px-2 py-1 text-muted-foreground"
+          variant="default"
+          className="flex items-center gap-1 px-2 py-1 text-muted-foreground bg-background"
         >
           {tag}
           <button
@@ -68,7 +70,7 @@ const TagInput: React.FC<TagInputProps> = ({ control }) => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder="Enter a tag and press Enter"
-        className="flex-grow text-sm placeholder:text-muted-foreground min-w-[100px] border-none outline-none focus:ring-0"
+        className="bg-transparent flex-grow text-sm placeholder:text-muted-foreground min-w-[100px] border-none outline-none focus:ring-0"
       />
     </div>
   );

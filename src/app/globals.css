@@ -69,7 +69,7 @@
   }
 
   body {
-    @apply bg-background overflow-x-hidden text-foreground;
+    @apply bg-secondary overflow-x-hidden text-foreground;
   }
 
   h1 {
@@ -166,6 +166,10 @@
   .custom-p {
     @apply font-medium text-foreground my-0;
   }
+}
+
+.ql-editor {
+  @apply !max-h-[500px] !overflow-auto;
 }
 
 @layer components {

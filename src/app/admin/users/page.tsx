@@ -22,7 +22,7 @@ export default function Users({
             <AddUserButton />
           </div>
         </DashboardHeader>
-        <DashboardContent className="bg-secondary shadow p-6 rounded-lg">
+        <DashboardContent className="bg-background shadow p-6 rounded-lg">
           <UsersTable searchParams={searchParams} />
         </DashboardContent>
       </DashboardContainer>

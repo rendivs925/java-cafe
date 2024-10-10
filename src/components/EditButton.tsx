@@ -6,12 +6,16 @@ import { MdOutlineEdit } from "react-icons/md";
 
 export interface EditButtonProps {
   path: string;
+  endpoint: string;
 }
 
-export default function EditButton({ path }: EditButtonProps): ReactElement {
+export default function EditButton({
+  path,
+  endpoint,
+}: EditButtonProps): ReactElement {
   const { pushRoute } = useAppContext();
   const handleEditProduct = async () => {
-    pushRoute(`/admin/products/edit?${path}`);
+    pushRoute(`/admin/${endpoint}/edit?${path}`);
   };
 
   return (

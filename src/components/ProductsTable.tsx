@@ -59,14 +59,14 @@ export default async function ProductsTable({
             startIndex={start}
           />
         ))}
-        <TableRow>
+        <TableRow className="bg-background">
           <TableCell
-            className="bg-transparent text-muted-foreground pb-0"
+            className="bg-background text-muted-foreground pb-0"
             colSpan={5}
           >
             Total Items: {totalItemsLength}
           </TableCell>
-          <TableCell className="bg-secondary pb-0" colSpan={5}>
+          <TableCell className="bg-background pb-0" colSpan={5}>
             <PaginationControls
               hasNextPage={page < totalPages}
               hasPrevPage={start > 0}
@@ -112,7 +112,7 @@ function ProductRow({ product, index, startIndex }: ProductRowProps) {
       <TableCell>{stock}</TableCell>
       <TableCell className="text-right">
         <ViewDetailButton path={`/products/${_id}`} />
-        <EditButton path={`productId=${_id}`} />
+        <EditButton endpoint={"products"} path={`productId=${_id}`} />
         <DeleteButton
           filePath={imgUrl}
           action={deleteProductAction}

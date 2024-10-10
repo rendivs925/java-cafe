@@ -1,6 +1,7 @@
 import React from "react";
+import { marked } from "marked";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Import Quill styles
+import "react-quill/dist/quill.snow.css";
 
 const quillFormats = [
   "header",
@@ -26,7 +27,6 @@ interface QuillEditorProps {
   imageHandler: () => void;
 }
 
-// Remove forwardRef and use params directly
 const QuillEditorComponent: React.FC<QuillEditorProps> = ({
   forwardedRef,
   value,
@@ -34,6 +34,8 @@ const QuillEditorComponent: React.FC<QuillEditorProps> = ({
   placeholder = "Write your blog content here...",
   imageHandler,
 }) => {
+  const content = marked(value);
+
   const quillModules = {
     toolbar: {
       container: [
@@ -57,7 +59,7 @@ const QuillEditorComponent: React.FC<QuillEditorProps> = ({
     <ReactQuill
       ref={forwardedRef}
       theme="snow"
-      value={value}
+      value={content as string}
       onChange={onChange}
       modules={quillModules}
       formats={quillFormats}
