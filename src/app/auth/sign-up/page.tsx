@@ -3,7 +3,7 @@ import { useTransition } from "react";
 import CardContainer from "@/components/CardContainer";
 import InputFormField from "@/components/InputFormField";
 import useSignUp from "@/hooks/useSignUp";
-import { Form } from "@/components/ui/form";
+import { FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   CardContent,
@@ -15,7 +15,7 @@ import {
 import Link from "next/link";
 import LoadingButton from "@/components/LoadingButton";
 import { addUserAction } from "@/actions/addUserAction";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 export default function SignUp() {
   const { form, formData, handleImageChange, imageFile, imageSrc } =
@@ -94,7 +94,7 @@ export default function SignUp() {
         <CardDescription>Let&apos;s register your account.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
+        <FormProvider {...form}>
           <form
             action={() => {
               startTransition(() => {
@@ -134,7 +134,7 @@ export default function SignUp() {
               </Button>
             )}
           </form>
-        </Form>
+        </FormProvider>
       </CardContent>
       <CardFooter>
         <CardDescription className="mt-0">

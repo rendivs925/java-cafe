@@ -1,53 +1,52 @@
-"use client"; // Ensures this component runs on the client side
+"use client";
 
 import { type ReactElement } from "react";
-import { Button } from "./ui/button"; // Importing the Button component
-import { RiDeleteBin6Line } from "react-icons/ri"; // Icon for delete action
-import { useToast } from "./ui/use-toast"; // Hook for displaying toast notifications
+import { Button } from "./ui/button";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { useToast } from "@/hooks/use-toast";
 
 export interface DeleteButtonProps {
-  itemId: string | number; // ID of the item to delete
-  filePath: string; // Path of the associated file to delete
+  itemId: string | number;
+  filePath: string;
   action: (
     id: string | number,
     path: string,
-  ) => Promise<{ status: string; message: string }>; // Function to call for delete action
+  ) => Promise<{ status: string; message: string }>;
 }
 
 export default function DeleteButton({
-  itemId, // ID of the item to delete
-  filePath, // File path associated with the item
-  action, // Action function to handle deletion
+  itemId,
+  filePath,
+  action,
 }: DeleteButtonProps): ReactElement {
-  const { toast } = useToast(); // Initialize the toast for notifications
+  const { toast } = useToast();
 
   const handleDelete = async () => {
     try {
-      const response = await action(itemId, filePath); // Call the passed action function
+      const response = await action(itemId, filePath);
       if (response.status === "error") {
         return toast({
           description: response.message,
-          variant: "destructive", // Toast style for error
+          variant: "destructive",
         });
       }
-      toast({ description: response.message }); // Display success message
+      toast({ description: response.message });
     } catch (error) {
-      // Handle unexpected errors
       toast({
         description:
           (error as { message: string }).message ||
           "An unexpected error occurred",
-        variant: "destructive", // Toast style for error
+        variant: "destructive",
       });
     }
   };
 
   return (
     <Button
-      onClick={handleDelete} // Trigger delete on click
-      size="sm" // Small button size
-      variant="ghost" // Ghost button style
-      className="bg-transparent" // Additional styling
+      onClick={handleDelete}
+      size="sm"
+      variant="ghost"
+      className="bg-transparent"
     >
       <RiDeleteBin6Line className="text-destructive text-lg" />{" "}
       {/* Delete icon */}

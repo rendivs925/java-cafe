@@ -7,7 +7,7 @@ import {
   DetailPengirimanType,
 } from "@/schemas/DetailPengirimanSchema";
 import { createUserDetailAction } from "@/actions/createUserDetailAction";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { getUserDetailAction } from "@/actions/getUserDetailAction";
 import useAppContext from "./useAppContext";
 

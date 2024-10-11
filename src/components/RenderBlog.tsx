@@ -79,7 +79,6 @@ const BlogContent: React.FC<{ content: string }> = ({ content }) => (
 );
 
 const RenderBlog = ({ data }: { data: IBlog }) => {
-  console.log(data);
   return (
     <BaseContainer>
       <BaseContent className="max-w-[80ch] mx-auto">

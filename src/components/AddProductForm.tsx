@@ -4,7 +4,7 @@ import { type ReactElement } from "react";
 import { Button } from "./ui/button";
 import LoadingButton from "./LoadingButton";
 import InputFormField from "./InputFormField";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import useAddProduct from "@/hooks/useAddProduct";
 import { Form } from "./ui/form";
 import CardContainer from "./CardContainer";

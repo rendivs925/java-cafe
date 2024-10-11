@@ -11,7 +11,7 @@ import {
 } from "@/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { AxiosError } from "axios";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { logoutAction } from "@/actions/logoutAction";
 
 // Create the context with a default value
@@ -38,7 +38,7 @@ export default function AppProvider({
   const [totalItems, setTotalItems] = useLocalStorage("totalItems", 0);
   const [detailPengiriman, setDetailPengiriman] = useLocalStorage(
     "detailPengiriman",
-    { username: "", noHandphone: "", alamatLengkap: "" }
+    { username: "", noHandphone: "", alamatLengkap: "" },
   );
 
   const handleLogout = async () => {

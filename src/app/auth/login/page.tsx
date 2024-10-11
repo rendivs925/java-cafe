@@ -15,7 +15,7 @@ import Link from "next/link";
 import LoadingButton from "@/components/LoadingButton";
 import InputFormField from "@/components/InputFormField";
 import { loginAction } from "@/actions/loginAction";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import useAppContext from "@/hooks/useAppContext";
 import { User } from "@/types";
 

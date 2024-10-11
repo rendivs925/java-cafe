@@ -2,7 +2,7 @@
 import { type ReactElement } from "react";
 import { Button } from "./ui/button";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { deleteUserAction } from "@/actions/deleteUserAction";
 
 export interface DeleteUserButtonProps {

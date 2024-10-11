@@ -1,8 +1,7 @@
 "use client";
-import { ReactNode, useEffect, useState, type ReactElement } from "react";
+import { ReactNode, useState, type ReactElement } from "react";
 import { createContext } from "use-context-selector";
 import { ShippingContextType } from "@/types";
-import useAppContext from "@/hooks/useAppContext";
 
 const shippingContextDefaultValues: ShippingContextType = {
   activeStep: 1,
@@ -11,7 +10,7 @@ const shippingContextDefaultValues: ShippingContextType = {
 };
 
 export const ShippingContext = createContext<ShippingContextType>(
-  shippingContextDefaultValues
+  shippingContextDefaultValues,
 );
 
 export interface ShippingProviderProps {

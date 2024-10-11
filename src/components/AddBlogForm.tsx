@@ -1,17 +1,9 @@
 "use client";
+import { handleError } from "@/lib/handleError";
+import { useCallback, useRef, useState, useEffect } from "react";
 import RenderBlog from "@/components/RenderBlog";
-import { handleResponse, Response } from "@/lib/handleResponse";
-import { extractFieldNames } from "@/lib/extractFieldNames";
-import {
-  useCallback,
-  useRef,
-  useEffect,
-  useState,
-  type ReactElement,
-} from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-import useClientComponent from "@/hooks/useClientComponent";
 import { Button } from "@/components/ui/button";
 import TurndownService from "turndown";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,30 +11,25 @@ import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { FormLabel, FormMessage } from "@/components/ui/form";
 import TagInput from "@/components/TagInput";
+import { IBlog } from "@/models/Blog";
 import InputFormField from "@/components/InputFormField";
 import { FormField as IFormField } from "@/components/AddProductForm";
-import { updateBlogAction } from "@/actions/updateBlogAction";
+import { createBlogAction } from "@/actions/createBlogAction";
 import { handleUpload } from "@/lib/storage";
 import ReactQuill from "react-quill";
 import useAppContext from "@/hooks/useAppContext";
 import { BlogFormSchema } from "@/schemas/BlogFormSchema";
-import { IBlog } from "@/models/Blog";
-import { handleError } from "@/lib/handleError";
+import { handleResponse, Response } from "@/lib/handleResponse";
+import { extractFieldNames } from "@/lib/extractFieldNames";
 
 const QuillEditorComponent = dynamic(
   () => import("@/components/QuillEditorComponent"),
   { ssr: false },
 );
 
-export interface EditBlogFormProps {
-  blog: IBlog;
-}
-
-export default function EditBlogForm({
-  blog,
-}: EditBlogFormProps): ReactElement {
+const AddBlogForm = () => {
   const [content, setContent] = useState<string>("");
-  const isClient = useClientComponent();
+  const [isClient, setIsClient] = useState(false);
   const { user, pushRoute } = useAppContext();
   const reactQuillRef = useRef<ReactQuill>(null);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
@@ -50,41 +37,33 @@ export default function EditBlogForm({
   const formMethods = useForm<z.infer<typeof BlogFormSchema>>({
     resolver: zodResolver(BlogFormSchema),
     defaultValues: {
-      blogTitle: blog?.title,
-      content: blog?.content,
-      tags: blog?.tags,
-      description: blog?.description,
+      blogTitle: "",
+      content: "",
+      tags: [],
+      description: "",
     },
+    mode: "onChange",
   });
 
-  const currentBlogData = formMethods.watch();
-
-  const blogData: IBlog = {
-    _id: blog?._id,
-    title: currentBlogData?.blogTitle || blog?.title,
-    content: currentBlogData?.content || blog?.content,
-    tags: currentBlogData?.tags || blog?.tags,
-    description: currentBlogData?.description || blog?.description,
-    author: {
-      authorId: blog?.author?.authorId,
-      username: blog?.author?.username,
-      imgUrl: blog?.author?.imgUrl,
-    },
-    isPublished: blog?.isPublished,
-    prevImgUrl: (imageSrc as string) || (blog?.prevImgUrl as string),
-    createdAt: blog?.createdAt,
-    updatedAt: blog?.updatedAt,
-  };
-
-  useEffect(() => {
-    setContent(blog?.content);
-  }, []);
+  const formData = formMethods.watch();
 
   const { control, setValue, formState } = formMethods;
 
-  const handleEditorChange = (newContent: string) => {
-    setContent(newContent);
-    setValue("content", newContent);
+  const blogData: IBlog = {
+    _id: "",
+    title: formData?.blogTitle,
+    content: formData?.content,
+    tags: formData?.tags,
+    description: formData?.description,
+    author: {
+      authorId: user?._id,
+      username: user?.username,
+      imgUrl: user?.imgUrl,
+    },
+    isPublished: false,
+    prevImgUrl: imageSrc as string,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,8 +78,41 @@ export default function EditBlogForm({
     }
   };
 
+  const formFields: IFormField[] = [
+    {
+      name: "blogTitle",
+      id: "blogTitle",
+      placeholder: "Enter blog title",
+      label: "Title",
+    },
+    {
+      name: "description",
+      id: "description",
+      placeholder: "Enter blog description",
+      label: "Description",
+    },
+    {
+      name: "previewImage",
+      id: "previewImage",
+      placeholder: "Enter preview image",
+      label: "Preview Image",
+      type: "file",
+      onChange: handleImageChange,
+    },
+  ];
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const handleEditorChange = (newContent: string) => {
+    setContent(newContent);
+
+    setValue("content", newContent);
+  };
+
   const imageHandler = useCallback(() => {
-    if (!isClient) return; // Prevent execution on server-side
+    if (!isClient) return;
 
     const input = document.createElement("input");
     input.setAttribute("type", "file");
@@ -133,7 +145,6 @@ export default function EditBlogForm({
 
     const formDataPayload = new FormData();
 
-    // Append author object properties as JSON
     formDataPayload.append(
       "author",
       JSON.stringify({
@@ -143,59 +154,30 @@ export default function EditBlogForm({
       }),
     );
 
-    if (blog?._id) {
-      formDataPayload.append("_id", blog._id.toString());
-    }
-
     formDataPayload.append("content", markdownContent);
     formDataPayload.append("isPublished", "true");
-    formDataPayload.append("title", formMethods.getValues("blogTitle"));
-    formDataPayload.append("description", formMethods.getValues("description"));
-    formDataPayload.append(
-      "tags",
-      JSON.stringify(formMethods.getValues("tags")),
-    );
+    formDataPayload.append("title", formData.blogTitle);
+    formDataPayload.append("description", formData.description);
 
-    if (imageFile) {
-      formDataPayload.append("previewImage", imageFile);
+    formDataPayload.append("tags", JSON.stringify(formData.tags));
+
+    if (formData.previewImage) {
+      formDataPayload.append("previewImage", formData.previewImage);
     }
 
     try {
-      const response = await updateBlogAction(formDataPayload);
+      const response = await createBlogAction(formDataPayload);
+
       const fieldNames = extractFieldNames(formFields);
 
       handleResponse(response as Response, formMethods, fieldNames);
     } catch (error) {
-      handleError(`Error updating blog: ${error}`);
+      handleError("Error creating blog.");
     }
   };
 
-  const formFields: IFormField[] = [
-    {
-      name: "blogTitle",
-      id: "blogTitle",
-      placeholder: "Enter blog title",
-      label: "Title",
-    },
-    {
-      name: "description",
-      id: "description",
-      placeholder: "Enter blog description",
-      label: "Description",
-    },
-    {
-      name: "previewImage",
-      id: "previewImage",
-      placeholder: "Enter preview image",
-      label: "Preview Image",
-      type: "file",
-      onChange: handleImageChange,
-    },
-  ];
-
   return (
     <>
-      {" "}
       <FormProvider {...formMethods}>
         <form action={handleSubmitForm} className="w-full space-y-6">
           <div className="grid grid-cols-2 gap-6">
@@ -235,14 +217,9 @@ export default function EditBlogForm({
           </div>
 
           <div className="space-x-3">
-            <Button type="submit">Update Blog</Button>
-            <Button
-              onClick={() => pushRoute("/admin/blogs")}
-              type="button"
-              variant="outline"
-              className="bg-transparent"
-            >
-              Cancel
+            <Button type="submit">Publish now</Button>
+            <Button type="button" variant="outline" className="bg-transparent">
+              Save draft
             </Button>
           </div>
         </form>
@@ -250,4 +227,6 @@ export default function EditBlogForm({
       <RenderBlog data={blogData} />
     </>
   );
-}
+};
+
+export default AddBlogForm;

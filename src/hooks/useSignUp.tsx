@@ -21,8 +21,8 @@ export default function useSignUp() {
     mode: "onChange",
   });
 
-  const { watch, ...formMethods } = form;
-  const formData = watch();
+  const { ...formMethods } = form;
+  const formData = form.watch();
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

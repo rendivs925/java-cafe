@@ -11,7 +11,7 @@ export default function useLogin() {
       email: "",
       password: "",
     },
-    mode: "onChange", // Validate on change for real-time feedback
+    mode: "onChange",
   });
 
   const formData = form.watch();

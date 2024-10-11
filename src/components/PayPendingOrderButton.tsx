@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { ISnap, ISnapResult } from "./Pesanan";
 import { updateOrderDetailsAction } from "./updateOrderDetailsAction";
 import { getOrderTokenAction } from "@/actions/getOrderTokenAction";
-import { toast } from "./ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 export interface PayPendingOrderButtonProps {
   orderId: string;
@@ -69,7 +69,7 @@ export default function PayPendingOrderButton({
           onClose: async () => {
             try {
               console.log(
-                "Customer closed the popup without finishing the payment"
+                "Customer closed the popup without finishing the payment",
               );
               await updateOrderDetailsAction({ orderId });
             } catch (error) {

@@ -41,8 +41,6 @@ export async function updateBlogAction(formData: FormData) {
       title,
     };
 
-    console.log(blogId);
-
     // Find the existing blog by ID
     const existingBlog = await Blog.findById(blogId);
     if (!existingBlog) {
@@ -75,20 +73,14 @@ export async function updateBlogAction(formData: FormData) {
     // Add the preview image URL to the payload
     (payload as IBlog).prevImgUrl = prevImgUrl;
 
-    console.log("Validated Payload:", payload);
-
     // Update the existing blog entry
     await Blog.findByIdAndUpdate(blogId, payload, { new: true });
-
-    console.log("Blog successfully updated.");
 
     return {
       status: "success",
       message: "Blog successfully updated.",
     };
   } catch (error) {
-    console.error("Error updating blog:", error);
-
     return {
       status: "error",
       message: (error as Error).message,

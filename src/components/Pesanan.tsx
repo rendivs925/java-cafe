@@ -14,7 +14,7 @@ import { createOrderAction } from "@/actions/createOrderAction";
 import { ICart, ICartProduct } from "@/models/Cart";
 import { UseFormReturn } from "react-hook-form";
 import { nanoid } from "nanoid";
-import { toast } from "./ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { deleteCartAction } from "@/actions/deleteCartAction";
 
 interface PesananProps {
@@ -77,7 +77,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
 
     const cartProductsReducer = (
       accumulator: number,
-      currentValue: ICartProduct
+      currentValue: ICartProduct,
     ): number => {
       return (
         currentValue.price * (currentValue as { qty: number }).qty + accumulator
@@ -245,7 +245,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         </CardFooter>
       </CardContainer>
     );
-  }
+  },
 );
 
 Pesanan.displayName = "Pesanan";

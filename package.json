@@ -19,7 +19,7 @@
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.0",
-    "@radix-ui/react-toast": "^1.2.1",
+    "@radix-ui/react-toast": "^1.2.2",
     "@types/leaflet": "^1.9.12",
     "@types/node": "^20.14.9",
     "@types/react-dom": "^18.3.0",
