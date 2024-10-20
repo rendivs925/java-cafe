@@ -82,12 +82,12 @@ const RenderBlog = ({ data }: { data: IBlog }) => {
   return (
     <BaseContainer>
       <BaseContent className="max-w-[80ch] mx-auto">
-        <h1 className="mb-10">{data.title}</h1>
-        <AuthorInfo author={data.author} createdAt={data.createdAt as Date} />
+        <h1 className="mb-10">{data?.title}</h1>
+        <AuthorInfo author={data?.author} createdAt={data?.createdAt as Date} />
         <div className="relative my-10 w-full overflow-hidden">
           <Image
-            src={data.prevImgUrl}
-            alt={data.title}
+            src={data?.prevImgUrl}
+            alt={data?.title}
             width={0}
             height={0}
             sizes="100vw"
@@ -95,8 +95,8 @@ const RenderBlog = ({ data }: { data: IBlog }) => {
             objectFit="contain"
           />
         </div>
-        <BlogContent content={data.content} />
-        <BlogTags tags={data.tags} />
+        <BlogContent content={data?.content} />
+        <BlogTags tags={data?.tags} />
       </BaseContent>
     </BaseContainer>
   );

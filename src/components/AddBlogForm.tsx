@@ -33,6 +33,7 @@ const AddBlogForm = () => {
   const { user, pushRoute } = useAppContext();
   const reactQuillRef = useRef<ReactQuill>(null);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [isPublished, setIsPublished] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>(null);
   const formMethods = useForm<z.infer<typeof BlogFormSchema>>({
     resolver: zodResolver(BlogFormSchema),
@@ -42,7 +43,6 @@ const AddBlogForm = () => {
       tags: [],
       description: "",
     },
-    mode: "onChange",
   });
 
   const formData = formMethods.watch();
@@ -60,7 +60,7 @@ const AddBlogForm = () => {
       username: user?.username,
       imgUrl: user?.imgUrl,
     },
-    isPublished: false,
+    isPublished,
     prevImgUrl: imageSrc as string,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -155,7 +155,7 @@ const AddBlogForm = () => {
     );
 
     formDataPayload.append("content", markdownContent);
-    formDataPayload.append("isPublished", "true");
+    formDataPayload.append("isPublished", String(isPublished));
     formDataPayload.append("title", formData.blogTitle);
     formDataPayload.append("description", formData.description);
 
@@ -217,14 +217,33 @@ const AddBlogForm = () => {
           </div>
 
           <div className="space-x-3">
-            <Button type="submit">Publish now</Button>
-            <Button type="button" variant="outline" className="bg-transparent">
+            <Button type="submit" onClick={() => setIsPublished(true)}>
+              Publish now
+            </Button>
+            <Button
+              type="submit"
+              onClick={() => setIsPublished(false)}
+              variant="outline"
+              className="bg-transparent"
+            >
               Save draft
+            </Button>
+            <Button
+              onClick={() => pushRoute("/admin/blogs")}
+              type="button"
+              variant="secondary"
+              className="bg-transparent"
+            >
+              Cancel
             </Button>
           </div>
         </form>
       </FormProvider>
-      <RenderBlog data={blogData} />
+      {blogData &&
+        blogData?.title &&
+        blogData?.prevImgUrl &&
+        blogData?.content !== "" &&
+        blogData?.tags.length !== 0 && <RenderBlog data={blogData} />}
     </>
   );
 };

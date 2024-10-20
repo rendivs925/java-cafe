@@ -24,7 +24,7 @@ export async function createBlogAction(formData: FormData) {
     }
 
     const author = JSON.parse(authorString);
-    const isPublished = isPublishedString === "true"; // Parse boolean from string
+    const isPublished = isPublishedString === "true";
     const tags = JSON.parse(tagsString);
 
     // Construct the data object
@@ -65,9 +65,13 @@ export async function createBlogAction(formData: FormData) {
     // Create a new blog entry
     await Blog.create(payload);
 
+    const message = isPublished
+      ? "Blog has been successfully published."
+      : "Draft has been saved successfully.";
+
     return {
       status: "success",
-      message: "Blog successfully created.",
+      message,
     };
   } catch (error) {
     return {

@@ -4,6 +4,7 @@ import DashboardContent from "@/components/DashboardContent";
 import DashboardHeader from "@/components/DashboardHeader";
 import DashboardTitle from "@/components/DashboardTitle";
 import AddBlogForm from "@/components/AddBlogForm";
+import { IBlog } from "@/models/Blog";
 
 export interface IBlogWithPreviewImage extends Omit<IBlog, "prevImgUrl"> {
   previewImage: File;
