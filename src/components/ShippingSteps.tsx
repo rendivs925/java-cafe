@@ -14,7 +14,7 @@ const Pembayaran = dynamic(() => import("@/components/Pembayaran"));
 
 export default function ShippingSteps({ cart }: { cart: ICart }) {
   const { activeStep, setActiveStep } = useShippingContext();
-  const { pushRoute } = useAppContext();
+  const { pushRoute, totalItems } = useAppContext();
   const isClient = useClientComponent();
   const searchParams = useSearchParams();
   const currStep = searchParams.get("step") || "1"; // Default to "1" if currStep is null
@@ -29,11 +29,16 @@ export default function ShippingSteps({ cart }: { cart: ICart }) {
     pushRoute(`/shipping/?step=${activeStep}`);
   }, [activeStep]);
 
+  useEffect(() => {
+   if(totalItems === 0) {
+      pushRoute("/")
+    }
+  }, [])
+
   if (!isClient) return null; // Handle non-client cases
 
   if (currStep === "1") return <Pengiriman />;
   if (currStep === "2") return <Konfirmasi cart={cart} />;
-  if (currStep === "3") return <Pembayaran />;
 
   // Optionally handle invalid steps or fallback UI
   return <div>Invalid step</div>;
