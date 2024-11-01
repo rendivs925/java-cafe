@@ -13,7 +13,7 @@ export async function getAllOrdersAction(page: number, limit: number) {
 
     const skip = (page - 1) * limit;
 
-    const orders: INewOrder[] = await Order.find({})
+    const orders = await Order.find({})
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)

@@ -4,6 +4,7 @@ import React, {
   useState,
   ForwardedRef,
 } from "react";
+import LoadingButton from "./LoadingButton";
 import CardContainer from "./CardContainer";
 import { Button } from "./ui/button";
 import { CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
@@ -19,19 +20,15 @@ import { deleteCartAction } from "@/actions/deleteCartAction";
 
 interface PesananProps {
   cart: ICart;
-  form: UseFormReturn<
-    {
-      kota: string;
-      kurir: string;
-      layanan: {
-        name: string;
-        cost: number;
-      };
-      provinsi: string;
-    },
-    any,
-    undefined
-  >;
+  form: UseFormReturn<{
+    kota: string;
+    kurir: string;
+    layanan: {
+      name: string;
+      cost: number;
+    };
+    provinsi: string;
+  }>;
 }
 
 export interface ISnap {
@@ -45,11 +42,10 @@ export interface ISnapResult {
 
 const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
   ({ cart, form }, ref: ForwardedRef<HTMLFormElement>) => {
-    const { formatToRupiah, pushRoute, setTotalItems, user, detailPengiriman } =
-      useAppContext();
+    const { formatToRupiah, pushRoute, setTotalItems, user, detailPengiriman } = useAppContext();
     const [subHarga, setSubHarga] = useState(0);
+    const [loading, setLoading] = useState(false); // Add loading state
     const { layanan } = form.watch();
-    // Check if layanan is valid JSON before parsing
     let parsedLayanan = {
       cost: 0,
       name: "",
@@ -107,12 +103,15 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
     }, []);
 
     const handlePayment = async () => {
+      setLoading(true); // Set loading to true when starting payment
+
       const payload = {
         email: user.email,
         firstName: user.username,
         grossAmount: totalHarga,
         orderId,
         phone: Number(detailPengiriman.noHandphone),
+        products: cart.products
       };
 
       if (ref && "current" in ref && ref.current) {
@@ -120,7 +119,6 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       }
 
       const paymentResponse = await paymentAction(payload);
-      console.log("Payment response: ", paymentResponse);
 
       const token = paymentResponse.token as string;
 
@@ -132,79 +130,60 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       ) {
         (window.snap as ISnap).pay(token, {
           onSuccess: async (result: ISnapResult) => {
-            const createOrderResponse = await createOrderAction({
-              token,
-              orderId: result.order_id,
-              user: {
-                userId: user._id,
-                username: user.username,
-                email: user.email,
-              },
-              address: detailPengiriman.alamatLengkap,
-              phone: Number(detailPengiriman.noHandphone),
-              subtotal: subHarga,
-              layanan: parsedLayanan,
-              payment: totalHarga,
-              shippingCost: Number(ongkir),
-              paymentStatus: result.transaction_status,
-              products: cart.products.map((product) => ({
-                imgUrl: product.imgUrl,
-                title: product.title,
-                productId: product.productId,
-                qty: product.qty as number,
-                totalPrice: product.price * (product as { qty: number }).qty,
-                profit: product.profit * (product as { qty: number }).qty,
-              })),
-            });
-            setTotalItems(0);
-            console.log("Create Order Response: ", createOrderResponse);
-            await deleteCartAction();
+            await handleSuccess(result);
           },
           onPending: async (result: ISnapResult) => {
-            console.log(result);
-
-            const createOrderResponse = await createOrderAction({
-              token,
-              orderId,
-              user: {
-                userId: user._id,
-                username: user.username,
-                email: user.email,
-              },
-              layanan: parsedLayanan,
-              address: detailPengiriman.alamatLengkap,
-              phone: Number(detailPengiriman.noHandphone),
-              subtotal: subHarga,
-              payment: totalHarga,
-              shippingCost: Number(ongkir),
-              paymentStatus: result.transaction_status,
-              products: cart.products.map((product) => ({
-                imgUrl: product.imgUrl,
-                title: product.title,
-                productId: product.productId,
-                qty: product.qty as number,
-                totalPrice: product.price * (product as { qty: number }).qty,
-                profit: product.profit * (product as { qty: number }).qty,
-              })),
-            });
-
-            setTotalItems(0);
-
-            await deleteCartAction();
-
-            console.log("Create Order Response: ", createOrderResponse);
-            pushRoute("/account/orders");
+            await handlePending(result);
           },
           onError: (error: { message: string }) => {
+            setLoading(false); // Reset loading on error
             toast({ description: error.message });
           },
           onClose: () => {
+            setLoading(false); // Reset loading if payment is closed
             toast({ description: "Segera lakukan pembayaran." });
           },
         });
       } else {
         console.error("Snap.js is not loaded or pay function is unavailable.");
+        setLoading(false); // Reset loading if Snap.js is not available
       }
+    };
+
+    const handleSuccess = async (result: ISnapResult) => {
+      const createOrderResponse = await createOrderAction({
+        token: result.order_id,
+        orderId: result.order_id,
+        user: {
+          userId: user._id,
+          username: user.username,
+          email: user.email,
+        },
+        address: detailPengiriman.alamatLengkap,
+        phone: Number(detailPengiriman.noHandphone),
+        subtotal: subHarga,
+        layanan: parsedLayanan,
+        payment: totalHarga,
+        shippingCost: Number(ongkir),
+        paymentStatus: result.transaction_status,
+        products: cart.products.map((product) => ({
+          imgUrl: product.imgUrl,
+          title: product.title,
+          productId: product.productId,
+          qty: product.qty as number,
+          totalPrice: product.price * (product as { qty: number }).qty,
+          profit: product.profit * (product as { qty: number }).qty,
+        })),
+      });
+      setTotalItems(0);
+      console.log("Create Order Response: ", createOrderResponse);
+      await deleteCartAction();
+      setLoading(false); // Reset loading after success
+    };
+
+    const handlePending = async (result: ISnapResult) => {
+      await handleSuccess(result);
+      pushRoute("/account/orders");
     };
 
     return (
@@ -218,9 +197,8 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
             {orderDetails.map((detail, index) => (
               <label
                 key={index}
-                className={`grid grid-cols-detail sm:grid-cols-sm-detail ${
-                  ongkir === 0 && detail.label === "Ongkir" && "hidden"
-                }`}
+                className={`grid grid-cols-detail sm:grid-cols-sm-detail ${ongkir === 0 && detail.label === "Ongkir" && "hidden"
+                  }`}
               >
                 <span className="text-muted-foreground">{detail.label}</span>
                 <p className="mt-0">
@@ -235,13 +213,14 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         </CardContent>
         <Line />
         <CardFooter className="pt-6 px-0">
-          <Button
-            disabled={ongkir === 0}
+            {loading ? <LoadingButton className="w-fit">Processing...</LoadingButton> :          <Button
+            disabled={loading || ongkir === 0}
             size="default"
             onClick={handlePayment}
           >
-            Proses Pembayaran
+          Proses Pembayaran
           </Button>
+ }
         </CardFooter>
       </CardContainer>
     );

@@ -1,10 +1,7 @@
 import Title from "@/components/Title";
 import ProductsList from "@/components/ProductsList";
-import { getProductsAction } from "@/actions/getProductsAction";
 
-export default async function Products() {
-  const products = await getProductsAction(1, 6);
-
+export default function Products() {
   return (
     <section id="products">
       <div className="container">
@@ -13,7 +10,7 @@ export default async function Products() {
           description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
                        dolor sit amet consectetur adipisicing elit. Corporis"
         />
-        <ProductsList products={products.items} />
+        <ProductsList />
       </div>
     </section>
   );

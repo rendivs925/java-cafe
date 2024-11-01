@@ -41,12 +41,11 @@ const SelectFormField = forwardRef<HTMLSelectElement, SelectFormFieldProps>(
                 defaultValue={JSON.stringify(field.value)}
                 onValueChange={field.onChange}
               >
-                <FormControl className="bg-secondary">
+                <FormControl className="bg-transparent">
                   <SelectTrigger>
                     <SelectValue
-                      placeholder={`Pilih ${
-                        isLayanan ? "layanan" : label.toLowerCase()
-                      }`}
+                      placeholder={`Pilih ${isLayanan ? "layanan" : label.toLowerCase()
+                        }`}
                     />
                   </SelectTrigger>
                 </FormControl>
@@ -54,7 +53,7 @@ const SelectFormField = forwardRef<HTMLSelectElement, SelectFormFieldProps>(
                   {options.map((option) => {
                     return (
                       <SelectItem
-                        key={`${option.value}`} 
+                        key={`${option.value}`}
                         value={`${option.value}`}
                       >
                         {option.label}

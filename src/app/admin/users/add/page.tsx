@@ -1,4 +1,7 @@
 "use client";
+import { handleError } from "@/lib/handleError";
+import { extractFieldNames } from "@/lib/extractFieldNames";
+import { handleResponse, Response } from "@/lib/handleResponse";
 import DashboardContainer from "@/components/DashboardContainer";
 import DashboardContent from "@/components/DashboardContent";
 import DashboardHeader from "@/components/DashboardHeader";
@@ -10,25 +13,21 @@ import InputFormField from "@/components/InputFormField";
 import { addUserAction } from "@/actions/addUserAction";
 import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
-import SelectFormField, { Option } from "@/components/SelectFormField";
+import SelectFormField from "@/components/SelectFormField";
+import { Option } from "@/components/PengirimanForm";
 
-export interface pageProps {}
-
-export default function AddNewUser(props: pageProps): ReactElement {
+export default function AddNewUser(): ReactElement {
   const {
     form,
-    handleUpload,
     handleImageChange,
     formData,
     imageSrc,
-    onSubmit,
-    setImageSrc,
     imageFile,
     setIsLoading,
     isLoading,
     handleCancel,
   } = useAddUser();
-  const { email, password, username, profileImage, role } = formData;
+  const { email, password, username, role } = formData;
 
   const formFields = [
     {
@@ -90,9 +89,13 @@ export default function AddNewUser(props: pageProps): ReactElement {
 
                 const response = await addUserAction(formData);
 
-                console.log(response.message);
+
+                const fieldNames = extractFieldNames(formFields);
+
+                handleResponse(response as Response, form, fieldNames);
               } catch (error) {
               } finally {
+                handleError("Error adding user.");
                 setIsLoading(false);
               }
             }}

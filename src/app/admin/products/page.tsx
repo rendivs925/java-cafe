@@ -1,4 +1,5 @@
 import { Suspense, type ReactElement } from "react";
+import type { SearchParams } from "@/types"; // Importing types
 import DashboardContainer from "@/components/DashboardContainer";
 import DashboardHeader from "@/components/DashboardHeader";
 import DashboardTitle from "@/components/DashboardTitle";
@@ -10,7 +11,7 @@ import AddButton from "@/components/AddButton";
 export default function Products({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: SearchParams
 }): ReactElement {
   return (
     <Suspense>

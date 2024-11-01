@@ -16,7 +16,6 @@ export default async function Cart() {
   return (
     <BaseContainer>
       <BaseHeader title="Keranjang Anda" />
-
       <BaseContent>
         <CartContent cart={cart} />
       </BaseContent>

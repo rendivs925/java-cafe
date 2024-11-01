@@ -20,7 +20,6 @@ export async function getUserOrdersAction(page: number, limit: number) {
 
     const skip = (page - 1) * limit;
 
-    // Use Promise.all to get both the orders and the total count in parallel
     const [orders, totalItemsLength] = await Promise.all([
       Order.find({ "user.userId": userId })
         .sort({ createdAt: -1 })

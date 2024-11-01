@@ -25,15 +25,11 @@ export async function updateOrderDetailsAction({
     // Get the transaction status from Midtrans
     const response = await snap.transaction.status(orderId.toString());
 
-    console.log(response);
-
     // Update the order with the provided fields
     const updateResult = await Order.updateOne(
       { orderId },
       { $set: { paymentStatus: response.transaction_status } }
     );
-
-    console.log("UpdatedResult:", updateResult);
 
     if (updateResult.modifiedCount === 0) {
       await session.abortTransaction();

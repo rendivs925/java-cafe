@@ -64,7 +64,7 @@ const OrdersTableRow = ({
   <TableRow key={orderId}>
     <TableCell>{user.username}</TableCell>
     <TableCell className="text-center">
-      <AlertDialogProducts products={products} />
+      <AlertDialogProducts shouldRate={orderStatus === "delivered"} products={products} />
     </TableCell>
     <TableCell>{address}</TableCell>
     <TableCell>{layanan.name}</TableCell>
@@ -118,12 +118,12 @@ export default async function Orders({
             })}
             <TableRow>
               <TableCell
-                className="bg-transparent text-muted-foreground pb-0"
+                className="bg-background text-muted-foreground pb-0"
                 colSpan={5}
               >
                 Total Items: {totalItemsLength}
               </TableCell>
-              <TableCell className="bg-transparent pb-0" colSpan={5}>
+              <TableCell className="bg-background pb-0" colSpan={5}>
                 <PaginationControls
                   hasNextPage={page < totalPages}
                   hasPrevPage={page > 1}

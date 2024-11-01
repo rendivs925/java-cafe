@@ -6,6 +6,7 @@ import Blog from "@/sections/Blog";
 import Footer from "@/sections/Footer";
 import Contact from "@/sections/Contact";
 import { Author } from "next/dist/lib/metadata/types/metadata-types";
+import { checkAndUpdateExpiredOrders } from "@/actions/checkAndUpdateExpiredOrders";
 
 export const metadata: Metadata = {
   title: "Java Cafe | Homepage",
@@ -18,18 +19,16 @@ export const metadata: Metadata = {
   keywords: ["coffee shop", "java cafe", "coffee", "cafe"],
 };
 
-export default function Home({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function Home() {
+  await checkAndUpdateExpiredOrders();
+
   return (
     <>
       <Hero />
       <div className="flex flex-col gap-[80px] lg:gap-[100px]">
         <About />
         <Products />
-        <Blog searchParams={searchParams} />
+        <Blog />
         <Contact />
       </div>
       <Footer />

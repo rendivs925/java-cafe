@@ -7,12 +7,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TableCellFormattedDate from "@/components/TableCellFormattedDate";
-import { Button } from "@/components/ui/button";
 import PaginationControls from "@/components/PaginationControls";
 import BaseContainer from "@/components/BaseContainer";
 import BaseContent from "@/components/BaseContent";
 import { getUserOrdersAction } from "@/actions/getUserOrdersAction";
-import { MessageSquareText } from "lucide-react";
 import BaseHeader from "@/components/BaseHeader";
 import SelectShowing from "@/components/SelectShowing";
 import SyncOrderStatusButton from "@/components/SyncOrderStatusButton";
@@ -42,9 +40,9 @@ export default async function Orders({
   return (
     <BaseContainer>
       <BaseHeader title="Pesanan Anda" className="flex justify-between">
-        <SelectShowing />
+        <SelectShowing className="bg-transparent" />
       </BaseHeader>
-      <BaseContent className="shadow bg-secondary p-6 rounded-lg">
+      <BaseContent className="shadow bg-background p-6 rounded-lg">
         <Table className="overflow-y-hidden">
           <TableHeader>
             <TableRow>
@@ -72,9 +70,9 @@ export default async function Orders({
                 createdAt,
               }) => (
                 <TableRow key={orderId}>
-                  <TableCell className="">{orderId}</TableCell>
+                  <TableCell>{orderId}</TableCell>
                   <TableCell className="text-center">
-                    <AlertDialogProducts products={products} />
+                    <AlertDialogProducts shouldRate={orderStatus === "delivered"} products={products} />
                   </TableCell>
                   <TableCell>{formatToRupiah(String(payment))}</TableCell>
                   <TableCellFormattedDate createdAt={createdAt} />
@@ -102,28 +100,25 @@ export default async function Orders({
                   <TableCell className="text-center">{resi || "-"}</TableCell>
                   <TableCell className="text-right flex items-center justify-end">
                     <PayPendingOrderButton
-                      disabled={paymentStatus === "settlement"}
+                      disabled={paymentStatus === "settlement" || paymentStatus === "expire"}
                       orderId={orderId}
                     />
                     <SyncOrderStatusButton
                       orderId={orderId}
-                      disabled={orderStatus === "delivered"}
+                      disabled={orderStatus === "delivered" || paymentStatus === "expire"}
                     />
-                    <Button size="sm" variant="ghost">
-                      <MessageSquareText />
-                    </Button>
                   </TableCell>
                 </TableRow>
               ),
             )}
             <TableRow>
               <TableCell
-                className="bg-secondary text-muted-foreground pb-0"
+                className="bg-background text-muted-foreground pb-0"
                 colSpan={5}
               >
                 Total Items : {totalItemsLength}
               </TableCell>
-              <TableCell className="bg-secondary pb-0" colSpan={5}>
+              <TableCell className="bg-background pb-0" colSpan={5}>
                 <PaginationControls
                   hasNextPage={Number(page) < totalPages}
                   hasPrevPage={start > 0}

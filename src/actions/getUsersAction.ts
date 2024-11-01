@@ -16,11 +16,12 @@ export async function getUsersAction(page: number, limit: number) {
 
     const skip = (page - 1) * limit;
 
-    const users: (IUser & { password: string })[] = await User.find({})
+    const users = await User.find({ role: { $ne: "admin" } })
       .skip(skip)
       .limit(limit)
       .lean();
-    const totalItemsLength: number = await User.find({}).countDocuments();
+
+    const totalItemsLength: number = await User.find({ role: { $ne: "admin" } }).countDocuments();
 
     const formattedUsers = users.map((user) => {
       const data = {

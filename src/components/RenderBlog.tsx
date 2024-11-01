@@ -1,5 +1,4 @@
 import BaseContainer from "@/components/BaseContainer";
-import TurndownService from "turndown";
 import BaseContent from "@/components/BaseContent";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
@@ -9,11 +8,6 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { IBlog } from "@/models/Blog";
-
-const convertToMarkdown = (content: string) => {
-  const turndownService = new TurndownService();
-  return turndownService.turndown(content);
-};
 
 // Define types for the blog data
 interface Author {
@@ -42,7 +36,7 @@ const BlogTags: React.FC<{ tags: string[] }> = ({ tags }) => (
     {tags.map((tag) => (
       <Badge
         key={tag}
-        className="bg-background px-3 py-1 font-normal text-muted-foreground text-lg hover:bg-background/85"
+        className="bg-secondary px-6 py-1 font-normal text-muted-foreground text-lg hover:bg-secondary"
       >
         {tag}
       </Badge>
@@ -74,7 +68,7 @@ const BlogContent: React.FC<{ content: string }> = ({ content }) => (
       },
     }}
   >
-    {convertToMarkdown(content)}
+    {content}
   </ReactMarkdown>
 );
 
@@ -95,7 +89,7 @@ const RenderBlog = ({ data }: { data: IBlog }) => {
             objectFit="contain"
           />
         </div>
-        <BlogContent content={data?.content} />
+        <BlogContent content={data?.content} /> {/* Pass the content directly */}
         <BlogTags tags={data?.tags} />
       </BaseContent>
     </BaseContainer>

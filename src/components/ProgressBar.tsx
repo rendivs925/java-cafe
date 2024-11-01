@@ -35,10 +35,9 @@ export default function ProgressBar(props: ProgressBarProps): ReactElement {
             isActive={activeStep === 1 || activeStep === 2 || activeStep === 3}
           />
           <Step
-            label="Konfirmasi"
+            label="Konfirmasi & Pembayaran"
             isActive={activeStep === 2 || activeStep === 3}
           />
-          <Step label="Pembayaran" isActive={activeStep === 3} />
         </div>
       </div>
     </section>

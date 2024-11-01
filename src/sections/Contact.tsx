@@ -1,3 +1,4 @@
+'use client'
 import { type ReactElement } from "react";
 import dynamic from "next/dynamic";
 import { contactUs, followUs, workingHours } from "@/constanst";

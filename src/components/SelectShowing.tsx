@@ -17,7 +17,7 @@ const selectShowingItems = [
   { value: "30" },
 ];
 
-export default function SelectShowing(): ReactElement {
+export default function SelectShowing({ className }: { className?: string }): ReactElement {
   const [totalItemsPerPage, setTotalItemsPerPage] = useLocalStorage(
     "totalItemsPerPage",
     "5",
@@ -40,7 +40,7 @@ export default function SelectShowing(): ReactElement {
 
   return (
     <Suspense>
-      <div className="flex gap-6 items-center">
+      <div className={`flex gap-6 items-center ${className}`}>
         <p className="mt-0">Showing</p>
         <Select
           defaultValue={totalItemsPerPage}

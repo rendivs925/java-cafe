@@ -6,6 +6,8 @@ interface IUser {
   password: string;
   role: "admin" | "user";
   imgUrl?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const UserSchema: Schema<IUser> = new Schema(

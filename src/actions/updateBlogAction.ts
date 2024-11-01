@@ -1,7 +1,7 @@
 "use server";
 import { IBlogWithPreviewImage } from "@/app/admin/blogs/add/page";
 import { connectToDatabase } from "@/lib/dbConnect";
-import { handleUpload } from "@/lib/storage";
+import { handleUpload, deleteFile } from "@/lib/storage";
 import Blog, { IBlog } from "@/models/Blog";
 import { BlogSchema } from "@/schemas/BlogFormSchema";
 
@@ -53,7 +53,16 @@ export async function updateBlogAction(formData: FormData) {
     // Handle image upload if a new image is provided
     let prevImgUrl = existingBlog.prevImgUrl;
     if (data.previewImage) {
-      prevImgUrl = await handleUpload(data.previewImage, "blogs");
+      // Upload the new image
+      const newImgUrl = await handleUpload(data.previewImage, "blogs");
+
+      // Delete the old image if the new one is uploaded successfully
+      if (prevImgUrl) {
+        await deleteFile(prevImgUrl);
+      }
+
+      // Set the new image URL
+      prevImgUrl = newImgUrl;
     }
 
     // Remove previewImage from the payload for validation

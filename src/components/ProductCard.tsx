@@ -1,81 +1,63 @@
 "use client";
 import Image from "next/legacy/image";
-// import { useState } from "react";
+import { ProductType } from "@/components/ProductsList";
+import { Button } from "./ui/button";
 import { type ReactElement } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-// import useAppContext from "@/hooks/useAppContext";
-import { Product } from "@/types";
 import { formatToRupiah } from "@/lib/formatToRupiah";
-import Link from "next/link";
+import useAppContext from "@/hooks/useAppContext";
 
 function ProductCard({
   title,
   price,
   imgUrl,
-  productId,
+  _id,
   description,
   readonly = false,
-}: Product & {
-  productId: string;
+  profit, stock, weight
+}: ProductType & {
   readonly?: boolean;
 }): ReactElement {
-  // const { user, setTotalItems, formatNumber } = useAppContext();
-  // const [loading, setLoading] = useState(false);
+  const { pushRoute } = useAppContext();
+  const { addProductToCart } = useAppContext();
 
-  // const addProductToCart = async () => {
-  //   setLoading(true); // Set loading state to true
-  //   try {
-  //     const data = await addProductToCartAction({
-  //       userId: user._id,
-  //       products: [
-  //         {
-  //           productId,
-  //           profit,
-  //           title,
-  //           imgUrl,
-  //           price,
-  //           stock,
-  //           weight,
-  //         },
-  //       ],
-  //     });
-  //
-  //     setTotalItems((data?.totalItems as number) || 1);
-  //
-  //     if (data?.status === "success") {
-  //       toast({ description: data.message });
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to add product to cart:", error);
-  //   } finally {
-  //     setLoading(false); // Set loading state to false after operation
-  //   }
-  // };
+  const handleAddToCartClick = () => {
+    addProductToCart({
+      productId: _id,
+      profit,
+      title,
+      imgUrl,
+      price,
+      stock,
+      weight,
+    });
+  };
+
+  const handleClick = () => {
+    !readonly && pushRoute(`/products/${_id}`);
+  };
 
   return (
     <Card className="flex flex-col w-full overflow-hidden bg-transparent shadow-none">
-      <CardHeader className="relative rounded-lg shadow aspect-square bg-transparent overflow-hidden">
+      <CardHeader onClick={handleClick}
+        className="relative rounded-lg shadow aspect-square bg-transparent cursor-pointer overflow-hidden">
         <Image
           src={imgUrl}
           loading="eager"
-          alt="Product"
-          className="aspect-square rounded-lg"
+          alt={title}
+          className="aspect-square rounded-lg hover:scale-125 transition-all duration-300"
           layout="fill"
           objectFit="cover"
         />
       </CardHeader>
       <CardContent className="prose bg-transparent p-0 pt-6">
-        <CardTitle className="mt-0">{title}</CardTitle>
+        <CardTitle onClick={handleClick} className="mt-0 cursor-pointer">{title}</CardTitle>
         <p className="line-clamp-2">{description}</p>
         <div className="flex items-baseline justify-between overflow-hidden">
           <h4 className="price">{formatToRupiah(price)}</h4>
-          {!readonly ? (
-            <Link href={`/products/${productId}`}>Details</Link>
-          ) : (
-            <h4 className="font-medium text-lg cursor-not-allowed text-primary underline">
-              Details
-            </h4>
-          )}
+          <Button onClick={handleAddToCartClick} variant="link" className="underline">
+            <h3>Add to Cart</h3>
+          </Button>
         </div>
       </CardContent>
     </Card>

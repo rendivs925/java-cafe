@@ -49,24 +49,33 @@ interface AppContextType {
   setDetailPengiriman: (
     value:
       | {
-          username: string;
-          noHandphone: string;
-          alamatLengkap: string;
-        }
+        username: string;
+        noHandphone: string;
+        alamatLengkap: string;
+      }
       | ((val: {
-          username: string;
-          noHandphone: string;
-          alamatLengkap: string;
-        }) => {
-          username: string;
-          noHandphone: string;
-          alamatLengkap: string;
-        }),
+        username: string;
+        noHandphone: string;
+        alamatLengkap: string;
+      }) => {
+        username: string;
+        noHandphone: string;
+        alamatLengkap: string;
+      }),
   ) => void;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
   setUser: (value: User | ((val: User) => User)) => void;
   pushRoute: (route: string) => void;
   formatToRupiah: (value: number) => string;
+  addProductToCart: (product: {
+    productId: string;
+    profit: number;
+    title: string;
+    imgUrl: string;
+    price: number;
+    stock: number;
+    weight: number;
+  }) => Promise<void>;
   formatNumber: (value: number) => string;
   formatDate: (date: Date) => string;
   getTotalSalesData: (data: TotalSalesData[]) => formattedDataType[];

@@ -16,8 +16,8 @@ const MAX_AGE = 60 * 60 * 24 * 30; // 30 days in seconds
 export async function loginAction(formData: FormData) {
   try {
     const data: BaseUserType = {
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
+      email: (formData.get("email") as string).trim(),
+      password: (formData.get("password") as string).trim(),
     };
 
     // Validate the data against the schema
@@ -39,8 +39,7 @@ export async function loginAction(formData: FormData) {
     if (!user) {
       return {
         status: "error",
-        message: "Account not found. Please check the email you provided.",
-        path: "email",
+        message: "Invalid credentials. Please try again.",
       };
     }
 
@@ -49,8 +48,7 @@ export async function loginAction(formData: FormData) {
     if (!isValidPassword) {
       return {
         status: "error",
-        message: "Incorrect password. Please try again.",
-        path: "password",
+        message: "Invalid credentials. Please try again.",
       };
     }
 
@@ -98,9 +96,7 @@ export async function loginAction(formData: FormData) {
   } catch (error) {
     return {
       status: "error",
-      message:
-        (error as { message: string }).message ||
-        "An unexpected error occurred. Please try again later.",
+      message: "An unexpected error occurred. Please try again later.",
       totalItems: 0,
     };
   }

@@ -1,3 +1,4 @@
+import EditButton from "@/components/EditButton";
 import {
   Table,
   TableBody,
@@ -50,7 +51,7 @@ export default async function UsersTable({
               <TableCell>{index + 1}</TableCell>
               <TableCell className="flex items-center gap-4">
                 <Image
-                  src={imgUrl}
+                  src={imgUrl as string}
                   width={40}
                   height={40}
                   alt={username}
@@ -62,11 +63,8 @@ export default async function UsersTable({
               <TableCell>{_id.toString()}</TableCell>
               <TableCell>{email}</TableCell>
               <TableCell>{role}</TableCell>
-              <TableCellFormattedDate createdAt={createdAt} />
+              <TableCellFormattedDate createdAt={createdAt as Date} />
               <TableCell className="text-right">
-                <Button size="sm" variant="ghost" className="bg-transparent">
-                  <MdOutlineEdit className="text-foreground text-lg" />
-                </Button>
                 <DeleteUserButton filePath="" itemId={_id.toString()} />
               </TableCell>
             </TableRow>

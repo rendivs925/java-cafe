@@ -10,10 +10,10 @@ import {
 
 export default function ConfirmationPage(): ReactElement {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-secondary">
+    <div className="flex items-center justify-center min-h-screen bg-background">
       <Card className="">
         <CardHeader>
-          <CardTitle className="">Payment Successful!</CardTitle>
+          <CardTitle>Payment Successful!</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="m-0">

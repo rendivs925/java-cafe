@@ -1,14 +1,14 @@
 "use server";
-import { ProductType } from "@/components/ProductsList";
 import { connectToDatabase } from "@/lib/dbConnect";
-import Product from "@/models/Product";
+import { serializeDocument } from "@/lib/utils";
+import Product, { IProduct } from "@/models/Product";
 
 export async function getProductByIdAction(id: string) {
   try {
     await connectToDatabase();
 
     // Find the product by ID
-    const product: ProductType | null = await Product.findById(id).lean();
+    const product: IProduct | null = await Product.findById(id).lean()
 
     if (!product) {
       return {
@@ -21,13 +21,13 @@ export async function getProductByIdAction(id: string) {
     // Format the product object
     const formattedProduct = {
       ...product,
-      _id: product._id.toString(),
+      _id: product?._id?.toString(),
     };
 
     return {
       status: "success",
       message: "Product fetched successfully.",
-      item: formattedProduct,
+      item: serializeDocument(formattedProduct),
     };
   } catch (error) {
     return {

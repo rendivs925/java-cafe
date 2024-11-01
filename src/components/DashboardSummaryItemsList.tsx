@@ -51,7 +51,7 @@ export default function DashboardSummaryItemsList({
             <Card className="bg-background shadow">
               <CardHeader>
                 <CardTitle className="text-xl text-muted-foreground mt-0 flex gap-4 items-center">
-                  <span className="bg-background text-xl p-3 rounded-lg">
+                  <span className="bg-secondary text-xl p-3 rounded-lg">
                     {item.icon}
                   </span>
                   {item.label}

@@ -1,3 +1,4 @@
+import { AlertRatingStars } from "@/components/AlertRatingStars";
 import {
   AlertDialog as BaseAlertDialog,
   AlertDialogAction,
@@ -15,10 +16,12 @@ import { IoMdClose } from "react-icons/io";
 
 interface AlertDialogProductsProps {
   products: IOrderProduct[];
+  shouldRate: boolean;
 }
 
 export default function AlertDialogProducts({
   products,
+  shouldRate
 }: AlertDialogProductsProps) {
   return (
     <BaseAlertDialog>
@@ -60,9 +63,14 @@ export default function AlertDialogProducts({
                       </span>
                     </div>
                   </div>
-                  <span className="text-sm font-semibold text-secondary-foreground">
-                    x{product.qty}
-                  </span>
+                  <div className="flex items-center">
+                    {
+                      shouldRate && <AlertRatingStars productId={product.productId} />
+                    }
+                    <span className="text-sm font-semibold text-secondary-foreground">
+                      x{product.qty}
+                    </span>
+                  </div>
                 </li>
               ))}
             </ul>

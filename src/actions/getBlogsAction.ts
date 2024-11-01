@@ -1,6 +1,7 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Blog, { IBlog } from "@/models/Blog";
+import { serializeDocument } from "@/lib/utils";
 
 export async function getBlogsAction(page: number, limit: number) {
   try {

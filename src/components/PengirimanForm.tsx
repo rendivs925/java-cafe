@@ -7,16 +7,16 @@ import { fetchCitiesAction } from "@/actions/fetchCitiesAction";
 import { fetchProvincesAction } from "@/actions/fetchProvinceAction";
 import { calculateShippingAction } from "@/actions/calculateShippingAction";
 import { UseFormReturn } from "react-hook-form";
-import { ICart, ICartProduct } from "@/models/Cart";
+import { ICart } from "@/models/Cart";
 
 // Define a type alias for option objects
 export type Option = {
   value:
-    | {
-        name: string;
-        cost: number;
-      }
-    | string;
+  | {
+    name: string;
+    cost: number;
+  }
+  | string;
   label: string;
 };
 
@@ -88,11 +88,9 @@ const PengirimanForm = forwardRef<
           cities.map(
             (city: { city_id: string; type: string; city_name: string }) => ({
               value: city.city_id,
-              label: `${
-                city.type.charAt(0).toUpperCase() + city.type.slice(1)
-              } - ${
-                city.city_name.charAt(0).toUpperCase() + city.city_name.slice(1)
-              }`,
+              label: `${city.type.charAt(0).toUpperCase() + city.type.slice(1)
+                } - ${city.city_name.charAt(0).toUpperCase() + city.city_name.slice(1)
+                }`,
             })
           )
         );
@@ -117,17 +115,15 @@ const PengirimanForm = forwardRef<
           result.response[0]?.costs.map((costDetail) => ({
             value: JSON.stringify({
               cost: costDetail.cost[0].value,
-              name: `${
-                (result as unknown as { response: [{ code: string }] })
-                  ?.response[0]?.code
-              } - ${costDetail.description}`,
+              name: `${(result as unknown as { response: [{ code: string }] })
+                ?.response[0]?.code
+                } - ${costDetail.description}`,
             }),
-            label: `${costDetail.service} - ${
-              costDetail.description
-            } - ${costDetail.cost[0]?.value.toLocaleString("id-ID", {
-              style: "currency",
-              currency: "IDR",
-            })} (${costDetail.cost[0]?.etd} days)`,
+            label: `${costDetail.service} - ${costDetail.description
+              } - ${costDetail.cost[0]?.value.toLocaleString("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              })} (${costDetail.cost[0]?.etd} days)`,
           }))
         );
       } else {

@@ -1,7 +1,7 @@
 "use server";
-import { ProductType } from "@/components/ProductsList";
 import { connectToDatabase } from "@/lib/dbConnect";
-import Product from "@/models/Product";
+import Product, { IProduct } from "@/models/Product";
+import { serializeDocument } from "@/lib/utils";
 
 export async function getProductsAction(page: number, limit: number) {
   try {
@@ -9,7 +9,7 @@ export async function getProductsAction(page: number, limit: number) {
 
     const skip = (page - 1) * limit;
 
-    const products: ProductType[] = await Product.find({})
+    const products: IProduct[] = await Product.find({})
       .skip(skip)
       .limit(limit)
       .lean();
@@ -18,7 +18,7 @@ export async function getProductsAction(page: number, limit: number) {
     const formattedProducts = products.map((product) => {
       return {
         ...product,
-        _id: product._id.toString(),
+        _id: product?._id?.toString(),
       };
     });
 

@@ -1,13 +1,13 @@
 import mongoose, { Model, Schema } from "mongoose";
 
-// Define the TypeScript interface for the document
+// Define the TypeScript interface for the review document
 export interface IReview {
-  userId: mongoose.Types.ObjectId;
-  // rating: number;
-  comment: string;
+  userId: mongoose.Types.ObjectId; // Reference to the user
+  rating: number; // Rating from 0 to 5
 }
 
 export interface IProduct {
+  _id?: Schema.Types.ObjectId;
   createdAt?: Date;
   category: string;
   description: string;
@@ -18,20 +18,20 @@ export interface IProduct {
   stock: number;
   title: string;
   weight: number;
-  // rating: number;
-  // reviews: IReview[];
+  rating?: number;  // Average rating of all reviews
+  reviews: IReview[];  // Array of reviews
 }
 
 // Create the Mongoose schema for reviews
-// const ReviewSchema: Schema<IReview> = new Schema({
-//   userId: { type: Schema.Types.ObjectId, required: false },
-//   rating: { type: Number, required: false },
-//   comment: { type: String, required: false },
-// });
-//
-// Create the Mongoose schema for products
+const ReviewSchema: Schema<IReview> = new Schema({
+  userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+  rating: { type: Number, required: true, min: 0, max: 5 }, // Ensure rating is between 0 and 5
+});
+
+// Create the Mongoose schema for products with embedded reviews
 const ProductSchema: Schema<IProduct> = new Schema(
   {
+    _id: { type: Schema.Types.ObjectId, required: false },
     category: { type: String, required: true },
     description: { type: String, required: true },
     imgUrl: { type: String, required: true },
@@ -42,14 +42,13 @@ const ProductSchema: Schema<IProduct> = new Schema(
     title: { type: String, required: true, unique: true },
     createdAt: { type: Date, required: false },
     weight: { type: Number, required: true },
-    // rating: { type: Number, required: false },
-    // reviews: [ReviewSchema],
+    rating: { type: Number, required: false, default: 0 },
+    reviews: { type: [ReviewSchema], default: [] },
   },
   { timestamps: true },
 );
 
 // Create and export the Mongoose model
-const Product: Model<IProduct> =
-  mongoose.models.Product || mongoose.model<IProduct>("Product", ProductSchema);
+const Product: Model<IProduct> = mongoose.models.Product || mongoose.model<IProduct>("Product", ProductSchema);
 
 export default Product;

@@ -34,21 +34,21 @@ export default function AvatarMenu({ user }: AvatarMenuProps): ReactElement {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => pushRoute("/account/orders")}>
+            {/* <DropdownMenuItem> */}
+            {/*   <User className="mr-2 h-4 w-4" /> */}
+            {/*   <span>Profile</span> */}
+            {/*   <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+            {/* </DropdownMenuItem> */}
+            { user.role !== "admin" && <DropdownMenuItem onClick={() => pushRoute("/account/orders")}>
               <CreditCard className="mr-2 h-4 w-4" />
               <span>Orders</span>
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
+              {/* <DropdownMenuShortcut>⌘B</DropdownMenuShortcut> */}
+            </DropdownMenuItem> }
+            {/* <DropdownMenuItem> */}
+            {/*   <Settings className="mr-2 h-4 w-4" /> */}
+            {/*   <span>Settings</span> */}
+            {/*   <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
+            {/* </DropdownMenuItem> */}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>

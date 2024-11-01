@@ -15,7 +15,7 @@ interface ErrorResponse {
   path?: string;
 }
 
-export default function useSignUp() {
+export default function useAddUser() {
   const { pushRoute: moveRoute } = useAppContext();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);

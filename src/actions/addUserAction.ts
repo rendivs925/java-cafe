@@ -25,7 +25,7 @@ const findExistingUser = async (username: string, email: string) => {
 
   return {
     path: user.username === username ? "username" : "email",
-    message: `An account with this ${user.username === username ? "username" : "email"} already exists in the database. Please choose a different one.`,
+    message: `An account with this ${user.username === username ? "username" : "email"} already exists. Please choose a different one.`,
     status: "error",
   };
 };
@@ -60,10 +60,10 @@ export async function addUserAction(formData: FormData) {
 
     const userData: AddUserType = {
       profileImage: formData.get("profileImage") as string,
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-      username: formData.get("username") as string,
-      role: formData.get("role") as "user" | "admin",
+      email: (formData.get("email") as string).trim(),
+      password: (formData.get("password") as string).trim(),
+      username: (formData.get("username") as string).trim(),
+      role: (formData.get("role") as "user" | "admin"),
     };
 
     const validationResult = addUserSchema.safeParse(userData);
@@ -79,11 +79,17 @@ export async function addUserAction(formData: FormData) {
       validationResult.data.username,
       validationResult.data.email,
     );
-    if (existingUserError) return existingUserError;
+    if (existingUserError) {
+      return {
+        status: "error",
+        message: "Username or email already in use. Please try again.",
+      };
+    }
 
     const profileImageUrl = await uploadProfileImage(
       validationResult.data.profileImage as File,
     );
+
     const newUserData: NewAddUserType = {
       ...validationResult.data,
       imgUrl: profileImageUrl,
@@ -111,7 +117,6 @@ export async function addUserAction(formData: FormData) {
     return {
       status: "error",
       message:
-        (error as { message: string }).message ||
         "An internal server error occurred. Please try again later.",
     };
   }

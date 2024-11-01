@@ -7,10 +7,8 @@ import { BlogSchema } from "@/schemas/BlogFormSchema";
 
 export async function createBlogAction(formData: FormData) {
   try {
-    // Connect to the database
     await connectToDatabase();
 
-    // Extract and validate FormData
     const authorString = formData.get("author") as string | null;
     const content = formData.get("content") as string | null;
     const description = formData.get("description") as string;
@@ -27,7 +25,6 @@ export async function createBlogAction(formData: FormData) {
     const isPublished = isPublishedString === "true";
     const tags = JSON.parse(tagsString);
 
-    // Construct the data object
     const data: IBlogWithPreviewImage = {
       author: {
         authorId: author.authorId,
