@@ -80,9 +80,9 @@ export default function AppProvider({
 
       setTotalItems((data?.totalItems as number) || 1);
 
-      if (data?.status === "success") {
-        toast({ description: data.message });
-      }
+      // if (data?.status === "success") {
+      //   toast({ description: data.message });
+      // }
     } catch (error) {
       console.error("Failed to add product to cart:", error);
     }
