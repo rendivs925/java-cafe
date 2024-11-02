@@ -40,7 +40,7 @@ export default async function Page({
 
   return (
     <BaseContainer>
-      <BaseContent className="grid gap-10 grid-cols-detail max-w-none mx-auto">
+      <BaseContent className="grid gap-10 max-md:grid-cols-1 grid-cols-detail max-w-none mx-auto">
         <div className="relative w-full overflow-hidden rounded-lg">
           <Image
             src={data.imgUrl}

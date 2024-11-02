@@ -32,7 +32,7 @@ const AuthorInfo: React.FC<{ author: Author; createdAt: string | Date }> = ({
 );
 
 const BlogTags: React.FC<{ tags: string[] }> = ({ tags }) => (
-  <div className="mt-12 flex gap-4">
+  <div className="mt-12 flex gap-4 flex-wrap">
     {tags.map((tag) => (
       <Badge
         key={tag}
