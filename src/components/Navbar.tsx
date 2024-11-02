@@ -13,7 +13,7 @@ export default function Navbar(): ReactElement {
 
   return (
     <header className="navbar glass w-full box-border bg-background shadow fixed top-[0] left-[0] right-[0] z-10">
-      <nav className="flex items-center h-full justify-between">
+      <nav className="md:container flex items-center h-full justify-between">
         <NavbarHeading />
         <NavbarItemList isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
         <HamburgerMenuWithCartAndAuthButtons toggleMobileMenu={toggleMobileMenu} />
