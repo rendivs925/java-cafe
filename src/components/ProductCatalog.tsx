@@ -17,7 +17,6 @@ const CACHE_EXPIRY = 1000 * 60 * 10; // 10 minutes
 const ProductCatalog = React.memo(() => {
   const lastProductRef = useRef<HTMLDivElement | null>(null);
   const isClient = useClientComponent();
-  const scrollPositionRef = useRef(0); // Ref to hold the scroll position
 
   const [page, setPage] = useState(1);
   const perPage = 10;
@@ -29,7 +28,7 @@ const ProductCatalog = React.memo(() => {
     if (isLoading) return;
     setIsLoading(true);
 
-    const cacheKey = `products`;
+    const cacheKey = 'productCatalog';
     const cacheTimestampKey = `${cacheKey}-timestamp`;
     const cachedData = localStorage.getItem(cacheKey);
     const cachedTimestamp = localStorage.getItem(cacheTimestampKey);
@@ -52,19 +51,24 @@ const ProductCatalog = React.memo(() => {
       localStorage.removeItem(cacheTimestampKey);
     }
 
-    const { items, totalItemsLength } = await getProductsAction(page, perPage);
-    setProducts((prev) => [...prev, ...items] as IProduct[]);
-    setTotalItemsLength(totalItemsLength);
+    try {
+      const { items, totalItemsLength } = await getProductsAction(page, perPage);
+      setProducts((prev) => [...prev, ...items] as IProduct[]);
+      setTotalItemsLength(totalItemsLength);
 
-    // Cache new data along with previous pages
-    const updatedCache = cachedData && isCacheValid
-      ? { ...JSON.parse(cachedData), [page]: { items, totalItemsLength } }
-      : { [page]: { items, totalItemsLength } };
+      // Cache new data along with previous pages
+      const updatedCache = cachedData && isCacheValid
+        ? { ...JSON.parse(cachedData), [page]: { items, totalItemsLength } }
+        : { [page]: { items, totalItemsLength } };
 
-    localStorage.setItem(cacheKey, JSON.stringify(updatedCache));
-    localStorage.setItem(cacheTimestampKey, Date.now().toString());
-
-    setIsLoading(false);
+      localStorage.setItem(cacheKey, JSON.stringify(updatedCache));
+      localStorage.setItem(cacheTimestampKey, Date.now().toString());
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+      // You can also implement error handling to reset loading state or notify the user
+    } finally {
+      setIsLoading(false);
+    }
   }, [page, perPage, isLoading]);
 
   const totalPages = Math.ceil(totalItemsLength / perPage);
@@ -76,20 +80,14 @@ const ProductCatalog = React.memo(() => {
     }
   }, [hasNextPage]);
 
-  // Preserve scroll position when loading new items
   useEffect(() => {
-    fetchProducts().then(() => {
-      if (page > 1) {
-        window.scrollTo(0, scrollPositionRef.current); // Restore previous scroll position
-      }
-    });
+    fetchProducts();
   }, [page, fetchProducts]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isLoading) {
-          scrollPositionRef.current = window.scrollY; // Save current scroll position
           loadMore();
         }
       },
