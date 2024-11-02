@@ -17,6 +17,7 @@ const CACHE_EXPIRY = 1000 * 60 * 10; // 10 minutes
 const ProductCatalog = React.memo(() => {
   const lastProductRef = useRef<HTMLDivElement | null>(null);
   const isClient = useClientComponent();
+  const scrollPositionRef = useRef(0); // Ref to hold the scroll position
 
   const [page, setPage] = useState(1);
   const perPage = 10;
@@ -75,15 +76,20 @@ const ProductCatalog = React.memo(() => {
     }
   }, [hasNextPage]);
 
+  // Preserve scroll position when loading new items
   useEffect(() => {
-    fetchProducts();
+    fetchProducts().then(() => {
+      if (page > 1) {
+        window.scrollTo(0, scrollPositionRef.current); // Restore previous scroll position
+      }
+    });
   }, [page, fetchProducts]);
-
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isLoading) {
+          scrollPositionRef.current = window.scrollY; // Save current scroll position
           loadMore();
         }
       },
