@@ -31,7 +31,6 @@ export default function NavbarItemList({ isMobileMenuOpen, setIsMobileMenuOpen }
 
   return (
     <>
-      {/* Desktop view */}
       <ul className="hidden lg:flex lg:flex-row gap-8 justify-between">
         {navbarLinks.map(({ href, label }: NavbarLink, index: number) => (
           <li key={index}>
@@ -40,7 +39,6 @@ export default function NavbarItemList({ isMobileMenuOpen, setIsMobileMenuOpen }
         ))}
       </ul>
 
-      {/* Mobile view navigation menu */}
       <ul
         className={`flex flex-col gap-4 fixed top-0 left-0 w-full h-svh items-center bg-background transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-y-0 pt-navbar" : "-translate-y-full"
           } lg:hidden z-10`}
@@ -52,7 +50,6 @@ export default function NavbarItemList({ isMobileMenuOpen, setIsMobileMenuOpen }
             </Link>
           </li>
         ))}
-        {/* Add Login and Sign Up Links */}
         <li className="p-4 border-b border-gray-200">
           <Button onClick={handleLogin}>
             Login
