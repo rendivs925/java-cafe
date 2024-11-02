@@ -1,6 +1,8 @@
 import { type ReactElement, Dispatch, SetStateAction } from "react";
 import { navbarLinks } from "@/constanst";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import useAppContext from "@/hooks/useAppContext";
 
 // Define the type for each link item
 type NavbarLink = {
@@ -10,11 +12,22 @@ type NavbarLink = {
 
 interface NavbarItemListProps {
   isMobileMenuOpen: boolean;
-  setIsMobileMenuOpen: Dispatch<SetStateAction<boolean>>
+  setIsMobileMenuOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 // Ensure `navbarLinks` is typed as an array of `NavbarLink` objects
 export default function NavbarItemList({ isMobileMenuOpen, setIsMobileMenuOpen }: NavbarItemListProps): ReactElement {
+  const { pushRoute } = useAppContext();
+
+  const handleLogin = () => {
+   setIsMobileMenuOpen(false)
+    pushRoute("/auth/login")
+  }
+
+  const handleSignup = () => {
+   setIsMobileMenuOpen(false)
+    pushRoute("/auth/sign-up")
+  }
 
   return (
     <>
@@ -39,6 +52,17 @@ export default function NavbarItemList({ isMobileMenuOpen, setIsMobileMenuOpen }
             </Link>
           </li>
         ))}
+        {/* Add Login and Sign Up Links */}
+        <li className="p-4 border-b border-gray-200">
+          <Button onClick={handleLogin}>
+            Login
+          </Button>
+        </li>
+        <li className="p-4">
+          <Button variant="outline" onClick={handleSignup}>
+            Sign Up
+          </Button>
+        </li>
       </ul>
     </>
   );

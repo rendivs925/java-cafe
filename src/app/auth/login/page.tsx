@@ -113,7 +113,6 @@ export default function Login(): ReactElement {
               <LoadingButton>Submitting...</LoadingButton>
             ) : (
               <Button
-                disabled={!form.formState.isValid}
                 type="submit"
                 size="default"
                 className="w-full"

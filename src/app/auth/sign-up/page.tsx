@@ -22,8 +22,6 @@ export default function SignUp() {
     useSignUp();
   let [isLoading, startTransition] = useTransition();
 
-  const { formState } = form;
-  const isValid = formState.isValid;
   const { username, email, password, role } = formData;
 
   const formFields = [
@@ -125,7 +123,6 @@ export default function SignUp() {
               <LoadingButton>Submitting...</LoadingButton>
             ) : (
               <Button
-                disabled={!isValid}
                 type="submit"
                 size="default"
                 className="w-full"
