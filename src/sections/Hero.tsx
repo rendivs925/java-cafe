@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import useAppContext from "@/hooks/useAppContext";
 
 export default function Hero(): ReactElement {
-  const { pushRoute: moveRoute } = useAppContext();
+       const { pushRoute: moveRoute } = useAppContext();
 
   return (
     <section id="hero">
       <div className="container grid min-h-svh content-center lg:grid-cols-hero gap-6 lg:gap-20">
-        <div className="justify-self-center max-smallerMobileScreen:w-[250px] max-smallerMobileScreen:h-[250px] max-[380px]:w-[0] max-[380px]:h-[0] lg:justify-self-end lg:order-2 w-[320px] h-[320px] lg:w-[350px] lg:h-[350px] xl:h-[550px] xl:w-[550px] relative">
+        <div className="justify-self-center max-[600px]:w-[0] max-[600px]:h-[0] lg:justify-self-end lg:order-2 w-[320px] h-[320px] lg:w-[350px] lg:h-[350px] xl:h-[550px] xl:w-[550px] relative">
           <Image
             src="/images/optimized-coffee-hd.png"
             alt="Coffee"

@@ -8,19 +8,16 @@ interface StepProps {
   isActive: boolean;
 }
 
-export interface ProgressBarProps {}
-
-export default function ProgressBar(props: ProgressBarProps): ReactElement {
+export default function ProgressBar(): ReactElement {
   const { activeStep } = useShippingContext();
 
   const Step = ({ label, isActive }: StepProps): ReactElement => (
     <h4
       suppressHydrationWarning
-      className={`mb-0 py-2 px-5 sm:py-3 sm:px-6 md:py-4 md:px-7 sm-text rounded-lg font-medium transition ${
-        isActive
-          ? "bg-primary/70 text-primary-foreground"
-          : "bg-background text-foreground"
-      }`}
+      className={`mb-0 py-3 px-6 sm-text rounded-lg font-medium transition ${isActive
+        ? "bg-primary/70 text-primary-foreground"
+        : "bg-background text-foreground"
+        }`}
     >
       {label}
     </h4>

@@ -24,5 +24,5 @@ export default function TableCellFormattedDate({
     return `${formattedDate} ${formattedTime}`;
   }
 
-  return <TableCell>{formatDate(createdAt)}</TableCell>;
+  return <TableCell className="min-w-[160px]">{formatDate(createdAt)}</TableCell>;
 }

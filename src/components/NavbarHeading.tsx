@@ -2,9 +2,7 @@
 import { type ReactElement } from "react";
 import Link from "next/link";
 
-export interface NavbarHeadingProps {}
-
-export default function NavbarHeading(props: NavbarHeadingProps): ReactElement {
+export default function NavbarHeading(): ReactElement {
   return (
     <>
       <Link href="/" className="hover:text-foreground hover:after:w-0">

@@ -72,42 +72,53 @@
     @apply bg-background overflow-x-hidden text-foreground;
   }
 
+  /* Headings */
   h1 {
-    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+    @apply scroll-m-20 font-extrabold tracking-tight;
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl; /* Responsive text sizes for h1 */
   }
 
+  h2 {
+    @apply mt-10 scroll-m-20 border-b pb-2 font-semibold tracking-tight transition-colors first:mt-0;
+    @apply text-2xl sm:text-3xl md:text-4xl; /* Responsive text sizes for h2 */
+  }
+
+  h3 {
+    @apply mt-8 scroll-m-20 font-semibold tracking-tight;
+    @apply text-xl sm:text-2xl md:text-3xl; /* Responsive text sizes for h3 */
+  }
+
+  h4 {
+    @apply scroll-m-20 font-semibold tracking-tight mb-6;
+    @apply text-lg sm:text-xl; /* Responsive text sizes for h4 */
+  }
+
+  /* Text Elements */
   p {
     @apply leading-7 mt-6 text-muted-foreground;
+    @apply text-base sm:text-lg md:text-xl; /* Responsive paragraph sizes */
   }
 
   li {
     @apply text-muted-foreground;
+    @apply text-base sm:text-lg; /* Responsive list item sizes */
   }
 
   strong {
     @apply text-primary;
-  }
-
-  h2 {
-    @apply mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
+    @apply text-lg sm:text-xl; /* Responsive strong text sizes */
   }
 
   a {
-    @apply font-medium relative text-foreground transition text-lg;
+    @apply font-medium relative text-foreground transition;
+    @apply text-base sm:text-lg; /* Responsive text sizes for links */
   }
 
   blockquote {
     @apply mt-6 border-l-2 pl-6 italic;
   }
 
-  h3 {
-    @apply mt-8 scroll-m-20 text-2xl font-semibold tracking-tight;
-  }
-
-  h4 {
-    @apply scroll-m-20 text-xl font-semibold tracking-tight mb-6;
-  }
-
+  /* Table Styles */
   .table-wrapper {
     @apply my-6 w-full overflow-y-auto;
   }
@@ -128,6 +139,7 @@
     @apply border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right;
   }
 
+  /* Additional Classes */
   .sm-text {
     @apply text-sm font-medium leading-none;
   }

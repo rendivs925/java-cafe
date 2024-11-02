@@ -49,7 +49,7 @@ export default async function Orders({
               <TableHead>Order ID</TableHead>
               <TableHead className="text-center">Detail</TableHead>
               <TableHead>Bill</TableHead>
-              <TableHead>Date</TableHead>
+              <TableHead className="min-w-max">Date</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Shipment</TableHead>
               <TableHead>Ongkir</TableHead>

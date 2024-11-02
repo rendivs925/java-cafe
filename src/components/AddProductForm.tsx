@@ -147,7 +147,7 @@ export default function AddProductForm(): ReactElement {
 
   return (
     <>
-      <CardContainer className="bg-secondary">
+      <CardContainer className="bg-background">
         <CardContent className="pt-6">
           <Form {...form}>
             <form
