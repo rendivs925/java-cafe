@@ -69,6 +69,7 @@
   }
 
   body {
+    overflow-anchor: none;
     @apply bg-background overflow-x-hidden text-foreground;
   }
 

@@ -17,6 +17,7 @@ const CACHE_EXPIRY = 1000 * 60 * 10; // 10 minutes
 const ProductCatalog = React.memo(() => {
   const lastProductRef = useRef<HTMLDivElement | null>(null);
   const isClient = useClientComponent();
+  const scrollPosRef = useRef<number>(0);
 
   const [page, setPage] = useState(1);
   const perPage = 10;
@@ -79,10 +80,23 @@ const ProductCatalog = React.memo(() => {
     fetchProducts();
   }, [page, fetchProducts]);
 
+  // Save the scroll position to avoid jumping on render
+  useEffect(() => {
+    const handleScroll = () => {
+      scrollPosRef.current = window.scrollY;
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, scrollPosRef.current);
+  });
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !isLoading) {
           loadMore();
         }
       },
@@ -99,7 +113,7 @@ const ProductCatalog = React.memo(() => {
         observer.unobserve(currentRef);
       }
     };
-  }, [loadMore]);
+  }, [loadMore, isLoading]);
 
   return (
     <div className="flex flex-wrap -mx-4 gap-y-6">
@@ -123,6 +137,7 @@ const ProductCatalog = React.memo(() => {
           />
         </div>
       ))}
+      {isLoading && <div className="text-center w-full">Loading...</div>}
     </div>
   );
 });
