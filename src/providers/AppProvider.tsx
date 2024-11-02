@@ -72,31 +72,20 @@ export default function AppProvider({
     stock: number;
     weight: number;
   }) => {
-    // Optimistically update the cart state
-    setTotalItems((prevTotal) => prevTotal + 1);
-
-    // Execute the action in the background
-    addProductToCartAction({
-      userId: user._id,
-      products: [product],
-    })
-      .then((data) => {
-        if (data?.status === "success") {
-          // Optionally show success message
-          // toast({ description: data.message });
-        } else {
-          // Handle unsuccessful addition, maybe revert the optimistic update
-          setTotalItems((prevTotal) => prevTotal - 1);
-          toast({ description: (data as { message: string }).message || "Failed to add product to cart." });
-        }
-      })
-      .catch((error) => {
-        // Handle any errors from the API call
-        console.error("Failed to add product to cart:", error);
-        // Revert the optimistic update on error
-        setTotalItems((prevTotal) => prevTotal - 1);
-        toast({ description: "An error occurred. Please try again." });
+    try {
+      const data = await addProductToCartAction({
+        userId: user._id,
+        products: [product],
       });
+
+      setTotalItems((data?.totalItems as number) || 1);
+
+      // if (data?.status === "success") {
+      //   toast({ description: data.message });
+      // }
+    } catch (error) {
+      console.error("Failed to add product to cart:", error);
+    }
   };
 
   const formatNumber = (value: number) => {
