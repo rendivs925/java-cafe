@@ -2,7 +2,7 @@
 import Image from "next/legacy/image";
 import { ProductType } from "@/components/ProductsList";
 import ProductCardButton from "@/components/ProductCardButton"
-import { type ReactElement } from "react";
+import { memo, type ReactElement } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { formatToRupiah } from "@/lib/formatToRupiah";
 import useAppContext from "@/hooks/useAppContext";
@@ -57,4 +57,4 @@ function ProductCard({
   );
 }
 
-export default ProductCard;
+export default memo(ProductCard);

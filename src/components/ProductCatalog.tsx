@@ -12,7 +12,7 @@ export type ProductType = newAddProductType & {
   updatedAt?: Date;
 };
 
-const CACHE_EXPIRY = 1000 * 60 * 10;
+const CACHE_EXPIRY = 1000 * 60 * 10; // 10 minutes
 
 const ProductCatalog = React.memo(() => {
   const lastProductRef = useRef<HTMLDivElement | null>(null);
@@ -28,33 +28,39 @@ const ProductCatalog = React.memo(() => {
     if (isLoading) return;
     setIsLoading(true);
 
-    const cacheKey = `products-page-${page}`;
-    const cachedData = localStorage.getItem(cacheKey);
+    const cacheKey = `products`;
     const cacheTimestampKey = `${cacheKey}-timestamp`;
+    const cachedData = localStorage.getItem(cacheKey);
     const cachedTimestamp = localStorage.getItem(cacheTimestampKey);
 
-    if (cachedData && cachedTimestamp) {
-      const isCacheValid = Date.now() - parseInt(cachedTimestamp, 10) < CACHE_EXPIRY;
+    const isCacheValid = cachedTimestamp && (Date.now() - parseInt(cachedTimestamp, 10) < CACHE_EXPIRY);
 
-      if (isCacheValid) {
+    if (cachedData && isCacheValid) {
+      const cachedPages = JSON.parse(cachedData);
+      const cachedPage = cachedPages[page];
 
-        const { items, totalItemsLength } = JSON.parse(cachedData);
-        setProducts((prev) => [...prev, ...items]);
-        setTotalItemsLength(totalItemsLength);
+      if (cachedPage) {
+        setProducts((prev) => [...prev, ...cachedPage.items]);
+        setTotalItemsLength(cachedPage.totalItemsLength);
         setIsLoading(false);
         return;
-      } else {
-
-        localStorage.removeItem(cacheKey);
-        localStorage.removeItem(cacheTimestampKey);
       }
+    } else {
+      // Clear expired cache if outdated
+      localStorage.removeItem(cacheKey);
+      localStorage.removeItem(cacheTimestampKey);
     }
 
     const { items, totalItemsLength } = await getProductsAction(page, perPage);
     setProducts((prev) => [...prev, ...items] as IProduct[]);
     setTotalItemsLength(totalItemsLength);
 
-    localStorage.setItem(cacheKey, JSON.stringify({ items, totalItemsLength }));
+    // Cache new data along with previous pages
+    const updatedCache = cachedData && isCacheValid
+      ? { ...JSON.parse(cachedData), [page]: { items, totalItemsLength } }
+      : { [page]: { items, totalItemsLength } };
+
+    localStorage.setItem(cacheKey, JSON.stringify(updatedCache));
     localStorage.setItem(cacheTimestampKey, Date.now().toString());
 
     setIsLoading(false);
@@ -71,7 +77,7 @@ const ProductCatalog = React.memo(() => {
 
   useEffect(() => {
     fetchProducts();
-  }, [page, perPage, fetchProducts]);
+  }, [page, fetchProducts]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
