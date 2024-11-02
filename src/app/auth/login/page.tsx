@@ -80,7 +80,7 @@ export default function Login(): ReactElement {
   };
 
   return (
-    <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full shadow-lg rounded-lg">
+    <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full sm:shadow rounded-lg">
       <CardHeader>
         <CardTitle className="text-xl font-bold">Login</CardTitle>
         <CardDescription className="text-gray-500">

@@ -86,7 +86,7 @@ export default function SignUp() {
   };
 
   return (
-    <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] w-full">
+    <CardContainer className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px] sm:shadow w-full">
       <CardHeader>
         <CardTitle>Sign Up</CardTitle>
         <CardDescription>Let&apos;s register your account.</CardDescription>

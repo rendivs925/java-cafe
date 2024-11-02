@@ -2,26 +2,27 @@
 import Image from "next/legacy/image";
 import { ProductType } from "@/components/ProductsList";
 import { Button } from "./ui/button";
-import { type ReactElement } from "react";
+import React, { type ReactElement, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { formatToRupiah } from "@/lib/formatToRupiah";
 import useAppContext from "@/hooks/useAppContext";
 
-function ProductCard({
+const ProductCard = React.memo(function ProductCard({
   title,
   price,
   imgUrl,
   _id,
   description,
   readonly = false,
-  profit, stock, weight
+  profit,
+  stock,
+  weight,
 }: ProductType & {
   readonly?: boolean;
 }): ReactElement {
-  const { pushRoute } = useAppContext();
-  const { addProductToCart } = useAppContext();
+  const { pushRoute, addProductToCart } = useAppContext();
 
-  const handleAddToCartClick = () => {
+  const handleAddToCartClick = useCallback(() => {
     addProductToCart({
       productId: _id,
       profit,
@@ -31,16 +32,20 @@ function ProductCard({
       stock,
       weight,
     });
-  };
+  }, [addProductToCart, _id, profit, title, imgUrl, price, stock, weight]);
 
-  const handleClick = () => {
-    !readonly && pushRoute(`/products/${_id}`);
-  };
+  const handleClick = useCallback(() => {
+    if (!readonly) {
+      pushRoute(`/products/${_id}`);
+    }
+  }, [readonly, _id, pushRoute]);
 
   return (
     <Card className="flex flex-col w-full overflow-hidden bg-transparent shadow-none">
-      <CardHeader onClick={handleClick}
-        className="relative rounded-lg shadow aspect-square bg-transparent cursor-pointer overflow-hidden">
+      <CardHeader
+        onClick={handleClick}
+        className="relative rounded-lg shadow aspect-square bg-transparent cursor-pointer overflow-hidden"
+      >
         <Image
           src={imgUrl}
           loading="eager"
@@ -51,7 +56,9 @@ function ProductCard({
         />
       </CardHeader>
       <CardContent className="prose bg-transparent p-0 pt-6">
-        <CardTitle onClick={handleClick} className="mt-0 cursor-pointer">{title}</CardTitle>
+        <CardTitle onClick={handleClick} className="mt-0 cursor-pointer">
+          {title}
+        </CardTitle>
         <p className="line-clamp-2">{description}</p>
         <div className="flex items-baseline justify-between overflow-hidden">
           <h4 className="price">{formatToRupiah(price)}</h4>
@@ -62,6 +69,6 @@ function ProductCard({
       </CardContent>
     </Card>
   );
-}
+});
 
 export default ProductCard;
