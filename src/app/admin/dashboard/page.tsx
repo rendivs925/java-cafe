@@ -9,7 +9,7 @@ import AdminProfileHeader from "@/components/AdminProfileHeader";
 import DashboardGreater from "@/components/DashboardGreater";
 import { Metadata } from "next";
 import { getProductsAction } from "@/actions/getProductsAction";
-import { getDashboardSummaryAction } from "@/actions/getDashboardSummaryAction"; // Ensure this import is correct
+import { getDashboardSummaryAction } from "@/actions/getDashboardSummaryAction";
 import { getRecentOrdersAction } from "@/actions/getRecentOrdersAction";
 import { INewOrder } from "@/actions/getAllOrdersAction";
 import { SearchParams } from "@/types";
@@ -47,6 +47,7 @@ const DashboardPage = async ({
           <StockReport
             page={page}
             per_page={per_page}
+            // @ts-ignore
             items={items}
             totalItemsLength={totalItemsLength}
           />

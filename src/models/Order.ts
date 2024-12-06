@@ -1,6 +1,5 @@
 import mongoose, { Model, Schema } from "mongoose";
 
-// Define the TypeScript interface for the product within the order
 export interface IOrderProduct {
   imgUrl: string;
   title: string;
@@ -16,7 +15,6 @@ interface IUser {
   email: string;
 }
 
-// Define the TypeScript interface for the order document
 export interface IOrder {
   token: string;
   orderId: string;
@@ -36,7 +34,6 @@ export interface IOrder {
   products: IOrderProduct[];
 }
 
-// Create the Mongoose schema for the order
 const OrderSchema: Schema<IOrder> = new Schema(
   {
     token: { type: String, required: true },
@@ -81,7 +78,6 @@ const OrderSchema: Schema<IOrder> = new Schema(
   { timestamps: true }
 );
 
-// Create and export the Mongoose model
 const Order: Model<IOrder> =
   mongoose.models.Order || mongoose.model<IOrder>("Order", OrderSchema);
 
