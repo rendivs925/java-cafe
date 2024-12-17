@@ -53,8 +53,6 @@ const DashboardPage = async ({
           />
         </section>
         <section className="flex flex-col col-span-2 gap-6">
-          {/* <TotalSales /> */}
-          {/* <ProductSales /> */}
           <RecentOrders orders={orders as INewOrder[]} />
         </section>
       </DashboardContent>

@@ -1,4 +1,3 @@
-import EditButton from "@/components/EditButton";
 import {
   Table,
   TableBody,
@@ -8,8 +7,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import { MdOutlineEdit } from "react-icons/md";
 import TableCellFormattedDate from "./TableCellFormattedDate";
 import PaginationControls from "./PaginationControls";
 import { getUsersAction } from "@/actions/getUsersAction";
