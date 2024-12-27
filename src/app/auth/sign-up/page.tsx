@@ -1,4 +1,5 @@
 "use client";
+import useAppContext from "@/hooks/useAppContext";
 import { useTransition } from "react";
 import CardContainer from "@/components/CardContainer";
 import InputFormField from "@/components/InputFormField";
@@ -21,18 +22,11 @@ export default function SignUp() {
   const { form, formData, handleImageChange, imageFile, imageSrc } =
     useSignUp();
   let [isLoading, startTransition] = useTransition();
+  const { pushRoute } = useAppContext();
 
   const { username, email, password, role } = formData;
 
   const formFields = [
-    {
-      name: "profileImage",
-      id: "profileImage",
-      placeholder: "Choose a profile image",
-      label: "Profile Image",
-      type: "file",
-      onChange: handleImageChange,
-    },
     {
       name: "username",
       id: "username",
@@ -57,9 +51,6 @@ export default function SignUp() {
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
-      if (imageFile) {
-        formData.append("profileImage", imageFile as File);
-      }
       formData.append("username", username);
       formData.append("email", email);
       formData.append("role", role);
@@ -77,6 +68,8 @@ export default function SignUp() {
       toast({
         description: "Sign Up successfully.",
       });
+
+      pushRoute("/auth/login");
     } catch (error) {
       toast({
         description:
@@ -111,12 +104,6 @@ export default function SignUp() {
                 label={field.label}
                 errors={form.formState.errors}
                 type={field.type}
-                onChange={field.onChange}
-                imageSrc={
-                  field.name === "profileImage"
-                    ? (imageSrc as string)
-                    : undefined
-                }
               />
             ))}
             {isLoading ? (

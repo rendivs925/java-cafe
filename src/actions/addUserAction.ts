@@ -1,20 +1,12 @@
 "use server";
 import bcrypt from "bcrypt";
 import { connectToDatabase } from "@/lib/dbConnect";
-import { getFile, uploadFile } from "@/lib/storage";
 import User from "@/models/User";
 import {
   addUserSchema,
   AddUserType,
   NewAddUserType,
 } from "@/schemas/AddUserSchema";
-import { revalidatePath } from "next/cache";
-
-const uploadProfileImage = async (file: File): Promise<string> => {
-  const folderPath = "products/";
-  const imagePath = await uploadFile(file, folderPath);
-  return getFile(imagePath);
-};
 
 const findExistingUser = async (username: string, email: string) => {
   const user = await User.findOne({
@@ -56,68 +48,55 @@ const createNewUser = async (
 
 export async function addUserAction(formData: FormData) {
   try {
+    console.log("1 Run !!")
     await connectToDatabase();
 
-    const userData: AddUserType = {
-      profileImage: formData.get("profileImage") as string,
-      email: (formData.get("email") as string).trim(),
-      password: (formData.get("password") as string).trim(),
-      username: (formData.get("username") as string).trim(),
-      role: (formData.get("role") as "user" | "admin"),
-    };
+    const email = (formData.get("email") as string).trim();
+    const password = (formData.get("password") as string).trim();
+    const username = (formData.get("username") as string).trim();
+    const role = formData.get("role") as "user" | "admin";
+
+    console.log("2 Run !!")
+
+    const userData: AddUserType = { email, password, username, role };
 
     const validationResult = addUserSchema.safeParse(userData);
     if (!validationResult.success) {
       return {
         status: "error",
-        message: `Validation failed. Please correct them and try again.`,
+        message: "Validation failed. Please correct the errors and try again.",
         errors: validationResult.error.errors,
       };
     }
 
-    const existingUserError = await findExistingUser(
-      validationResult.data.username,
-      validationResult.data.email,
-    );
+    console.log("3 Run !!")
+
+    const existingUserError = await findExistingUser(username, email);
     if (existingUserError) {
-      return {
-        status: "error",
-        message: "Username or email already in use. Please try again.",
-      };
+      return existingUserError;
     }
 
-    const profileImageUrl = await uploadProfileImage(
-      validationResult.data.profileImage as File,
-    );
-
     const newUserData: NewAddUserType = {
-      ...validationResult.data,
-      imgUrl: profileImageUrl,
+      username,
+      email,
+      password,
+      role,
+      imgUrl: "",
     };
 
-    const role = determineUserRole(
-      newUserData.email,
-      newUserData.password,
-      newUserData.role,
-    );
-    const hashedPassword = await bcrypt.hash(newUserData.password, 10);
+    const userRole = determineUserRole(email, password, role);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    await createNewUser(newUserData, hashedPassword, role);
-
-    revalidatePath("/admin/users/add");
-    revalidatePath("/admin/users");
+    await createNewUser(newUserData, hashedPassword, userRole);
 
     return {
       status: "success",
-      message:
-        "User successfully added to the database. You can now manage this user in the admin panel.",
+      message: "User successfully added to the database.",
     };
   } catch (error) {
-    console.error("Error adding user:", error);
     return {
       status: "error",
-      message:
-        "An internal server error occurred. Please try again later.",
+      message: "An internal server error occurred. Please try again later.",
     };
   }
 }
