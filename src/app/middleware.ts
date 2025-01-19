@@ -17,11 +17,16 @@ export default async function middleware(req: NextRequest) {
 
   if (!verifiedToken) {
     if (pathname.startsWith("/auth")) return NextResponse.next();
-    if (pathname.startsWith("/shipping") || pathname.startsWith("/cart") || pathname.startsWith("/account/orders"))
+    if (
+      pathname.startsWith("/shipping") ||
+      pathname.startsWith("/cart") ||
+      pathname.startsWith("/account/orders")
+    )
       return NextResponse.redirect(new URL("/", origin));
   }
 
-  if(pathname.startsWith("/account/orders") && userRole === "admin") return NextResponse.redirect(new URL("/", origin));
+  if (pathname.startsWith("/account/orders") && userRole === "admin")
+    return NextResponse.redirect(new URL("/", origin));
 
   if (pathname.startsWith("/auth"))
     return NextResponse.redirect(new URL("/", origin));
