@@ -1,2 +1,2 @@
-declare module "@maptiler/leaflet-maptilersdk";
-declare module "midtrans-client";
+// declare module "midtrans-client";
+declare module "bcryptjs";
