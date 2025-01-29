@@ -21,7 +21,7 @@ The **Cafe Management System** is a powerful solution built with **Next.js, Type
 
 With a **scalable and user-friendly** design, this system ensures smooth café operations, helping businesses focus on delivering great customer experiences.
 
-## How to Use This Café System
+## How to Use This Cafe System
 
 ### Prerequisites
 Ensure you have Node.js and npm installed on your machine. You can download them from [here](https://nodejs.org/).
