@@ -56,16 +56,3 @@ yarn dev
 4. **Access the System:**
 
 Open http://localhost:3000 in your browser to access the application.
-
-## Usage Guide
-
--  **Dashboard**: View key metrics, manage orders, and access recent sales insights.
--  **Order Management**: Process new orders, manage existing ones, and track order history.
--  **Inventory Tracking**: Monitor stock levels in real time, set low-stock alerts, and view restock recommendations.
--  **Marketing**: Create blog post for inbound marketing
-- **Reports and Analytics**: Generate reports on sales performance and identify growth opportunities.
-
-## Conclusion
-
-This project is designed to make café management easy and efficient, whether you're running a single café or multiple locations. Enjoy a faster, smarter way to manage your café business and deliver memorable customer experiences!
-
