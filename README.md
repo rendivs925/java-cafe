@@ -60,4 +60,4 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to access th
 ---
 
 **Live Demo**: [https://java-cafe-beta.vercel.app/](https://java-cafe-beta.vercel.app/)  
-**Source Code**: [https://github.com/rendi12345678/java-cafe](https://github.com/rendi12345678/java-cafe)
+**Source Code**: [https://github.com/rendivs925/java-cafe](https://github.com/rendivs925/java-cafe)
