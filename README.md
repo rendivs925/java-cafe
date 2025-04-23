@@ -1,6 +1,6 @@
 # Cafe Management System
 
-The **Cafe Management System** is a powerful solution built with **Next.js, TypeScript, Tailwind CSS, and MongoDB** to help café owners optimize their operations. This system enhances efficiency, improves customer experiences, and drives business growth through seamless order handling, inventory tracking, and marketing automation—all from a single platform.
+The **Cafe Management System** is a powerful solution built with **Next.js, TypeScript, Tailwind CSS, and MongoDB** to help café owners optimize their operations. This system enhances efficiency, improves customer experiences, and drives business growth through seamless order handling, inventory tracking, and **inbound marketing**—all from a single platform.
 
 ## Key Features
 
@@ -16,8 +16,8 @@ The **Cafe Management System** is a powerful solution built with **Next.js, Type
 4. **Seamless Billing & Invoicing**  
    Generate invoices automatically, making transactions quick and hassle-free for both customers and staff.
 
-5. **Efficient Marketing**  
-   Attract more customers with targeted promotions and **inbound marketing through blog posts**, helping build brand authority.
+5. **Marketing with Blog Post Feature**  
+   Attract more customers through **inbound marketing** by publishing blog posts, building brand authority, and engaging your community.
 
 With a **scalable and user-friendly** design, this system ensures smooth café operations, helping businesses focus on delivering great customer experiences.
 
@@ -30,14 +30,14 @@ Ensure you have Node.js and npm installed on your machine. You can download them
 
 1. **Clone the Repository:**
 
-``` 
+```bash
 git clone https://github.com/rendi12345678/java-cafe.git
 cd java-cafe
 ```
 
 2. **Install Dependencies:**
 
-```
+```bash
 npm install
 # or
 yarn install
@@ -47,7 +47,7 @@ yarn install
 
 Start the server locally to test the system.
 
-```
+```bash
 npm run dev
 # or
 yarn dev
@@ -55,4 +55,9 @@ yarn dev
 
 4. **Access the System:**
 
-Open http://localhost:3000 in your browser to access the application.
+Open [http://localhost:3000](http://localhost:3000) in your browser to access the application.
+
+---
+
+**Live Demo**: [https://java-cafe-beta.vercel.app/](https://java-cafe-beta.vercel.app/)  
+**Source Code**: [https://github.com/rendi12345678/java-cafe](https://github.com/rendi12345678/java-cafe)
