@@ -1,33 +1,20 @@
-import mongoose from "mongoose";
+import mongoose, { ConnectOptions } from "mongoose";
 
-const MONGODB_URI = process.env.DB_URL as string;
+const DB_URL = process.env.DB_URL as string;
 
-if (!MONGODB_URI) {
+if (DB_URL === "" || DB_URL === null || DB_URL === undefined) {
   throw new Error("Please define the DB_URL environment variable inside .env");
 }
 
-interface MongooseCache {
-  conn: typeof mongoose | null;
-  promise: Promise<typeof mongoose> | null;
-}
+export async function connectToDatabase() {
+  try {
+    const options: ConnectOptions = {};
 
-// @ts-ignore - global type extension (defined below)
-let cached: MongooseCache = global.mongoose;
-
-if (!cached) {
-  // @ts-ignore
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-export async function connectToDatabase(): Promise<typeof mongoose> {
-  if (cached.conn) return cached.conn;
-
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      bufferCommands: false,
-    });
+    const client = await mongoose.connect(DB_URL, options);
+    console.log("Connected to MongoDB");
+    return client.startSession();
+  } catch (error) {
+    console.error("Failed to connect to MongoDB", error);
+    throw error;
   }
-
-  cached.conn = await cached.promise;
-  return cached.conn;
 }

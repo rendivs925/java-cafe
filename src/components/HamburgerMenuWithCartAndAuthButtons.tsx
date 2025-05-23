@@ -22,7 +22,7 @@ export default function HamburgerMenuWithCartAndAuthButtons({
         {user.role === "user" && user._id.toString() !== "" && isClient && (
           <CartIcon />
         )}
-        {user.imgUrl && isClient && <AvatarMenu user={user} />}
+        {isClient && <AvatarMenu user={user} />}
         <div
           onClick={toggleMobileMenu}
           className="flex z-[100] flex-col items-center justify-between h-6 w-9 lg:hidden"

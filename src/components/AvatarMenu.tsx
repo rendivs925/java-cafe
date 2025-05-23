@@ -2,7 +2,7 @@ import { type ReactElement } from "react";
 import { User as UserType } from "@/types";
 import { CreditCard, LogOut } from "lucide-react";
 
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,11 +21,10 @@ export interface AvatarMenuProps {
 export default function AvatarMenu({ user }: AvatarMenuProps): ReactElement {
   const { pushRoute, handleLogout } = useAppContext();
 
-  // A helper to render menu items, improves readability for conditional rendering.
   const renderMenuItem = (
     onClick: () => void,
     Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>,
-    label: string
+    label: string,
   ) => (
     <DropdownMenuItem onClick={onClick}>
       <Icon className="mr-2 h-4 w-4" />
@@ -39,6 +38,11 @@ export default function AvatarMenu({ user }: AvatarMenuProps): ReactElement {
         <DropdownMenuTrigger asChild>
           <Avatar className="cursor-pointer size-full">
             <AvatarImage src={user.imgUrl} alt="User Avatar" />
+            {user.imgUrl === "" && (
+              <AvatarFallback>
+                {user.username?.charAt(0).toUpperCase() ?? "U"}
+              </AvatarFallback>
+            )}
           </Avatar>
         </DropdownMenuTrigger>
 
@@ -47,11 +51,12 @@ export default function AvatarMenu({ user }: AvatarMenuProps): ReactElement {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
-            {user.role !== "admin" && renderMenuItem(
-              () => pushRoute("/account/orders"),
-              CreditCard,
-              "Orders"
-            )}
+            {user.role !== "admin" &&
+              renderMenuItem(
+                () => pushRoute("/account/orders"),
+                CreditCard,
+                "Orders",
+              )}
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
