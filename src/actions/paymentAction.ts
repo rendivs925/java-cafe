@@ -3,7 +3,7 @@ import { BASE_URL } from "@/constanst";
 import midtransClient from "midtrans-client";
 import { ICartProduct } from "@/models/Cart";
 import Product from "@/models/Product";
-import mongoose from "mongoose"; // Import mongoose for session management
+import mongoose from "mongoose";
 
 interface PaymentActionProps {
   orderId: string | number;
@@ -33,18 +33,16 @@ export async function paymentAction({
     midtransResponse: any;
   };
 }> {
-  const session = await mongoose.startSession(); // Start a session for the transaction
-  session.startTransaction(); // Start the transaction
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
   try {
-    // Create an instance of Midtrans Snap
     const snap = new midtransClient.Snap({
       isProduction: false,
       serverKey: process.env.SERVER_KEY!,
       clientKey: process.env.CLIENT_KEY!,
     });
 
-    // Prepare the payment parameter
     const parameter = {
       transaction_details: {
         order_id: orderId,
@@ -68,29 +66,27 @@ export async function paymentAction({
       ],
     };
 
-    // Create the payment transaction
     const transaction = await snap.createTransaction(parameter);
     const transactionToken = (transaction as TransactionResponse).token;
 
-    // Prepare bulk write operations
     const bulkOps = products.map((cartProduct) => ({
       updateOne: {
-        filter: { _id: cartProduct.productId, stock: { $gte: cartProduct?.qty as number || 0 } },
+        filter: {
+          _id: cartProduct.productId,
+          stock: { $gte: (cartProduct?.qty as number) || 0 },
+        },
         update: { $inc: { stock: -(cartProduct as { qty: number })?.qty } },
       },
     }));
 
-    // Execute the bulk write operation
     const result = await Product.bulkWrite(bulkOps, { session });
 
-    // Check if any updates were made
     if (result.modifiedCount !== products.length) {
       throw new Error("Some products do not have enough stock.");
     }
 
-    // Commit the transaction if everything went well
     await session.commitTransaction();
-    session.endSession(); // End the session
+    session.endSession();
 
     return {
       status: "success",
@@ -101,8 +97,8 @@ export async function paymentAction({
       },
     };
   } catch (error) {
-    await session.abortTransaction(); // Abort the transaction on error
-    session.endSession(); // End the session
+    await session.abortTransaction();
+    session.endSession();
     console.error((error as Error).message);
 
     return {

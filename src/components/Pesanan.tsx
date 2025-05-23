@@ -156,7 +156,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         token: result.order_id,
         orderId: result.order_id,
         user: {
-          userId: user._id.toString(),
+          userId: user._id,
           username: user.username,
           email: user.email,
         },

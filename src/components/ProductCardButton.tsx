@@ -35,7 +35,7 @@ function ProductCardButton({
   }) => {
     try {
       const data = await addProductToCartAction({
-        userId: user._id.toString(),
+        userId: user._id,
         products: [product],
       });
 

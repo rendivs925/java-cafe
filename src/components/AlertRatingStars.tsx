@@ -1,7 +1,7 @@
 "use client";
 import useAppContext from "@/hooks/useAppContext";
 import React, { useState } from "react";
-import { FaRegStar, FaStar } from "react-icons/fa6"; // Full star icon for selected and hovered state
+import { FaRegStar, FaStar } from "react-icons/fa6";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,7 +30,7 @@ export function AlertRatingStars({ productId }: IAlertRatingStars) {
   };
 
   const handleSubmitRating = async () => {
-    await setRatingAction({ userId: user._id.toString(), productId, rating });
+    await setRatingAction({ userId: user._id, productId, rating });
     console.log(`User submitted a rating of ${rating} stars`);
   };
 
@@ -60,9 +60,9 @@ export function AlertRatingStars({ productId }: IAlertRatingStars) {
               className="text-3xl cursor-pointer transition"
             >
               {star <= (hoverRating || rating) ? (
-                <FaStar className="text-yellow-500" /> // Full yellow star for selected or hovered stars
+                <FaStar className="text-yellow-500" />
               ) : (
-                <FaRegStar className="text-muted-foreground" /> // Outline star for unselected and unhovered stars
+                <FaRegStar className="text-muted-foreground" />
               )}
             </span>
           ))}
