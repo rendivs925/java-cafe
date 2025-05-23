@@ -148,7 +148,7 @@ const AddBlogForm = () => {
     formDataPayload.append(
       "author",
       JSON.stringify({
-        authorId: user._id,
+        authorId: user._id.toString(),
         imgUrl: user.imgUrl,
         username: user.username,
       }),

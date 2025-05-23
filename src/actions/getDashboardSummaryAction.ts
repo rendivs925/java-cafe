@@ -32,7 +32,7 @@ export async function getDashboardSummaryAction() {
           },
         },
       ]),
-      User.countDocuments({ role: "user" }), // Count users with the "user" role
+      User.countDocuments({ role: "user" }),
     ]);
 
     const totalPesanan = ordersSummary[0]?.totalPesanan[0]?.count || 0;

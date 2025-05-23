@@ -11,22 +11,20 @@ const snap = new midtransClient.Snap({
 });
 
 export async function checkAndUpdateExpiredOrders() {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
   try {
-    // Connect to the database
     await connectToDatabase();
 
-    // Find orders that are still pending
-    const pendingOrders = await Order.find({ paymentStatus: "pending" }).session(session);
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-    // Prepare bulk operations
+    const pendingOrders = await Order.find({
+      paymentStatus: "pending",
+    }).session(session);
+
     const orderUpdates = [];
     const productUpdates = [];
 
     for (const order of pendingOrders) {
-      // Get the transaction status from Midtrans for each order
       const response = await snap.transaction.status(order.orderId);
 
       if (response.transaction_status === "expire") {
@@ -37,7 +35,6 @@ export async function checkAndUpdateExpiredOrders() {
           },
         });
 
-        // Prepare to increment stock for each product in the order
         for (const item of order.products) {
           productUpdates.push({
             updateOne: {
@@ -49,7 +46,6 @@ export async function checkAndUpdateExpiredOrders() {
       }
     }
 
-    // Execute bulk updates if there are any expired orders
     if (orderUpdates.length > 0) {
       await Order.bulkWrite(orderUpdates, { session });
       await Product.bulkWrite(productUpdates, { session });
@@ -58,7 +54,9 @@ export async function checkAndUpdateExpiredOrders() {
     await session.commitTransaction();
     session.endSession();
 
-    console.log(`${orderUpdates.length} orders updated to expired and stock restored.`);
+    console.log(
+      `${orderUpdates.length} orders updated to expired and stock restored.`,
+    );
   } catch (error) {
     await session.abortTransaction();
     session.endSession();

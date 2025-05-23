@@ -42,7 +42,8 @@ export interface ISnapResult {
 
 const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
   ({ cart, form }, ref: ForwardedRef<HTMLFormElement>) => {
-    const { formatToRupiah, pushRoute, setTotalItems, user, detailPengiriman } = useAppContext();
+    const { formatToRupiah, pushRoute, setTotalItems, user, detailPengiriman } =
+      useAppContext();
     const [subHarga, setSubHarga] = useState(0);
     const [loading, setLoading] = useState(false); // Add loading state
     const { layanan } = form.watch();
@@ -111,7 +112,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         grossAmount: totalHarga,
         orderId,
         phone: Number(detailPengiriman.noHandphone),
-        products: cart.products
+        products: cart.products,
       };
 
       if (ref && "current" in ref && ref.current) {
@@ -155,7 +156,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         token: result.order_id,
         orderId: result.order_id,
         user: {
-          userId: user._id,
+          userId: user._id.toString(),
           username: user.username,
           email: user.email,
         },
@@ -197,8 +198,9 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
             {orderDetails.map((detail, index) => (
               <label
                 key={index}
-                className={`grid grid-cols-detail sm:grid-cols-sm-detail ${ongkir === 0 && detail.label === "Ongkir" && "hidden"
-                  }`}
+                className={`grid grid-cols-detail sm:grid-cols-sm-detail ${
+                  ongkir === 0 && detail.label === "Ongkir" && "hidden"
+                }`}
               >
                 <span className="text-muted-foreground">{detail.label}</span>
                 <p className="mt-0">
@@ -213,14 +215,17 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         </CardContent>
         <Line />
         <CardFooter className="pt-6 px-0">
-            {loading ? <LoadingButton className="w-fit">Processing...</LoadingButton> :          <Button
-            disabled={loading || ongkir === 0}
-            size="default"
-            onClick={handlePayment}
-          >
-          Proses Pembayaran
-          </Button>
- }
+          {loading ? (
+            <LoadingButton className="w-fit">Processing...</LoadingButton>
+          ) : (
+            <Button
+              disabled={loading || ongkir === 0}
+              size="default"
+              onClick={handlePayment}
+            >
+              Proses Pembayaran
+            </Button>
+          )}
         </CardFooter>
       </CardContainer>
     );

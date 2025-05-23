@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Form } from "@/components/ui/form";
 import { IUser } from "@/actions/getUsersAction";
 import InputFormField from "@/components/InputFormField";
@@ -77,7 +77,10 @@ export default function EditUserForm({ user }: { user: IUser }) {
             formData.append("role", role);
             formData.append("password", password);
 
-            const response = await editUserAction(user._id as string, formData);
+            const response = await editUserAction(
+              user._id.toString() as string,
+              formData,
+            );
 
             const fieldNames = extractFieldNames(formFields);
             handleResponse(response as Response, form, fieldNames);
@@ -108,9 +111,11 @@ export default function EditUserForm({ user }: { user: IUser }) {
               label={field.label}
               errors={form.formState.errors}
               type={field.type}
-              onChange={field.name === "profileImage" ? handleImageChange : undefined}
+              onChange={
+                field.name === "profileImage" ? handleImageChange : undefined
+              }
             />
-          )
+          ),
         )}
         <div className="flex gap-6">
           {isLoading ? (

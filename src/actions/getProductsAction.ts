@@ -25,7 +25,7 @@ export async function getProductsAction(page: number, limit: number) {
     return {
       status: "success",
       message: "Products fetched successfully.",
-      items: formattedProducts,
+      items: serializeDocument(formattedProducts),
       totalItemsLength,
     };
   } catch (error) {

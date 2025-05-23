@@ -8,18 +8,19 @@ import { UserJwtPayload, verifyAuth } from "@/lib/auth";
 export async function POST(req: NextRequest) {
   const token = req.cookies.get(COOKIE_NAME)?.value;
 
-  // Verify the JWT token
   const verifiedToken =
     token &&
     (await verifyAuth(token).catch((err) => {
       console.log("Verification error:", err);
-      return null; // Explicitly return null in case of error
+      return null;
     }));
 
-  const session: ClientSession = await mongoose.startSession();
-  session.startTransaction();
-
   try {
+    await connectToDatabase();
+
+    const session: ClientSession = await mongoose.startSession();
+    session.startTransaction();
+
     const { userId, productId } = await req.json();
 
     if (!userId || !productId) {
@@ -27,19 +28,16 @@ export async function POST(req: NextRequest) {
 
       return new NextResponse(
         JSON.stringify({ message: "Missing userId or productId" }),
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    // Check if the authenticated user is trying to modify their own cart
     if (userId !== (verifiedToken as UserJwtPayload)?._id) {
       await session.abortTransaction();
       return new NextResponse(JSON.stringify({ message: "Forbidden" }), {
         status: 403,
       });
     }
-
-    await connectToDatabase();
 
     const cart = await Cart.findOne({ userId }).session(session);
 
@@ -52,7 +50,7 @@ export async function POST(req: NextRequest) {
     }
 
     const itemIndex = cart.products.findIndex(
-      (item) => item.productId.toString() === productId
+      (item) => item.productId.toString() === productId,
     );
 
     if (itemIndex === -1) {
@@ -60,7 +58,7 @@ export async function POST(req: NextRequest) {
 
       return new NextResponse(
         JSON.stringify({ message: "Product not found in cart" }),
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -76,7 +74,7 @@ export async function POST(req: NextRequest) {
 
     return new NextResponse(
       JSON.stringify({ message: "Cart updated successfully" }),
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     await session.abortTransaction();
@@ -84,7 +82,7 @@ export async function POST(req: NextRequest) {
     console.error(error);
     return new NextResponse(
       JSON.stringify({ message: "Internal Server Error" }),
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     session.endSession();

@@ -30,7 +30,7 @@ export function AlertRatingStars({ productId }: IAlertRatingStars) {
   };
 
   const handleSubmitRating = async () => {
-    await setRatingAction({ userId: user._id, productId, rating })
+    await setRatingAction({ userId: user._id.toString(), productId, rating });
     console.log(`User submitted a rating of ${rating} stars`);
   };
 
@@ -69,7 +69,9 @@ export function AlertRatingStars({ productId }: IAlertRatingStars) {
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleSubmitRating}>Submit</AlertDialogAction>
+          <AlertDialogAction onClick={handleSubmitRating}>
+            Submit
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -18,7 +18,7 @@ export async function getBlogsAction(page: number, limit: number) {
     return {
       status: "success",
       message: "Blogs successfully retrieved.",
-      items: blogs,
+      items: serializeDocument(blogs),
       totalItemsLength,
     };
   } catch (error) {

@@ -1,4 +1,4 @@
-import { memo } from "react"
+import { memo } from "react";
 import { addProductToCartAction } from "@/actions/addProductToCartAction";
 import { Button } from "./ui/button";
 import useAppContext from "@/hooks/useAppContext";
@@ -35,7 +35,7 @@ function ProductCardButton({
   }) => {
     try {
       const data = await addProductToCartAction({
-        userId: user._id,
+        userId: user._id.toString(),
         products: [product],
       });
 
