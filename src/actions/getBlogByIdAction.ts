@@ -1,6 +1,5 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
-import { serializeDocument } from "@/lib/utils";
 import Blog from "@/models/Blog";
 
 export async function getBlogByIdAction(id: string) {
@@ -20,7 +19,7 @@ export async function getBlogByIdAction(id: string) {
 
     return {
       status: "success",
-      data: serializeDocument(blog),
+      data: blog,
     };
   } catch (error) {
     console.error(error);

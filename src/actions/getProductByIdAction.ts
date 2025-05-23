@@ -1,6 +1,5 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
-import { serializeDocument } from "@/lib/utils";
 import Product, { IProduct } from "@/models/Product";
 
 export async function getProductByIdAction(id: string) {
@@ -8,7 +7,7 @@ export async function getProductByIdAction(id: string) {
     await connectToDatabase();
 
     // Find the product by ID
-    const product: IProduct | null = await Product.findById(id).lean()
+    const product: IProduct | null = await Product.findById(id).lean();
 
     if (!product) {
       return {
@@ -27,7 +26,7 @@ export async function getProductByIdAction(id: string) {
     return {
       status: "success",
       message: "Product fetched successfully.",
-      item: serializeDocument(formattedProduct),
+      item: formattedProduct,
     };
   } catch (error) {
     return {
