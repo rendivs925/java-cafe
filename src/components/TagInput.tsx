@@ -3,9 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import { useController } from "react-hook-form";
 
-// Define the type for the props
 interface TagInputProps {
-  control: any; // Control from react-hook-form
+  control: any;
 }
 
 const TagInput: React.FC<TagInputProps> = ({ control }) => {
@@ -32,7 +31,6 @@ const TagInput: React.FC<TagInputProps> = ({ control }) => {
       setInputValue("");
     }
 
-    // Handle backspace to remove last tag
     if (e.key === "Backspace" && !inputValue) {
       field.onChange(field.value.slice(0, field.value.length - 1));
     }
@@ -47,7 +45,7 @@ const TagInput: React.FC<TagInputProps> = ({ control }) => {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 border border-input rounded-md px-0 py-2 bg-secondary ring-offset-background outline-none placeholder:text-muted-foreground file:text-sm file:font-medium file:border-0 min-h-10 focus-visible:ring-offset-2 focus-visible:ring-2 focus-within:border focus-within:border-blue-500 text-sm file:bg-transparent">
+    <div className="flex flex-wrap items-center gap-2 border border-input rounded-md px-3 py-2 bg-secondary ring-offset-background outline-none placeholder:text-muted-foreground file:text-sm file:font-medium file:border-0 min-h-10 focus-visible:ring-offset-2 focus-visible:ring-2 focus-within:border focus-within:border-blue-500 text-sm file:bg-transparent">
       {field.value.map((tag: string, index: number) => (
         <Badge
           key={index}

@@ -14,10 +14,6 @@ interface PaymentActionProps {
   products: ICartProduct[];
 }
 
-interface TransactionResponse {
-  token: string;
-}
-
 export async function paymentAction({
   orderId,
   grossAmount,
@@ -29,9 +25,7 @@ export async function paymentAction({
   status: string;
   message: string;
   token?: string;
-  dataPayment?: {
-    midtransResponse: any;
-  };
+  dataPayment?: any;
 }> {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -53,12 +47,12 @@ export async function paymentAction({
         email,
         phone,
       },
-      callback: {
+      callbacks: {
         finish: `${BASE_URL}/confirmation`,
       },
       enabled_payments: [
-        "mandiri_clicpay",
-        "bca_clicpay",
+        "mandiri_clickpay",
+        "bca_clickpay",
         "bni_va",
         "bca_va",
         "permata_va",
@@ -67,15 +61,18 @@ export async function paymentAction({
     };
 
     const transaction = await snap.createTransaction(parameter);
-    const transactionToken = (transaction as TransactionResponse).token;
+
+    if (!transaction || typeof transaction.token !== "string") {
+      throw new Error("Failed to get transaction token from Midtrans.");
+    }
 
     const bulkOps = products.map((cartProduct) => ({
       updateOne: {
         filter: {
           _id: cartProduct.productId,
-          stock: { $gte: (cartProduct?.qty as number) || 0 },
+          stock: { $gte: cartProduct.qty },
         },
-        update: { $inc: { stock: -(cartProduct as { qty: number })?.qty } },
+        update: { $inc: { stock: -cartProduct.qty } },
       },
     }));
 
@@ -90,16 +87,14 @@ export async function paymentAction({
 
     return {
       status: "success",
-      message: "Pembayaran sudah berhasil.",
-      token: transactionToken,
-      dataPayment: {
-        midtransResponse: transaction,
-      },
+      message: "Token pembayaran berhasil dibuat.",
+      token: transaction.token,
+      dataPayment: transaction,
     };
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    console.error((error as Error).message);
+    console.error("PaymentAction error:", error);
 
     return {
       status: "error",

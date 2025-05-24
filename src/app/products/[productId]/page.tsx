@@ -9,11 +9,12 @@ import { formatToRupiah } from "@/lib/formatToRupiah";
 import { FaStar } from "react-icons/fa";
 import AddProductToCartButton from "@/components/AddProductToCartButton";
 
-export default async function Page({
-  params,
-}: {
-  params: { productId: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ productId: string }>;
+  }
+) {
+  const params = await props.params;
   const { productId } = params;
   const response = await getProductByIdAction(productId);
   const data = response.item;

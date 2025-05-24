@@ -8,11 +8,12 @@ import AddButton from "@/components/AddButton";
 import BlogsTable from "@/components/BlogsTable";
 import { SearchParams } from "@/types";
 
-export default function BlogsPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}): ReactElement {
+export default async function BlogsPage(
+  props: {
+    searchParams: Promise<SearchParams>;
+  }
+): Promise<ReactElement> {
+  const searchParams = await props.searchParams;
   return (
     <Suspense>
       <DashboardContainer>

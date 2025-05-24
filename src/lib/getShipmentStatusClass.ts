@@ -1,12 +1,12 @@
 export function getShipmentStatusClass(
-  status: "processing" | "delivered"
+  status: "processing" | "delivered",
 ): string {
   switch (status) {
     case "processing":
-      return "text-blue-600 bg-blue-100";
+      return "text-blue-600 bg-blue-100 text-base";
     case "delivered":
-      return "text-green-600 bg-green-100";
+      return "text-green-600 bg-green-100 text-base";
     default:
-      return "text-gray-600 bg-gray-100"; // Default fallback for unexpected statuses
+      return "text-gray-600 bg-gray-100 text-base";
   }
 }

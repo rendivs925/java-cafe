@@ -18,11 +18,12 @@ export const metadata: Metadata = {
   title: "Admin | Dashboard",
 };
 
-const DashboardPage = async ({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) => {
+const DashboardPage = async (
+  props: {
+    searchParams: Promise<SearchParams>;
+  }
+) => {
+  const searchParams = await props.searchParams;
   const page = searchParams["page"] ?? "1";
   const per_page = searchParams["per_page"] ?? "5";
 

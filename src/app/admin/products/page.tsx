@@ -8,11 +8,12 @@ import ProductsTable from "@/components/ProductsTable";
 import SelectShowing from "@/components/SelectShowing";
 import AddButton from "@/components/AddButton";
 
-export default function Products({
-  searchParams,
-}: {
-  searchParams: SearchParams
-}): ReactElement {
+export default async function Products(
+  props: {
+    searchParams: Promise<SearchParams>
+  }
+): Promise<ReactElement> {
+  const searchParams = await props.searchParams;
   return (
     <Suspense>
       <DashboardContainer>

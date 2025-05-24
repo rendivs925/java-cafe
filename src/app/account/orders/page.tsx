@@ -21,13 +21,14 @@ import { getShipmentStatusClass } from "@/lib/getShipmentStatusClass";
 import AlertDialogProducts from "@/components/AlertDialogProducts";
 import { OrderStatus, PaymentStatus } from "@/types";
 
-export default async function Orders({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const page = searchParams["page"] ?? "1";
-  const per_page = searchParams["per_page"] ?? "5";
+export default async function Orders(
+  props: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const page = (await searchParams["page"]) ?? "1";
+  const per_page = (await searchParams["per_page"]) ?? "5";
   const { items, totalItemsLength } = await getUserOrdersAction(
     Number(page),
     Number(per_page),
@@ -72,7 +73,10 @@ export default async function Orders({
                 <TableRow key={orderId}>
                   <TableCell>{orderId}</TableCell>
                   <TableCell className="text-center">
-                    <AlertDialogProducts shouldRate={orderStatus === "delivered"} products={products} />
+                    <AlertDialogProducts
+                      shouldRate={orderStatus === "delivered"}
+                      products={products}
+                    />
                   </TableCell>
                   <TableCell>{formatToRupiah(String(payment))}</TableCell>
                   <TableCellFormattedDate createdAt={createdAt} />
@@ -100,12 +104,18 @@ export default async function Orders({
                   <TableCell className="text-center">{resi || "-"}</TableCell>
                   <TableCell className="text-right flex items-center justify-end">
                     <PayPendingOrderButton
-                      disabled={paymentStatus === "settlement" || paymentStatus === "expire"}
+                      disabled={
+                        paymentStatus === "settlement" ||
+                        paymentStatus === "expire"
+                      }
                       orderId={orderId}
                     />
                     <SyncOrderStatusButton
                       orderId={orderId}
-                      disabled={orderStatus === "delivered" || paymentStatus === "expire"}
+                      disabled={
+                        orderStatus === "delivered" ||
+                        paymentStatus === "expire"
+                      }
                     />
                   </TableCell>
                 </TableRow>

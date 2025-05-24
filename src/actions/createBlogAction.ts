@@ -39,13 +39,10 @@ export async function createBlogAction(formData: FormData) {
       title,
     };
 
-    // Upload the image and get the URL
     const prevImgUrl = await handleUpload(data.previewImage, "blogs");
 
-    // Remove previewImage from the payload for validation
     const { previewImage: _, ...payload } = data;
 
-    // Validate the payload against the schema
     const parseResult = BlogSchema.safeParse(payload);
 
     if (!parseResult.success) {
@@ -56,10 +53,8 @@ export async function createBlogAction(formData: FormData) {
       };
     }
 
-    // Add the preview image URL to the payload
     (payload as IBlog).prevImgUrl = prevImgUrl;
 
-    // Create a new blog entry
     await Blog.create(payload);
 
     const message = isPublished

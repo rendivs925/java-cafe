@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 
 export async function getUserCartAction() {
   try {
-    const token = cookies().get(COOKIE_NAME);
+    const token = (await cookies()).get(COOKIE_NAME);
     // Verify the JWT token
     const verifiedToken =
       token &&

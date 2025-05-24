@@ -17,8 +17,8 @@ export default async function UsersTable({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const page = searchParams["page"] ?? "1";
-  const per_page = searchParams["per_page"] ?? "1";
+  const page = (await searchParams["page"]) ?? "1";
+  const per_page = (await searchParams["per_page"]) ?? "1";
   const { items, totalItemsLength } = await getUsersAction(
     Number(page),
     Number(per_page),

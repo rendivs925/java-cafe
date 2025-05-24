@@ -63,7 +63,7 @@ export async function loginAction(formData: FormData) {
       .setExpirationTime(`${MAX_AGE}s`)
       .sign(new TextEncoder().encode(getJwtSecretKey()));
 
-    cookies().set({
+    (await cookies()).set({
       name: COOKIE_NAME,
       value: token,
       secure: process.env.NODE_ENV === "production",

@@ -1,22 +1,27 @@
 "use client";
 
-import { type ReactElement, memo } from "react";
-import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { type ReactElement, memo, ChangeEvent } from "react";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  FormLabel,
+} from "@/components/ui/form";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
-import { Textarea } from "./ui/textarea";
 import { TbPhotoCirclePlus } from "react-icons/tb";
+import { FieldValues, Control } from "react-hook-form";
 
 interface InputFormFieldProps {
-  control: any;
+  control: Control<FieldValues>;
   name: string;
   id: string;
-  placeholder: string;
+  placeholder?: string;
   label: string;
-  errors: any;
+  errors: Record<string, { message?: string }>;
   type?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   imageSrc?: string;
 }
 
@@ -31,82 +36,56 @@ const InputFormField = ({
   onChange,
   imageSrc,
 }: InputFormFieldProps): ReactElement => {
+  const renderFileInput = (field: any) => (
+    <div className="space-y-1.5 w-full">
+      <FormLabel htmlFor={id}>{label}</FormLabel>
+      <FormControl>
+        <Input
+          id={id}
+          type="file"
+          accept="image/*"
+          onChange={(event) => {
+            field.onChange(event.target.files?.[0]);
+            onChange?.(event);
+          }}
+          onBlur={field.onBlur}
+          name={field.name}
+          ref={field.ref}
+        />
+      </FormControl>
+    </div>
+  );
 
-  // Render input or textarea based on field type
-  const renderInputField = (field: any) => {
-    return field.name === "description" ? (
-      <Textarea
-        key={id + name}
-        id={id}
-        placeholder={placeholder}
-        className="resize-none h-[200px]"
-        {...field}
-        maxLength={95}
-      />
-    ) : (
-      <Input key={id + name} id={id} placeholder={placeholder} type={type} {...field} />
-    );
-  };
-
-  // Render profile image input
-  const renderProfileImageInput = () => {
-    return (
-      <Label
-        htmlFor={id}
-        className="flex cursor-pointer items-center justify-center mx-auto size-36 shadow rounded-full bg-secondary"
-      >
-        {!imageSrc ? (
-          <TbPhotoCirclePlus className="size-full p-6 text-secondary-foreground" />
-        ) : (
-          <Avatar className="size-full">
-            <AvatarImage src={imageSrc} />
-          </Avatar>
-        )}
-      </Label>
-    );
-  };
+  const renderStandardInput = (field: any) => (
+    <div className="space-y-1.5">
+      <FormLabel htmlFor={id}>{label}</FormLabel>
+      <FormControl>
+        <Input
+          id={id}
+          placeholder={placeholder}
+          type={type}
+          {...field}
+          value={field.value ?? ""}
+        />
+      </FormControl>
+    </div>
+  );
 
   return (
-    <FormField control={control} name={name} render={({ field }) => {
-      // If it's a profile image, render the image input and return early
-      if (field.name === "profileImage") {
-        return (
-          <FormItem className="col-span-2">
-            {renderProfileImageInput()}
-            <FormControl>
-              <Input
-                key={id + name}
-                id={id}
-                placeholder={placeholder}
-                type={type}
-                className="opacity-0 size-0 absolute"
-                accept="image/*"
-                onChange={(event) => {
-                  field.onChange(event?.target?.files ? event.target.files[0] : null);
-                  onChange && onChange(event);
-                }}
-                onBlur={field.onBlur}
-                name={field.name}
-                ref={field.ref}
-              />
-            </FormControl>
-          </FormItem>
-        );
-      }
-
-      // Otherwise, render the normal input or textarea
-      return (
-        <FormItem>
-          <Label htmlFor={id}>{label}</Label>
-          <FormControl>
-            {renderInputField(field)}
-          </FormControl>
-          <FormMessage className="empty:hidden mt-0">
-            {errors[name]?.message}
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className="w-full space-y-1">
+          {type === "file"
+            ? renderFileInput(field)
+            : renderStandardInput(field)}
+          <FormMessage className="empty:hidden mt-1 text-sm text-destructive">
+            {errors?.[name]?.message as string}
           </FormMessage>
         </FormItem>
-      );
-    }} />
+      )}
+    />
   );
 };
 

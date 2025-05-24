@@ -7,11 +7,12 @@ import SelectShowing from "@/components/SelectShowing";
 import UsersTable from "@/components/UsersTable";
 import { Suspense, type ReactElement } from "react";
 
-export default function Users({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}): ReactElement {
+export default async function Users(
+  props: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+): Promise<ReactElement> {
+  const searchParams = await props.searchParams;
   return (
     <Suspense>
       <DashboardContainer>

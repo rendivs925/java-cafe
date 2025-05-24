@@ -7,12 +7,13 @@ import { SearchParams } from "@/types";
 import { getBlogByIdAction } from "@/actions/getBlogByIdAction";
 import { IBlog } from "@/models/Blog";
 
-export default async function EditBlogPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
-  const blogId = searchParams["blogId"] ?? "";
+export default async function EditBlogPage(
+  props: {
+    searchParams: Promise<SearchParams>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const blogId = (await searchParams["blogId"]) ?? "";
   const response = await getBlogByIdAction(blogId as string);
   const blog = response.data;
 

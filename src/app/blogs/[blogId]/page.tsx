@@ -8,7 +8,8 @@ interface BlogParams {
 }
 
 // Main component with types
-const Page: React.FC<BlogParams> = async ({ params }) => {
+const Page: React.FC<BlogParams> = async props => {
+  const params = await props.params;
   const { blogId } = params;
   const response = await getBlogByIdAction(blogId);
   const data = response.data;

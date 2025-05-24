@@ -9,13 +9,11 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { IBlog } from "@/models/Blog";
 
-// Define types for the blog data
 interface Author {
   imgUrl: string;
   username: string;
 }
 
-// Reusable components with types
 const AuthorInfo: React.FC<{ author: Author; createdAt: string | Date }> = ({
   author,
   createdAt,
@@ -80,7 +78,7 @@ const RenderBlog = ({ data }: { data: IBlog }) => {
         <AuthorInfo author={data?.author} createdAt={data?.createdAt as Date} />
         <div className="relative my-10 w-full overflow-hidden">
           <Image
-            src={data?.prevImgUrl}
+            src={data?.prevImgUrl || null}
             alt={data?.title}
             width={0}
             height={0}
@@ -89,8 +87,7 @@ const RenderBlog = ({ data }: { data: IBlog }) => {
             objectFit="contain"
           />
         </div>
-        <BlogContent content={data?.content} /> {/* Pass the content directly */}
-        <BlogTags tags={data?.tags} />
+        <BlogContent content={data?.content} /> <BlogTags tags={data?.tags} />
       </BaseContent>
     </BaseContainer>
   );

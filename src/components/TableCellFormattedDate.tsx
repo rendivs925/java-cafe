@@ -8,7 +8,9 @@ export interface TableCellFormattedDateProps {
 export default function TableCellFormattedDate({
   createdAt,
 }: TableCellFormattedDateProps): ReactElement {
-  function formatDate(date: Date): string {
+  function formatDate(dateInput: string | Date): string {
+    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+
     const formattedDate = date.toLocaleDateString("id-ID", {
       day: "numeric",
       month: "short",
@@ -18,11 +20,13 @@ export default function TableCellFormattedDate({
     const formattedTime = date.toLocaleTimeString("id-ID", {
       hour: "2-digit",
       minute: "2-digit",
-      hour12: false, // 24-hour format
+      hour12: false,
     });
 
     return `${formattedDate} ${formattedTime}`;
   }
 
-  return <TableCell className="min-w-[160px]">{formatDate(createdAt)}</TableCell>;
+  return (
+    <TableCell className="min-w-[160px]">{formatDate(createdAt)}</TableCell>
+  );
 }

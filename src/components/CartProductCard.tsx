@@ -30,24 +30,23 @@ function CartProductCard({
 
     try {
       const itemIndex = optimisticCart.products.findIndex(
-        (product) => product.productId === productId
+        (product) => product.productId === productId,
       );
 
       if (itemIndex !== -1) {
         startTransition(() => {
           setOptimisticCart((prev) => {
             const updatedProducts = [...prev.products];
+            const currentQty = (updatedProducts[itemIndex] as { qty: number })
+              .qty;
+
             if (
               type === "increment" &&
-              (updatedProducts[itemIndex] as { qty: number }).qty <
-                updatedProducts[itemIndex].stock
+              currentQty < updatedProducts[itemIndex].stock
             ) {
-              (updatedProducts[itemIndex] as { qty: number }).qty += 1;
-            } else if (
-              type === "decrement" &&
-              (updatedProducts[itemIndex] as { qty: number }).qty > 1
-            ) {
-              (updatedProducts[itemIndex] as { qty: number }).qty -= 1;
+              updatedProducts[itemIndex].qty = currentQty + 1;
+            } else if (type === "decrement" && currentQty > 0) {
+              updatedProducts[itemIndex].qty = currentQty - 1;
             }
 
             return {

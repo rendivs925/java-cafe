@@ -15,7 +15,6 @@ import { AxiosError } from "axios";
 import { toast } from "@/hooks/use-toast";
 import { logoutAction } from "@/actions/logoutAction";
 
-// Create the context with a default value
 export const AppContext = createContext<AppContextType | null>(null);
 
 export interface AppProviderProps {
@@ -72,6 +71,11 @@ export default function AppProvider({
     stock: number;
     weight: number;
   }) => {
+    if (product.stock === 0) {
+      console.warn("Product is out of stock.");
+      return;
+    }
+
     try {
       const data = await addProductToCartAction({
         userId: user._id,
@@ -115,9 +119,8 @@ export default function AppProvider({
       value: number;
     }
 
-    // Group by month and sum values
     const monthlyData = data.reduce<DataType[]>((acc, { date, value }) => {
-      const month = date.getMonth(); // 0 for January, 1 for February, etc.
+      const month = date.getMonth();
       if (!acc[month]) {
         acc[month] = { date, value };
       }
@@ -125,14 +128,13 @@ export default function AppProvider({
       return acc;
     }, []);
 
-    // Convert the array to a more readable format and sort by month
     const formattedData: formattedDataType[] = monthlyData
-      .filter((entry) => entry) // Remove any undefined months
+      .filter((entry) => entry)
       .sort((a, b) => a.date.getMonth() - b.date.getMonth())
       .map(({ date, value }) => ({
         month: new Date(2024, date.getMonth(), 1).toLocaleString("default", {
           month: "long",
-        }), // Get full month name
+        }),
         value,
       }));
 
@@ -154,7 +156,7 @@ export default function AppProvider({
     setUser,
     isAuthenticated,
     setIsAuthenticated,
-    addProductToCart
+    addProductToCart,
   };
 
   return (

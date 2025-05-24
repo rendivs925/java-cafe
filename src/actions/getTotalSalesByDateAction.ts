@@ -1,4 +1,5 @@
 "use server";
+import { serializeDocument } from "@/lib/utils";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Order from "@/models/Order";
 
@@ -6,7 +7,6 @@ export async function getTotalSalesByDateAction() {
   try {
     await connectToDatabase();
 
-    // Aggregate sales data by date
     const salesByDate = await Order.aggregate([
       {
         $group: {
@@ -15,11 +15,11 @@ export async function getTotalSalesByDateAction() {
             month: { $month: "$createdAt" },
             day: { $dayOfMonth: "$createdAt" },
           },
-          totalSales: { $sum: "$subtotal" }, // Sum up the subtotal for each order
+          totalSales: { $sum: "$subtotal" },
         },
       },
       {
-        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 }, // Sort by date
+        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
       },
       {
         $project: {
@@ -36,15 +36,14 @@ export async function getTotalSalesByDateAction() {
       },
     ]);
 
-    // Transform the result to match the desired format
     const formattedSalesData = salesByDate.map(({ date, totalSales }) => ({
       value: totalSales,
-      date: new Date(date), // Convert ISO string to JavaScript Date object
+      date: new Date(date),
     }));
 
     return {
       status: "success",
-      data: formattedSalesData,
+      data: serializeDocument(formattedSalesData),
     };
   } catch (error) {
     console.error("Error fetching total sales by date:", error);

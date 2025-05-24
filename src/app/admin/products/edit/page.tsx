@@ -7,12 +7,13 @@ import { SearchParams } from "@/types";
 import { getProductByIdAction } from "@/actions/getProductByIdAction";
 import { newAddProductType } from "@/schemas/AddProductSchema";
 
-export default async function EditProductPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
-  const productId = searchParams["productId"] ?? "";
+export default async function EditProductPage(
+  props: {
+    searchParams: Promise<SearchParams>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const productId = (await searchParams["productId"]) ?? "";
   const response = await getProductByIdAction(productId as string);
   const product = response.item;
 

@@ -1,11 +1,12 @@
 "use server";
 import { COOKIE_NAME } from "@/constanst";
+import { serializeDocument } from "@/lib/utils";
 import { verifyAuth } from "@/lib/auth";
 import Order from "@/models/Order";
 import { cookies } from "next/headers";
 
 export async function getMyOrderAction() {
-  const token = cookies().get(COOKIE_NAME);
+  const token = (await cookies()).get(COOKIE_NAME);
 
   const verifiedToken =
     token &&
@@ -28,7 +29,7 @@ export async function getMyOrderAction() {
     return {
       status: "success",
       message: "Order fetched successfully.",
-      order: JSON.parse(JSON.stringify(order)),
+      order: serializeDocument(order),
     };
   } catch (error) {
     return {

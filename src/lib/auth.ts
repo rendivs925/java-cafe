@@ -22,7 +22,7 @@ export const getRajaOngkirApiKey = (): string => {
 };
 
 export const getVerifiedToken = async () => {
-  const token = cookies().get(COOKIE_NAME);
+  const token = (await cookies()).get(COOKIE_NAME);
 
   const verifiedToken =
     token &&

@@ -1,6 +1,7 @@
 "use server";
 
 import { connectToDatabase } from "@/lib/dbConnect";
+import { serializeDocument } from "@/lib/utils";
 import User from "@/models/User";
 import { AddUserType } from "@/schemas/AddUserSchema";
 
@@ -17,7 +18,7 @@ export async function getUserByIdAction(userId: string | number) {
 
     const user = await User.findOne({
       _id: userId,
-      role: { $ne: "admin" }
+      role: { $ne: "admin" },
     }).lean();
 
     if (!user) {
@@ -38,7 +39,7 @@ export async function getUserByIdAction(userId: string | number) {
     return {
       status: "success",
       message: "User fetched successfully.",
-      item: filteredData,
+      item: serializeDocument(filteredData),
     };
   } catch (error) {
     return {

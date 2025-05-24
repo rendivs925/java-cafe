@@ -25,7 +25,6 @@ export async function editProductAction(formData: FormData, productId: string) {
       productImage: formData.get("productImage") as File | null,
     };
 
-    // Validate the data against the schema
     const parseResult = addProductSchema.safeParse(data);
     if (!parseResult.success) {
       return {
@@ -35,7 +34,6 @@ export async function editProductAction(formData: FormData, productId: string) {
       };
     }
 
-    // Find the product by ID
     const existingProduct = await Product.findById(productId);
     if (!existingProduct) {
       return {
@@ -44,13 +42,11 @@ export async function editProductAction(formData: FormData, productId: string) {
       };
     }
 
-    // Handle image upload if a new image is provided
     let imgUrl = existingProduct.imgUrl;
     if (data.productImage) {
       imgUrl = await handleUpload(data.productImage as File, "products");
     }
 
-    // Update the product with the new data
     const { productImage, ...payload } = parseResult.data;
     (payload as newAddProductType).imgUrl = imgUrl;
 

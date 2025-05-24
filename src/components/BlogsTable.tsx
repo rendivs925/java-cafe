@@ -19,8 +19,8 @@ export default async function BlogsTable({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const page = searchParams["page"] ?? "1";
-  const per_page = searchParams["per_page"] ?? "5";
+  const page = (await searchParams["page"]) ?? "1";
+  const per_page = (await searchParams["per_page"]) ?? "5";
   const { items, totalItemsLength } = await getBlogsAction(
     Number(page),
     Number(per_page),

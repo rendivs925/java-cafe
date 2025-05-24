@@ -3,12 +3,12 @@ export function getPaymentStatusClass(
 ): string {
   switch (status) {
     case "settlement":
-      return "text-green-600 bg-green-100";
+      return "text-green-600 bg-green-100 text-base";
     case "pending":
-      return "text-yellow-600 bg-yellow-100";
+      return "text-yellow-600 bg-yellow-100 text-base";
     case "expire":
-      return "text-red-600 bg-red-100";
+      return "text-red-600 bg-red-100 text-base";
     default:
-      return "text-gray-600 bg-gray-100"; // Default fallback for unexpected statuses
+      return "text-gray-600 bg-gray-100 text-base";
   }
 }

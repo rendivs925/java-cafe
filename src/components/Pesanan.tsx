@@ -119,34 +119,41 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
         ref.current?.requestSubmit();
       }
 
-      const paymentResponse = await paymentAction(payload);
+      try {
+        const paymentResponse = await paymentAction(payload);
+        const token = paymentResponse?.token;
 
-      const token = paymentResponse.token as string;
+        if (!token) {
+          throw new Error("Token pembayaran tidak ditemukan.");
+        }
 
-      if (
-        "snap" in window &&
-        window.snap &&
-        typeof (window.snap as ISnap).pay === "function" &&
-        (window.snap as ISnap).pay
-      ) {
-        (window.snap as ISnap).pay(token, {
-          onSuccess: async (result: ISnapResult) => {
-            await handleSuccess(result);
-          },
-          onPending: async (result: ISnapResult) => {
-            await handlePending(result);
-          },
-          onError: (error: { message: string }) => {
-            setLoading(false);
-            toast({ description: error.message });
-          },
-          onClose: () => {
-            setLoading(false);
-            toast({ description: "Segera lakukan pembayaran." });
-          },
-        });
-      } else {
-        console.error("Snap.js is not loaded or pay function is unavailable.");
+        if (
+          "snap" in window &&
+          window.snap &&
+          typeof (window.snap as ISnap).pay === "function"
+        ) {
+          (window.snap as ISnap).pay(token, {
+            onSuccess: async (result: ISnapResult) => {
+              await handleSuccess(result);
+            },
+            onPending: async (result: ISnapResult) => {
+              await handlePending(result);
+            },
+            onError: (error: { message: string }) => {
+              setLoading(false);
+              toast({ description: error.message });
+            },
+            onClose: () => {
+              setLoading(false);
+              toast({ description: "Segera lakukan pembayaran." });
+            },
+          });
+        } else {
+          throw new Error("Snap.js belum dimuat dengan benar.");
+        }
+      } catch (error: any) {
+        console.error("Payment error:", error);
+        toast({ description: error.message || "Gagal memproses pembayaran." });
         setLoading(false);
       }
     };

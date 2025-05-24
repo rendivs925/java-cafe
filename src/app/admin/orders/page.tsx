@@ -91,11 +91,12 @@ const OrdersTableRow = ({
   </TableRow>
 );
 
-export default async function Orders({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function Orders(
+  props: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const page = Number(searchParams["page"] ?? "1");
   const per_page = Number(searchParams["per_page"] ?? "5");
   const { items, totalItemsLength } = await getAllOrdersAction(page, per_page);

@@ -1,6 +1,7 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Order from "@/models/Order";
+import { serializeDocument } from "@/lib/utils";
 import User from "@/models/User";
 
 export async function getDashboardSummaryAction() {

@@ -1,7 +1,7 @@
 import React from "react";
 import { marked } from "marked";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 const quillFormats = [
   "header",
@@ -62,7 +62,7 @@ const QuillEditorComponent: React.FC<QuillEditorProps> = ({
       value={content as string}
       onChange={onChange}
       modules={quillModules}
-      formats={quillFormats}
+      // formats={quillFormats}
       placeholder={placeholder}
     />
   );
