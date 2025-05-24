@@ -62,7 +62,7 @@ export default async function UsersTable({
               <TableCell>{role}</TableCell>
               <TableCellFormattedDate createdAt={createdAt as Date} />
               <TableCell className="text-right">
-                <DeleteUserButton filePath="" itemId={_id.toString()} />
+                <DeleteUserButton filePath="" itemId={_id?.toString()} />
               </TableCell>
             </TableRow>
           ),

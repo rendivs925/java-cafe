@@ -1,5 +1,6 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
+import { serializeDocument } from "@/lib/utils";
 import Product, { IProduct } from "@/models/Product";
 
 export async function getProductsAction(page: number, limit: number) {
@@ -24,7 +25,7 @@ export async function getProductsAction(page: number, limit: number) {
     return {
       status: "success",
       message: "Products fetched successfully.",
-      items: formattedProducts,
+      items: serializeDocument(formattedProducts),
       totalItemsLength,
     };
   } catch (error) {

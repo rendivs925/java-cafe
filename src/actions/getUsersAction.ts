@@ -1,5 +1,6 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
+import { serializeDocument } from "@/lib/utils";
 import User from "@/models/User";
 import { AddUserType } from "@/schemas/AddUserSchema";
 
@@ -21,7 +22,9 @@ export async function getUsersAction(page: number, limit: number) {
       .limit(limit)
       .lean();
 
-    const totalItemsLength: number = await User.find({ role: { $ne: "admin" } }).countDocuments();
+    const totalItemsLength: number = await User.find({
+      role: { $ne: "admin" },
+    }).countDocuments();
 
     const formattedUsers = users.map((user) => {
       const data = {
@@ -37,7 +40,7 @@ export async function getUsersAction(page: number, limit: number) {
     return {
       status: "success",
       message: "Users fetched successfully.",
-      items: formattedUsers,
+      items: serializeDocument(formattedUsers),
       totalItemsLength,
     };
   } catch (error) {

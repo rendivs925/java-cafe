@@ -20,7 +20,8 @@ export default function BlogsList() {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const fetchBlogs = async () => {
-    const { items: fetchedItems, totalItemsLength: totalLength } = await getBlogsAction(page, perPage);
+    const { items: fetchedItems, totalItemsLength: totalLength } =
+      await getBlogsAction(page, perPage);
     setBlogs((prevBlogs) => [...prevBlogs, ...fetchedItems]);
     setTotalBlogsLength(totalLength);
   };
@@ -41,7 +42,7 @@ export default function BlogsList() {
           setPage((prevPage) => prevPage + 1);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     const lastRefs = itemRefs.current.slice(-3); // Observe the last 3 items
@@ -58,7 +59,7 @@ export default function BlogsList() {
         {blogs.map(({ title, description, prevImgUrl, _id }, index) => (
           <CarouselItem
             className="pl-12 md:basis-1/2 lg:basis-1/3"
-            key={_id}
+            key={_id?.toString()}
             ref={(el: any) => (itemRefs.current[index] = el)}
           >
             <BlogCard

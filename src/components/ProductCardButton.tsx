@@ -51,7 +51,7 @@ function ProductCardButton({
 
   const handleAddToCartClick = () => {
     addProductToCart({
-      productId: _id,
+      productId: _id.toString(),
       profit,
       title,
       imgUrl,

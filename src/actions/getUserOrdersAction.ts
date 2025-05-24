@@ -1,4 +1,5 @@
 "use server";
+import { serializeDocument } from "@/lib/utils";
 import { getVerifiedToken } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Order, { IOrder } from "@/models/Order";
@@ -32,7 +33,7 @@ export async function getUserOrdersAction(page: number, limit: number) {
     return {
       status: "success",
       message: "Orders fetched successfully.",
-      items: orders,
+      items: serializeDocument(orders),
       totalItemsLength,
     };
   } catch (error) {

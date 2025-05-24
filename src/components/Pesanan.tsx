@@ -45,7 +45,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
     const { formatToRupiah, pushRoute, setTotalItems, user, detailPengiriman } =
       useAppContext();
     const [subHarga, setSubHarga] = useState(0);
-    const [loading, setLoading] = useState(false); // Add loading state
+    const [loading, setLoading] = useState(false);
     const { layanan } = form.watch();
     let parsedLayanan = {
       cost: 0,
@@ -104,7 +104,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
     }, []);
 
     const handlePayment = async () => {
-      setLoading(true); // Set loading to true when starting payment
+      setLoading(true);
 
       const payload = {
         email: user.email,
@@ -137,17 +137,17 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
             await handlePending(result);
           },
           onError: (error: { message: string }) => {
-            setLoading(false); // Reset loading on error
+            setLoading(false);
             toast({ description: error.message });
           },
           onClose: () => {
-            setLoading(false); // Reset loading if payment is closed
+            setLoading(false);
             toast({ description: "Segera lakukan pembayaran." });
           },
         });
       } else {
         console.error("Snap.js is not loaded or pay function is unavailable.");
-        setLoading(false); // Reset loading if Snap.js is not available
+        setLoading(false);
       }
     };
 
@@ -179,7 +179,7 @@ const Pesanan = React.forwardRef<HTMLFormElement, PesananProps>(
       setTotalItems(0);
       console.log("Create Order Response: ", createOrderResponse);
       await deleteCartAction();
-      setLoading(false); // Reset loading after success
+      setLoading(false);
     };
 
     const handlePending = async (result: ISnapResult) => {

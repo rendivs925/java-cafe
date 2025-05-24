@@ -235,7 +235,7 @@ export default function EditProductForm({
         key={title}
         category={category}
         description={description}
-        productId={product?._id as string}
+        productId={product?._id?.toString() as string}
         price={price}
         stock={stock}
         title={title}

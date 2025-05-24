@@ -1,6 +1,7 @@
 "use server";
 import { connectToDatabase } from "@/lib/dbConnect";
 import Blog, { IBlog } from "@/models/Blog";
+import { serializeDocument } from "@/lib/utils";
 
 export async function getBlogsAction(page: number, limit: number) {
   try {
@@ -17,7 +18,7 @@ export async function getBlogsAction(page: number, limit: number) {
     return {
       status: "success",
       message: "Blogs successfully retrieved.",
-      items: blogs,
+      items: serializeDocument(blogs),
       totalItemsLength,
     };
   } catch (error) {

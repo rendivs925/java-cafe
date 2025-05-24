@@ -23,49 +23,49 @@ const products = [
     item: "Product A",
     productID: "PROD001",
     dateAdded: new Date("2024-06-01T00:00:00Z"),
-    price: 3750000, // IDR 3,750,000
+    price: 3750000,
     QTY: 10,
   },
   {
     item: "Product B",
     productID: "PROD002",
     dateAdded: new Date("2024-06-10T00:00:00Z"),
-    price: 2250000, // IDR 2,250,000
+    price: 2250000,
     QTY: 0,
   },
   {
     item: "Product C",
     productID: "PROD003",
     dateAdded: new Date("2024-06-15T00:00:00Z"),
-    price: 5250000, // IDR 5,250,000
+    price: 5250000,
     QTY: 5,
   },
   {
     item: "Product D",
     productID: "PROD004",
     dateAdded: new Date("2024-06-20T00:00:00Z"),
-    price: 6750000, // IDR 6,750,000
+    price: 6750000,
     QTY: 8,
   },
   {
     item: "Product E",
     productID: "PROD005",
     dateAdded: new Date("2024-06-25T00:00:00Z"),
-    price: 8250000, // IDR 8,250,000
+    price: 8250000,
     QTY: 3,
   },
   {
     item: "Product F",
     productID: "PROD006",
     dateAdded: new Date("2024-06-30T00:00:00Z"),
-    price: 3000000, // IDR 3,000,000
+    price: 3000000,
     QTY: 0,
   },
   {
     item: "Product G",
     productID: "PROD007",
     dateAdded: new Date("2024-07-01T00:00:00Z"),
-    price: 4500000, // IDR 4,500,000
+    price: 4500000,
     QTY: 7,
   },
 ];
@@ -81,8 +81,7 @@ export default function StockReportTable({
   page: string | string[];
   per_page: string | string[];
 }) {
-  // mocked, skipped and limited in the real app
-  const start = (Number(page) - 1) * Number(per_page); // 0, 5, 10 ...
+  const start = (Number(page) - 1) * Number(per_page);
   const totalPages = Math.ceil(totalItemsLength / Number(per_page));
 
   const getStockStatus = (QTY: number): string => {

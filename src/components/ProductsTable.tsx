@@ -53,7 +53,7 @@ export default async function ProductsTable({
       <TableBody>
         {items?.map((product: newAddProductType, index: number) => (
           <ProductRow
-            key={product._id}
+            key={product._id?.toString()}
             product={product}
             index={index}
             startIndex={start}
@@ -89,7 +89,7 @@ function ProductRow({ product, index, startIndex }: ProductRowProps) {
   const { _id, title, createdAt, category, price, stock, imgUrl } = product;
 
   return (
-    <TableRow key={_id}>
+    <TableRow key={_id?.toString()}>
       <TableCell>{startIndex + index + 1}</TableCell>
       <TableCell className="flex items-center gap-4">
         <Image
@@ -102,7 +102,7 @@ function ProductRow({ product, index, startIndex }: ProductRowProps) {
         />
         {title}
       </TableCell>
-      <TableCell>{_id}</TableCell>
+      <TableCell>{_id?.toString()}</TableCell>
       <TableCellFormattedDate createdAt={createdAt as Date} />
       <TableCellFormattedNumber price={price} />
       <TableCell>{category}</TableCell>

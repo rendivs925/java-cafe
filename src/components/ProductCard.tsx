@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/legacy/image";
 import { ProductType } from "@/components/ProductsList";
-import ProductCardButton from "@/components/ProductCardButton"
+import ProductCardButton from "@/components/ProductCardButton";
 import { memo, type ReactElement } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { formatToRupiah } from "@/lib/formatToRupiah";
@@ -14,7 +14,9 @@ function ProductCard({
   _id,
   description,
   readonly = false,
-  profit, stock, weight
+  profit,
+  stock,
+  weight,
 }: ProductType & {
   readonly?: boolean;
 }): ReactElement {
@@ -26,8 +28,10 @@ function ProductCard({
 
   return (
     <Card className="flex flex-col w-full overflow-hidden bg-transparent shadow-none">
-      <CardHeader onClick={handleClick}
-        className="relative rounded-lg shadow aspect-square bg-transparent cursor-pointer overflow-hidden">
+      <CardHeader
+        onClick={handleClick}
+        className="relative rounded-lg shadow aspect-square bg-transparent cursor-pointer overflow-hidden"
+      >
         <Image
           src={imgUrl}
           loading="eager"
@@ -38,12 +42,14 @@ function ProductCard({
         />
       </CardHeader>
       <CardContent className="prose bg-transparent p-0 pt-6">
-        <CardTitle onClick={handleClick} className="mt-0 cursor-pointer">{title}</CardTitle>
+        <CardTitle onClick={handleClick} className="mt-0 cursor-pointer">
+          {title}
+        </CardTitle>
         <p className="line-clamp-2">{description}</p>
         <div className="flex items-baseline justify-between overflow-hidden">
           <h4 className="price">{formatToRupiah(price)}</h4>
           <ProductCardButton
-            _id={_id}
+            id={_id?.toString()}
             profit={profit}
             title={title}
             imgUrl={imgUrl}

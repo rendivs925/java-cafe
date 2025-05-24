@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState, useRef } from "react";
 import BlogCard from "./BlogCard";
 import { IBlog } from "@/models/Blog";
@@ -11,10 +11,10 @@ export default function BlogCatalog() {
   const [totalItemsLength, setTotalItemsLength] = useState(0);
   const lastItemRef = useRef<HTMLDivElement | null>(null);
 
-  // Fetch blogs when the component mounts or when the page changes
   useEffect(() => {
     const fetchBlogs = async () => {
-      const { items: fetchedItems, totalItemsLength: totalLength } = await getBlogsAction(page, perPage);
+      const { items: fetchedItems, totalItemsLength: totalLength } =
+        await getBlogsAction(page, perPage);
       setItems((prevItems) => [...prevItems, ...fetchedItems]);
       setTotalItemsLength(totalLength);
     };
@@ -22,7 +22,6 @@ export default function BlogCatalog() {
     fetchBlogs();
   }, [page, perPage]);
 
-  // Setup IntersectionObserver to load more items
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -30,7 +29,7 @@ export default function BlogCatalog() {
           setPage((prevPage) => prevPage + 1);
         }
       },
-      { threshold: 1.0 }
+      { threshold: 1.0 },
     );
 
     const currentRef = lastItemRef.current;
@@ -44,9 +43,13 @@ export default function BlogCatalog() {
   return (
     <div className="flex flex-wrap -mx-4 gap-y-6">
       {items.map(({ title, description, prevImgUrl, _id }, index) => (
-        <div className="px-4 w-full md:w-1/2 lg:w-1/3" key={_id} ref={index === items.length - 1 ? lastItemRef : null}>
+        <div
+          className="px-4 w-full md:w-1/2 lg:w-1/3"
+          key={_id}
+          ref={index === items.length - 1 ? lastItemRef : null}
+        >
           <BlogCard
-            id={_id as number | string}
+            id={_id.toString() as string}
             title={title}
             imgUrl={prevImgUrl}
             description={description}

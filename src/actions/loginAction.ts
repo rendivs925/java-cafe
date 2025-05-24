@@ -10,8 +10,9 @@ import { nanoid } from "nanoid";
 import { getJwtSecretKey } from "@/lib/auth";
 import { SignJWT } from "jose";
 import { getUserCartAction } from "./getUserCartAction";
+import { serializeDocument } from "@/lib/utils";
 
-const MAX_AGE = 60 * 60 * 24 * 30; // 30 days in seconds
+const MAX_AGE = 60 * 60 * 24 * 30;
 
 export async function loginAction(formData: FormData) {
   try {
@@ -20,7 +21,6 @@ export async function loginAction(formData: FormData) {
       password: (formData.get("password") as string).trim(),
     };
 
-    // Validate the data against the schema
     const parseResult = baseUserSchema.safeParse(data);
     if (!parseResult.success) {
       return {
@@ -43,7 +43,6 @@ export async function loginAction(formData: FormData) {
       };
     }
 
-    // Validate password
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       return {
@@ -52,7 +51,6 @@ export async function loginAction(formData: FormData) {
       };
     }
 
-    // Create JWT token
     const token = await new SignJWT({
       _id: user._id,
       role: user.role,
@@ -65,7 +63,6 @@ export async function loginAction(formData: FormData) {
       .setExpirationTime(`${MAX_AGE}s`)
       .sign(new TextEncoder().encode(getJwtSecretKey()));
 
-    // Set the authentication cookie
     cookies().set({
       name: COOKIE_NAME,
       value: token,
@@ -85,13 +82,13 @@ export async function loginAction(formData: FormData) {
       status: "success",
       message: "Login successful. Welcome back!",
       totalItems: cartResponse.cart.products.length,
-      user: {
+      user: serializeDocument({
         _id: user._id.toString(),
         username: user.username,
         role: user.role,
         email: user.email,
         imgUrl: user.imgUrl,
-      },
+      }),
     };
   } catch (error) {
     return {

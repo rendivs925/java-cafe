@@ -28,8 +28,11 @@ const ProductsList = () => {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const fetchProducts = useCallback(async () => {
-    const { items: fetchedProducts, totalItemsLength: totalLength } = await getProductsAction(page, perPage);
-    setProducts((prevProducts) => [...prevProducts, ...fetchedProducts] as IProduct[]);
+    const { items: fetchedProducts, totalItemsLength: totalLength } =
+      await getProductsAction(page, perPage);
+    setProducts(
+      (prevProducts) => [...prevProducts, ...fetchedProducts] as IProduct[],
+    );
     setTotalProductsLength(totalLength);
   }, [page, perPage]);
 
@@ -40,25 +43,24 @@ const ProductsList = () => {
   const totalPages = Math.ceil(totalProductsLength / perPage);
   const hasNextPage = page < totalPages;
 
-  // Intersection Observer to load more items when the last 3 items are in view
   useEffect(() => {
     if (!hasNextPage) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const lastItemsInView = entries.some(entry => entry.isIntersecting);
+        const lastItemsInView = entries.some((entry) => entry.isIntersecting);
         if (lastItemsInView) {
           setPage((prevPage) => prevPage + 1);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     const lastThreeRefs = itemRefs.current.slice(-3);
-    lastThreeRefs.forEach(ref => ref && observer.observe(ref));
+    lastThreeRefs.forEach((ref) => ref && observer.observe(ref));
 
     return () => {
-      lastThreeRefs.forEach(ref => ref && observer.unobserve(ref));
+      lastThreeRefs.forEach((ref) => ref && observer.unobserve(ref));
     };
   }, [products, hasNextPage]);
 
