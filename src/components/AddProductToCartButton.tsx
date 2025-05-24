@@ -15,7 +15,7 @@ export default function AddProductToCartButton({
 
   const handleAddToCartClick = () => {
     addProductToCart({
-      productId: _id as string | undefined,
+      productId: _id,
       profit,
       title,
       imgUrl,
