@@ -68,11 +68,14 @@ export async function addProductToCartAction(body: ICart) {
       message: "Cart product added successfully.",
     };
   } catch (error) {
+    console.error("Error adding product to cart:", error);
     if (session.inTransaction()) {
-      await session.abortTransaction();
+      try {
+        await session.abortTransaction();
+      } catch (abortError) {
+        console.error("Error aborting transaction:", abortError);
+      }
     }
-
-    console.error(error);
 
     return {
       status: "error",
