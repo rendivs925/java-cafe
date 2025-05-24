@@ -1,9 +1,10 @@
 "use server";
 import { BASE_URL } from "@/constanst";
 import midtransClient from "midtrans-client";
+import { connectToDatabase } from "@/lib/dbConnect";
 import { ICartProduct } from "@/models/Cart";
 import Product from "@/models/Product";
-import mongoose from "mongoose";
+import { ClientSession } from "mongoose";
 
 interface PaymentActionProps {
   orderId: string | number;
@@ -27,7 +28,7 @@ export async function paymentAction({
   token?: string;
   dataPayment?: any;
 }> {
-  const session = await mongoose.startSession();
+  const session: ClientSession = await connectToDatabase();
   session.startTransaction();
 
   try {

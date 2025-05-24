@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Cart from "@/models/Cart";
 import { connectToDatabase } from "@/lib/dbConnect";
-import mongoose, { ClientSession } from "mongoose";
+import { ClientSession } from "mongoose";
 import { COOKIE_NAME } from "@/constanst";
 import { UserJwtPayload, verifyAuth } from "@/lib/auth";
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
 
-    const session: ClientSession = await mongoose.startSession();
+    const session: ClientSession = await connectToDatabase();
     session.startTransaction();
 
     const { userId, productId } = await req.json();

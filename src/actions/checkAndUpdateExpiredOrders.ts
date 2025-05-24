@@ -2,7 +2,7 @@ import midtransClient from "midtrans-client";
 import Order from "@/models/Order";
 import Product from "@/models/Product";
 import { connectToDatabase } from "@/lib/dbConnect";
-import mongoose from "mongoose";
+import { ClientSession } from "mongoose";
 
 const snap = new midtransClient.Snap({
   isProduction: false,
@@ -11,12 +11,10 @@ const snap = new midtransClient.Snap({
 });
 
 export async function checkAndUpdateExpiredOrders() {
+  const session: ClientSession = await connectToDatabase();
+  session.startTransaction();
+
   try {
-    await connectToDatabase();
-
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
     const pendingOrders = await Order.find({
       paymentStatus: "pending",
     }).session(session);
