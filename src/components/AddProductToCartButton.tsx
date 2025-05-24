@@ -15,7 +15,7 @@ export default function AddProductToCartButton({
 
   const handleAddToCartClick = () => {
     addProductToCart({
-      productId: _id,
+      productId: _id?.toString() as string,
       profit,
       title,
       imgUrl,
