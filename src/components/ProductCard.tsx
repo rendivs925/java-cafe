@@ -49,7 +49,7 @@ function ProductCard({
         <div className="flex items-baseline justify-between overflow-hidden">
           <h4 className="price">{formatToRupiah(price)}</h4>
           <ProductCardButton
-            id={_id?.toString()}
+            _id={_id?.toString()}
             profit={profit}
             title={title}
             imgUrl={imgUrl}

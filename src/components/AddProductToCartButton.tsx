@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import useAppContext from "@/hooks/useAppContext";
 import { IProduct } from "@/models/Product";
@@ -14,8 +15,15 @@ export default function AddProductToCartButton({
   const { addProductToCart } = useAppContext();
 
   const handleAddToCartClick = () => {
+    if (!_id) {
+      console.error("Product ID is missing, cannot add to cart");
+      return;
+    }
+
+    console.log(product);
+
     addProductToCart({
-      productId: _id?.toString() as string,
+      productId: _id,
       profit,
       title,
       imgUrl,

@@ -13,69 +13,56 @@ export async function addProductToCartAction(body: ICart) {
     const myCart = await Cart.findOne({ userId: body.userId }).session(session);
 
     if (!myCart) {
-      await Cart.create([body], { session });
+      await session.abortTransaction();
 
-      await session.commitTransaction();
+      await Cart.create(body);
+    } else {
+      const updatedProducts = myCart.products.map(
+        (existingProduct: ICartProduct) => {
+          const newProduct = body.products.find(
+            (product) => product.productId === existingProduct.productId,
+          );
+
+          if (newProduct) {
+            existingProduct.qty =
+              (existingProduct.qty || 1) + (newProduct.qty || 1);
+          }
+
+          return existingProduct;
+        },
+      );
+
+      body.products.forEach((newProduct) => {
+        if (
+          !myCart.products.some(
+            (existingProduct) =>
+              existingProduct.productId === newProduct.productId,
+          )
+        ) {
+          updatedProducts.push(newProduct);
+        }
+      });
+
+      await Cart.updateOne(
+        { userId: body.userId },
+        { $set: { products: updatedProducts } },
+        { session },
+      );
 
       revalidateTag("/cart");
 
+      await session.commitTransaction();
+
       return {
         status: "success",
-        totalItems: body.products.length,
-        message: "Cart created and product added successfully.",
+        totalItems: updatedProducts.length,
+        message: "Cart product added successfully.",
       };
     }
-
-    const updatedProducts = myCart.products.map(
-      (existingProduct: ICartProduct) => {
-        const newProduct = body.products.find(
-          (product) => product.productId === existingProduct.productId,
-        );
-
-        if (newProduct) {
-          existingProduct.qty =
-            (existingProduct.qty || 1) + (newProduct.qty || 1);
-        }
-
-        return existingProduct;
-      },
-    );
-
-    body.products.forEach((newProduct) => {
-      if (
-        !myCart.products.some(
-          (existingProduct) =>
-            existingProduct.productId === newProduct.productId,
-        )
-      ) {
-        updatedProducts.push(newProduct);
-      }
-    });
-
-    await Cart.updateOne(
-      { userId: body.userId },
-      { $set: { products: updatedProducts } },
-      { session },
-    );
-
-    await session.commitTransaction();
-
-    revalidateTag("/cart");
-
-    return {
-      status: "success",
-      totalItems: updatedProducts.length,
-      message: "Cart product added successfully.",
-    };
   } catch (error) {
-    console.error("Error adding product to cart:", error);
-    if (session.inTransaction()) {
-      try {
-        await session.abortTransaction();
-      } catch (abortError) {
-        console.error("Error aborting transaction:", abortError);
-      }
-    }
+    await session.abortTransaction();
+
+    console.log(error);
 
     return {
       status: "error",

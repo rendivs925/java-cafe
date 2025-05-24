@@ -71,8 +71,8 @@ export default function AppProvider({
     stock: number;
     weight: number;
   }) => {
-    if (product.stock === 0) {
-      console.warn("Product is out of stock.");
+    if (!product.productId || product.stock === 0) {
+      console.warn("Invalid product or out of stock.");
       return;
     }
 
@@ -82,12 +82,8 @@ export default function AppProvider({
         products: [product],
       });
 
-      setTotalItems((data?.totalItems as number) || 1);
-
-      // if (data?.status === "success") {
-      //   toast({ description: data.message });
-      // }
-    } catch (error) {
+      setTotalItems(data?.totalItems || 1);
+    } catch (error: any) {
       console.error("Failed to add product to cart:", error);
     }
   };

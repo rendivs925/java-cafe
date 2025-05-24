@@ -9,15 +9,15 @@ import { formatToRupiah } from "@/lib/formatToRupiah";
 import { FaStar } from "react-icons/fa";
 import AddProductToCartButton from "@/components/AddProductToCartButton";
 
-export default async function Page(
-  props: {
-    params: Promise<{ productId: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ productId: string }>;
+}) {
   const params = await props.params;
   const { productId } = params;
   const response = await getProductByIdAction(productId);
   const data = response.item;
+
+  console.log(data);
 
   if (!data) {
     return <div>Error: Product not found.</div>;
@@ -33,7 +33,7 @@ export default async function Page(
             key={i}
             className={`text-yellow-500 ${i <= rating ? "" : "text-secondary"}`}
           />
-        </span>
+        </span>,
       );
     }
     return stars;
@@ -61,7 +61,9 @@ export default async function Page(
           {data?.rating && (
             <div className="flex items-center mt-6">
               {renderStars(data.rating)}
-              <span className="ml-2 text-muted-foreground">{data.rating} / 5 by {data?.reviews.length} customers</span>
+              <span className="ml-2 text-muted-foreground">
+                {data.rating} / 5 by {data?.reviews.length} customers
+              </span>
             </div>
           )}
 
@@ -72,7 +74,7 @@ export default async function Page(
             <p className="my-0">Stock : {data.stock}</p>
           </div>
           <div>
-            <AddProductToCartButton product={data as IProduct} />
+            <AddProductToCartButton product={data} />
           </div>
         </div>
       </BaseContent>

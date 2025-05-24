@@ -7,7 +7,7 @@ export interface IReview {
 }
 
 export interface IProduct {
-  _id?: Schema.Types.ObjectId;
+  _id: string;
   createdAt?: Date;
   category: string;
   description: string;
@@ -18,8 +18,8 @@ export interface IProduct {
   stock: number;
   title: string;
   weight: number;
-  rating?: number;  // Average rating of all reviews
-  reviews: IReview[];  // Array of reviews
+  rating?: number; // Average rating of all reviews
+  reviews: IReview[]; // Array of reviews
 }
 
 // Create the Mongoose schema for reviews
@@ -49,6 +49,7 @@ const ProductSchema: Schema<IProduct> = new Schema(
 );
 
 // Create and export the Mongoose model
-const Product: Model<IProduct> = mongoose.models.Product || mongoose.model<IProduct>("Product", ProductSchema);
+const Product: Model<IProduct> =
+  mongoose.models.Product || mongoose.model<IProduct>("Product", ProductSchema);
 
 export default Product;

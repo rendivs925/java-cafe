@@ -9,6 +9,8 @@ export async function getProductByIdAction(id: string) {
 
     const product: IProduct | null = await Product.findById(id).lean();
 
+    console.log(product);
+
     if (!product) {
       return {
         status: "error",
@@ -17,15 +19,10 @@ export async function getProductByIdAction(id: string) {
       };
     }
 
-    const formattedProduct = {
-      ...product,
-      _id: product?._id?.toString(),
-    };
-
     return {
       status: "success",
       message: "Product fetched successfully.",
-      item: serializeDocument(formattedProduct),
+      item: product,
     };
   } catch (error) {
     return {
