@@ -1,19 +1,21 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import useAppContext from "@/hooks/useAppContext";
 import { IProduct } from "@/models/Product";
 
 interface IAddProductToCartButton {
-  product: IProduct
+  product: IProduct;
 }
 
-export default function AddProductToCartButton({ product }: IAddProductToCartButton) {
+export default function AddProductToCartButton({
+  product,
+}: IAddProductToCartButton) {
   const { weight, title, stock, price, imgUrl, profit, _id } = product;
   const { addProductToCart } = useAppContext();
 
   const handleAddToCartClick = () => {
     addProductToCart({
-      productId: _id?.toString() as string,
+      productId: _id as string | undefined,
       profit,
       title,
       imgUrl,
@@ -24,6 +26,8 @@ export default function AddProductToCartButton({ product }: IAddProductToCartBut
   };
 
   return (
-    <Button onClick={handleAddToCartClick} size="lg">Add to Cart</Button>
-  )
+    <Button onClick={handleAddToCartClick} size="lg">
+      Add to Cart
+    </Button>
+  );
 }
