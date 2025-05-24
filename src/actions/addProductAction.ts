@@ -25,7 +25,6 @@ export async function addProductAction(formData: FormData) {
       productImage: formData.get("productImage") as string,
     };
 
-    // Validate the data against the schema
     const parseResult = addProductSchema.safeParse(data);
     if (!parseResult.success) {
       return {
@@ -35,7 +34,6 @@ export async function addProductAction(formData: FormData) {
       };
     }
 
-    // Check for duplicate product by title
     const existingProduct = await Product.findOne({ title: data.title });
     if (existingProduct) {
       return {
@@ -46,12 +44,10 @@ export async function addProductAction(formData: FormData) {
 
     const imgUrl = await handleUpload(data.productImage as File, "products");
 
-    // Extracting data from formData and casting to appropriate types
     const { productImage, ...payload } = parseResult.data;
 
     (payload as newAddProductType).imgUrl = imgUrl;
 
-    // Add the product to the database
     const newProduct = new Product(payload);
     await newProduct.save();
 
