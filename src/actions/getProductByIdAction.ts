@@ -22,7 +22,7 @@ export async function getProductByIdAction(id: string) {
     return {
       status: "success",
       message: "Product fetched successfully.",
-      item: product,
+      item: serializeDocument(product),
     };
   } catch (error) {
     return {
